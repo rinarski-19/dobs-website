@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+
+  /* ── Layout ── */
+  .page-wrapper {
+    @apply max-w-[1400px] mx-auto px-10 py-12;
+  }
+
+  .section {
+    @apply py-12;
+  }
+
+  /* ── Typography ── */
+  .page-title {
+    @apply text-3xl font-bold text-gray-900 mb-2;
+  }
+
+  .page-subtitle {
+    @apply text-gray-500 text-lg mb-10;
+  }
+
+  .section-heading {
+    @apply text-2xl font-semibold text-gray-800 mb-4;
+  }
+
+  .section-body {
+    @apply text-gray-600 leading-relaxed;
+  }
+
+  /* ── Cards ── */
+  .card {
+    @apply bg-white rounded-xl border border-gray-200 p-6 shadow-sm;
+  }
+
+  .card-title {
+    @apply text-lg font-semibold text-gray-900 mb-1;
+  }
+
+  .card-body {
+    @apply text-sm text-gray-500;
+  }
+
+  /* ── Buttons ── */
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-5 py-2.5 text-white font-medium rounded-lg transition-opacity hover:opacity-90;
+    background: linear-gradient(135deg, #1a6db8, #4a9eed);
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 px-5 py-2.5 border border-primary-200 text-primary-700 font-medium rounded-lg hover:bg-primary-50 transition-colors;
+  }
+
+  /* ── Forms ── */
+  .form-label {
+    @apply block text-sm font-medium text-gray-700 mb-1;
+  }
+
+  .form-input {
+    @apply w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+  }
+
+  .form-textarea {
+    @apply w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none;
+  }
+
+  /* ── Badge ── */
+  .badge {
+    @apply inline-block text-xs font-medium px-2.5 py-0.5 rounded-full bg-primary-50 text-primary-700;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    @apply border-t border-gray-100 my-8;
+  }
+
+  /* ── Placeholder block (for content not yet filled) ── */
+  .placeholder-block {
+    @apply bg-gray-100 border-2 border-dashed border-gray-300 rounded-xl p-10 text-center text-gray-400 text-sm;
+  }
+}
