@@ -8,6 +8,7 @@ const nextConfig = {
       },
     ],
   },
+  transpilePackages: ['sanity', 'next-sanity', '@sanity/ui', '@sanity/icons', '@sanity/vision'],
 }
 
 module.exports = nextConfig
