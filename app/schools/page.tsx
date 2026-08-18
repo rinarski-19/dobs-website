@@ -3,6 +3,8 @@ import { client, urlFor } from '@/lib/sanity'
 import Link from 'next/link'
 import { MapPin } from 'lucide-react'
 
+export const revalidate = 60 // refresh every 60 seconds
+
 type School = {
   _id: string
   name: string

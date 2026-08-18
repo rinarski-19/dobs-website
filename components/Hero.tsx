@@ -29,8 +29,11 @@ export default function Hero({
   return (
     <section
       className="relative w-full h-[70vh] flex items-center justify-center overflow-hidden"
-      style={!image ? { background: 'linear-gradient(135deg, #153e67 0%, #1a6db8 50%, #4a9eed 100%)' } : {}}
-      style={image ? { backgroundImage: `url(${image})`, backgroundSize: 'cover', backgroundPosition: 'center' } : {}}
+      style={
+        image
+          ? { backgroundImage: `url(${image})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+          : { background: 'linear-gradient(135deg, #153e67 0%, #1a6db8 50%, #4a9eed 100%)' }
+      }
     >
       {/* Overlay — only shown when there's a real image */}
       {image && (
