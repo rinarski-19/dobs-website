@@ -1,8 +1,9 @@
 'use client'
 
+import Hero from '@/components/Hero'
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import { ArrowDown, BookOpen } from 'lucide-react'
+import { BookOpen } from 'lucide-react'
 
 const levels = [
   {
@@ -10,8 +11,8 @@ const levels = [
     grades: 'Nursery & Kindergarten',
     ages: 'Ages 3–5',
     description: 'A nurturing environment that develops foundational skills through play-based learning, creativity, and early childhood development principles.',
-    bg: 'from-sky-500 to-blue-700',
-    accent: 'bg-sky-400/20 text-sky-100',
+    image: '/programs/preschool.jpg',
+    accent: 'bg-white/10 text-white/90',
     num: '01',
   },
   {
@@ -19,8 +20,8 @@ const levels = [
     grades: 'Grades 1–6',
     ages: 'Ages 6–12',
     description: 'A strong academic foundation in core subjects — Mathematics, Science, Filipino, English, and Values Education — guided by the K–12 curriculum.',
-    bg: 'from-blue-600 to-indigo-800',
-    accent: 'bg-blue-400/20 text-blue-100',
+    image: '/programs/elementary.jpg',
+    accent: 'bg-white/10 text-white/90',
     num: '02',
   },
   {
@@ -28,8 +29,8 @@ const levels = [
     grades: 'Grades 7–10',
     ages: 'Ages 13–16',
     description: 'Deepening academic knowledge with a focus on critical thinking, character formation, and preparation for senior high school.',
-    bg: 'from-indigo-600 to-violet-800',
-    accent: 'bg-indigo-400/20 text-indigo-100',
+    image: '/programs/junior.jpg',
+    accent: 'bg-white/10 text-white/90',
     num: '03',
   },
   {
@@ -37,8 +38,8 @@ const levels = [
     grades: 'Grades 11–12',
     ages: 'Ages 17–18',
     description: 'Specialized tracks — Academic, Technical-Vocational, Sports, and Arts & Design — preparing students for college or the workforce.',
-    bg: 'from-violet-600 to-purple-900',
-    accent: 'bg-violet-400/20 text-violet-100',
+    image: '/programs/senior.jpg',
+    accent: 'bg-white/10 text-white/90',
     num: '04',
   },
 ]
@@ -46,15 +47,14 @@ const levels = [
 export default function ProgramsPage() {
   const [active, setActive] = useState(0)
   const sectionRefs = useRef<(HTMLElement | null)[]>([])
-  const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       entries => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            const idx = sectionRefs.current.indexOf(entry.target as HTMLElement)
-            if (idx !== -1) setActive(idx)
+            const idx = parseInt(entry.target.getAttribute('data-idx') ?? '0')
+            setActive(idx)
           }
         })
       },
@@ -69,11 +69,15 @@ export default function ProgramsPage() {
   }
 
   return (
-    <div
-      ref={containerRef}
-      className="h-screen overflow-y-scroll"
-      style={{ scrollSnapType: 'y mandatory' }}
-    >
+    <>
+      {/* Regular hero — same as all other pages */}
+      <Hero
+        title="Academic Programs"
+        subtitle="Curriculum"
+        description="Programs offered across the Diocese of Baguio Schools network, from Pre-School through Senior High School."
+        imagePlaceholder="Students in Classroom Photo"
+      />
+
       {/* Dot navigator */}
       <div className="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3">
         {levels.map((l, i) => (
@@ -82,58 +86,61 @@ export default function ProgramsPage() {
             onClick={() => scrollTo(i)}
             title={l.label}
             className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-              active === i ? 'bg-white scale-125' : 'bg-white/40 hover:bg-white/70'
+              active === i ? 'bg-white scale-125 shadow-lg' : 'bg-gray-400/60 hover:bg-gray-600/80'
             }`}
           />
         ))}
       </div>
 
-      {levels.map((level, i) => (
-        <section
-          key={level.label}
-          ref={el => { sectionRefs.current[i] = el }}
-          className={`relative h-screen flex items-center justify-center bg-gradient-to-br ${level.bg} overflow-hidden`}
-          style={{ scrollSnapAlign: 'start' }}
-        >
-          {/* Large background number */}
-          <span className="absolute right-12 bottom-8 text-[20rem] font-black text-white/5 leading-none select-none pointer-events-none">
-            {level.num}
-          </span>
+      {/* Scroll-snap program sections */}
+      <div style={{ scrollSnapType: 'y mandatory', overflowY: 'scroll', height: '100vh', marginBottom: '-5rem' }}>
+        {levels.map((level, i) => (
+          <section
+            key={level.label}
+            ref={el => { sectionRefs.current[i] = el }}
+            data-idx={i}
+            className="relative h-screen flex items-center justify-center overflow-hidden bg-gray-900"
+            style={{
+              scrollSnapAlign: 'start',
+              backgroundImage: `url(${level.image})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+          >
+            {/* Dark overlay */}
+            <div className="absolute inset-0 bg-black/55" />
 
-          {/* Content */}
-          <div className="relative z-10 max-w-3xl mx-auto px-8 text-white">
-            <span className={`inline-block text-xs font-semibold uppercase tracking-widest mb-6 px-3 py-1.5 rounded-full ${level.accent}`}>
-              <BookOpen size={11} className="inline mr-1.5" />
-              {level.grades} · {level.ages}
+            {/* Large background number — opposite side from text */}
+            <span className={`absolute bottom-4 text-[18rem] font-black text-white/5 leading-none select-none pointer-events-none ${i % 2 === 0 ? 'right-12' : 'left-12'}`}>
+              {level.num}
             </span>
 
-            <h1 className="text-6xl md:text-7xl lg:text-8xl font-black leading-none mb-6 tracking-tight">
-              {level.label}
-            </h1>
+            <div className={`relative z-10 max-w-3xl px-8 text-white ${i % 2 === 0 ? 'mr-auto ml-16' : 'ml-auto mr-16'}`}>
+              <span className={`inline-block text-xs font-semibold uppercase tracking-widest mb-6 px-3 py-1.5 rounded-full ${level.accent}`}>
+                <BookOpen size={11} className="inline mr-1.5" />
+                {level.grades} · {level.ages}
+              </span>
 
-            <p className="text-lg md:text-xl text-white/80 leading-relaxed max-w-xl mb-10">
-              {level.description}
-            </p>
+              <h2 className="text-6xl md:text-7xl lg:text-8xl font-black leading-none mb-6 tracking-tight">
+                {level.label}
+              </h2>
 
-            <div className="flex gap-4">
-              <Link href="/schools" className="btn-primary bg-white text-blue-800 hover:bg-white/90">
-                Find a School
-              </Link>
-              <Link href="/enrollment" className="btn-secondary border-white/40 text-white hover:bg-white/10">
-                Enroll Now
-              </Link>
+              <p className="text-lg md:text-xl text-white/80 leading-relaxed max-w-xl mb-10">
+                {level.description}
+              </p>
+
+              <div className="flex gap-4">
+                <Link href="/schools" className="btn-primary bg-white text-blue-800 hover:bg-white/90">
+                  Find a School
+                </Link>
+                <Link href="/enrollment" className="btn-secondary border-white/40 text-white hover:bg-white/10">
+                  Enroll Now
+                </Link>
+              </div>
             </div>
-          </div>
-
-          {/* Scroll hint on first section */}
-          {i === 0 && (
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/50 flex flex-col items-center gap-2 text-xs animate-bounce">
-              <span>Scroll</span>
-              <ArrowDown size={14} />
-            </div>
-          )}
-        </section>
-      ))}
-    </div>
+          </section>
+        ))}
+      </div>
+    </>
   )
 }
