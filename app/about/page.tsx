@@ -7,6 +7,7 @@ export default function AboutPage() {
         title="About DOBS"
         subtitle="Our Story"
         description="Learn about our mission, vision, core values, and the people who lead the Diocese of Baguio Schools network."
+        image="/images/about.png"
         imagePlaceholder="Administration Building Photo"
       />
 

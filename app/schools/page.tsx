@@ -46,7 +46,7 @@ export default async function SchoolsPage() {
         {schools.length === 0 ? (
           <div className="placeholder-block">
             No schools added yet. Add schools in the{' '}
-            <a href="/studio" className="text-primary-600 underline">Sanity Studio</a>.
+            <Link href="/studio" className="text-primary-600 underline">Sanity Studio</Link>.
           </div>
         ) : (
           <>

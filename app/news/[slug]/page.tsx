@@ -2,7 +2,8 @@ import Hero from '@/components/Hero'
 import Link from 'next/link'
 import { ArrowLeft, Calendar, Tag, School, Clock } from 'lucide-react'
 
-export default function NewsPostPage({ params }: { params: { slug: string } }) {
+export default async function NewsPostPage({ params }: { params: Promise<{ slug: string }> }) {
+  await params
   return (
     <>
       {/* Hero with featured image */}

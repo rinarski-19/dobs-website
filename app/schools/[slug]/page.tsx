@@ -32,8 +32,9 @@ async function getSchool(slug: string): Promise<School | null> {
   )
 }
 
-export default async function SchoolDetailPage({ params }: { params: { slug: string } }) {
-  const school = await getSchool(params.slug)
+export default async function SchoolDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const school = await getSchool(slug)
   if (!school) notFound()
 
   const coverUrl = school.coverPhoto
