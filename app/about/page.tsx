@@ -17,6 +17,7 @@ type AboutPageContent = {
     style?: string
     children?: Array<{ _key?: string; text?: string }>
   }>
+  leadership?: Array<{ _key?: string; name: string; role: string; photoUrl?: string }>
 }
 
 const fallback: Required<Omit<AboutPageContent, 'heroImageUrl'>> = {
@@ -42,6 +43,10 @@ const fallback: Required<Omit<AboutPageContent, 'heroImageUrl'>> = {
     { _type: 'block', children: [{ text: 'The Apostolic Prefecture of the Mountain Provinces was established on July 15, 1932. It was elevated to the Apostolic Vicariate of the Mountain Provinces in 1948 and renamed the Apostolic Vicariate of Baguio in 1992.' }] },
     { _type: 'block', children: [{ text: 'On June 24, 2004, it was formally elevated as the Diocese of Baguio, serving Baguio City and the Province of Benguet. The Diocese of Baguio Schools continues this Catholic educational mission through a network of schools committed to faith formation, academic excellence, cultural respect, servant leadership, and responsible stewardship.' }] },
   ],
+  leadership: [
+    { name: 'Most Rev. Rafael T. Cruz, D.D.', role: 'Bishop of the Diocese of Baguio' },
+    { name: 'Rev. Fr. Marlon M. Urmaza', role: 'Superintendent, Diocese of Baguio Schools' },
+  ],
 }
 
 async function getAboutPage(): Promise<AboutPageContent> {
@@ -55,7 +60,13 @@ async function getAboutPage(): Promise<AboutPageContent> {
         vision,
         mission,
         coreValues,
-        history
+        history,
+        leadership[] {
+          _key,
+          name,
+          role,
+          "photoUrl": photo.asset->url
+        }
       }
     `)
     return content ?? fallback
@@ -70,6 +81,7 @@ export default async function AboutPage() {
   const mission = content.mission?.length ? content.mission : fallback.mission
   const coreValues = content.coreValues?.length ? content.coreValues : fallback.coreValues
   const history = content.history?.length ? content.history : fallback.history
+  const leadership = content.leadership?.length ? content.leadership : fallback.leadership
 
   return (
     <>
@@ -121,6 +133,29 @@ export default async function AboutPage() {
               if (block.style === 'h3') return <h3 key={block._key ?? index} className="text-xl font-semibold text-gray-900">{text}</h3>
               return <p key={block._key ?? index}>{text}</p>
             })}
+          </div>
+        </section>
+
+        <div className="divider" />
+
+        <section className="section">
+          <h2 className="section-heading">Leadership &amp; Administration</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl">
+            {leadership.map(person => (
+              <article key={person._key ?? person.name} className="card flex items-center gap-5">
+                {person.photoUrl ? (
+                  <img src={person.photoUrl} alt={person.name} className="h-20 w-20 rounded-full object-cover shrink-0" />
+                ) : (
+                  <div className="h-20 w-20 rounded-full bg-primary-50 text-primary-700 flex items-center justify-center text-2xl font-bold shrink-0" aria-hidden="true">
+                    {person.name.split(' ').filter(word => /^[A-Z]/.test(word)).slice(0, 2).map(word => word[0]).join('')}
+                  </div>
+                )}
+                <div>
+                  <h3 className="card-title mb-1">{person.name}</h3>
+                  <p className="card-body">{person.role}</p>
+                </div>
+              </article>
+            ))}
           </div>
         </section>
       </div>

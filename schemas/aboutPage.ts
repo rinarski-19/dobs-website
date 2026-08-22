@@ -32,6 +32,20 @@ export default defineType({
       validation: Rule => Rule.min(1).required(),
     }),
     defineField({ name: 'history', title: 'History', type: 'array', of: [{ type: 'block' }], validation: Rule => Rule.required() }),
+    defineField({
+      name: 'leadership',
+      title: 'Leadership & Administration',
+      type: 'array',
+      of: [{
+        type: 'object',
+        fields: [
+          defineField({ name: 'name', title: 'Name', type: 'string', validation: Rule => Rule.required() }),
+          defineField({ name: 'role', title: 'Role', type: 'string', validation: Rule => Rule.required() }),
+          defineField({ name: 'photo', title: 'Photo', type: 'image', options: { hotspot: true } }),
+        ],
+        preview: { select: { title: 'name', subtitle: 'role', media: 'photo' } },
+      }],
+    }),
   ],
   preview: { prepare: () => ({ title: 'About Page' }) },
 })
