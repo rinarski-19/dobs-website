@@ -3,6 +3,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+  }
+}
+
 @layer components {
 
   .font-diocesan {
@@ -28,7 +38,7 @@
   }
 
   .section-heading {
-    @apply text-2xl font-semibold text-gray-800 mb-4;
+    @apply font-diocesan text-2xl font-semibold text-gray-800 mb-4;
   }
 
   .section-body {
@@ -51,7 +61,7 @@
   /* ── Buttons ── */
   .btn-primary {
     @apply inline-flex items-center gap-2 px-5 py-2.5 text-white font-medium rounded-lg transition-opacity hover:opacity-90;
-    background: linear-gradient(135deg, #1a6db8, #4a9eed);
+    background: linear-gradient(135deg, #16324F, #285943);
   }
 
   .btn-secondary {

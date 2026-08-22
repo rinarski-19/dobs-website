@@ -32,7 +32,7 @@ export default function Hero({
       style={
         image
           ? { backgroundImage: `url(${image})`, backgroundSize: 'cover', backgroundPosition: 'center' }
-          : { background: 'linear-gradient(135deg, #153e67 0%, #1a6db8 50%, #4a9eed 100%)' }
+          : { background: 'linear-gradient(135deg, #16324F 0%, #285943 100%)' }
       }
     >
       {/* Overlay — only shown when there's a real image */}
@@ -54,7 +54,7 @@ export default function Hero({
             {subtitle}
           </span>
         )}
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4 max-w-3xl">
+        <h1 className="font-diocesan text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4 max-w-3xl">
           {title}
         </h1>
         {description && (
