@@ -1,5 +1,6 @@
 import Hero from '@/components/Hero'
 import { client } from '@/lib/sanity'
+import { Award, Church, HeartHandshake, Quote, ShieldCheck, Sprout } from 'lucide-react'
 
 export const revalidate = 60
 
@@ -82,6 +83,7 @@ export default async function AboutPage() {
   const coreValues = content.coreValues?.length ? content.coreValues : fallback.coreValues
   const history = content.history?.length ? content.history : fallback.history
   const leadership = content.leadership?.length ? content.leadership : fallback.leadership
+  const valueIcons = [ShieldCheck, Award, HeartHandshake, Sprout]
 
   return (
     <>
@@ -93,70 +95,112 @@ export default async function AboutPage() {
         imagePlaceholder="Administration Building Photo"
       />
 
-      <div className="page-wrapper">
-        <section className="section grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="rounded-2xl border border-[#C9DEEE] bg-[#EAF3FA] p-7 shadow-sm">
-            <div className="mb-5 h-1 w-12 rounded-full bg-[#C79A3B]" />
-            <h2 className="text-2xl font-semibold text-[#153E67] mb-4">Mission</h2>
-            <ol className="space-y-3 text-slate-600 leading-relaxed list-decimal pl-5 marker:font-semibold marker:text-[#1A6DB8]">
-              {mission.map(item => <li key={item}>{item}</li>)}
-            </ol>
+      <div className="bg-[#F7F3EA]">
+        <div className="page-wrapper">
+        <section className="py-16">
+          <div className="text-center max-w-2xl mx-auto mb-10">
+            <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#8F3A3A]">Faith in action</span>
+            <h2 className="font-diocesan text-4xl md:text-5xl font-bold text-[#16324F] mt-3">Our Guiding Purpose</h2>
+            <div className="mx-auto mt-4 h-px w-20 bg-[#C7A24B]" />
           </div>
-          <div className="rounded-2xl border border-[#E9D9AA] bg-[#FFF8E7] p-7 shadow-sm">
-            <div className="mb-5 h-1 w-12 rounded-full bg-[#C79A3B]" />
-            <h2 className="text-2xl font-semibold text-[#153E67] mb-4">Vision</h2>
-            <p className="text-slate-600 text-lg leading-relaxed">{content.vision || fallback.vision}</p>
+
+          <div className="grid grid-cols-1 lg:grid-cols-5 overflow-hidden rounded-3xl border border-[#D8CEB8] bg-white shadow-sm">
+            <div className="lg:col-span-3 p-8 md:p-10">
+              <div className="flex items-center gap-3 mb-6">
+                <Church className="text-[#C7A24B]" size={24} strokeWidth={1.7} />
+                <h3 className="font-diocesan text-3xl font-bold text-[#16324F]">Our Mission</h3>
+              </div>
+              <ol className="space-y-4 text-slate-600 leading-relaxed">
+                {mission.map((item, index) => (
+                  <li key={item} className="flex gap-4">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#285943] text-xs font-semibold text-white">{index + 1}</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            <div className="relative lg:col-span-2 bg-[#16324F] p-8 md:p-10 text-white flex flex-col justify-center">
+              <Quote className="absolute right-8 top-8 text-[#C7A24B]/30" size={72} strokeWidth={1.2} />
+              <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#D9BC72] mb-4">Our Vision</span>
+              <p className="font-diocesan text-3xl md:text-4xl font-semibold leading-tight text-[#FFFDF7] relative z-10">
+                {content.vision || fallback.vision}
+              </p>
+            </div>
           </div>
         </section>
 
-        <section className="section my-8 rounded-2xl bg-[#F4F7FA] px-8">
-          <div className="mb-5 h-1 w-12 rounded-full bg-[#C79A3B]" />
-          <h2 className="text-2xl font-semibold text-[#153E67] mb-6">Core Values</h2>
+        <section className="py-16 border-t border-[#DED5C4]">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-9">
+            <div>
+              <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#8F3A3A]">What shapes us</span>
+              <h2 className="font-diocesan text-4xl md:text-5xl font-bold text-[#16324F] mt-2">Core Values</h2>
+            </div>
+            <p className="max-w-lg text-sm leading-relaxed text-slate-600">The values that guide learning, leadership, service, and community life throughout the Diocese of Baguio Schools.</p>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {coreValues.map(value => (
-              <article key={value._key ?? value.name} className="rounded-xl border border-[#D7E0E8] border-t-4 border-t-[#C79A3B] bg-white p-6 shadow-sm">
-                <h3 className="text-lg font-semibold text-[#153E67] mb-2">{value.name}</h3>
-                {value.description && <p className="text-sm leading-relaxed text-slate-600">{value.description}</p>}
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="section my-8 rounded-2xl border border-[#D7E0E8] bg-white px-8 shadow-sm">
-          <div className="mb-5 h-1 w-12 rounded-full bg-[#C79A3B]" />
-          <h2 className="text-2xl font-semibold text-[#153E67] mb-6">History</h2>
-          <div className="space-y-4 text-slate-600 leading-relaxed">
-            {history.map((block, index) => {
-              const text = block.children?.map(child => child.text ?? '').join('')
-              if (!text) return null
-              if (block.style === 'h2') return <h2 key={block._key ?? index} className="text-2xl font-bold text-gray-900">{text}</h2>
-              if (block.style === 'h3') return <h3 key={block._key ?? index} className="text-xl font-semibold text-gray-900">{text}</h3>
-              return <p key={block._key ?? index}>{text}</p>
+            {coreValues.map((value, index) => {
+              const Icon = valueIcons[index % valueIcons.length]
+              return (
+                <article key={value._key ?? value.name} className="group rounded-2xl border border-[#D8CEB8] bg-[#FFFDF7] p-7 transition-all hover:-translate-y-1 hover:shadow-md">
+                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-[#285943] text-[#F4D98C]">
+                    <Icon size={23} strokeWidth={1.7} />
+                  </div>
+                  <h3 className="font-diocesan text-2xl font-bold text-[#16324F] mb-2">{value.name}</h3>
+                  {value.description && <p className="text-sm leading-relaxed text-slate-600">{value.description}</p>}
+                </article>
+              )
             })}
           </div>
         </section>
 
-        <section className="section my-8 rounded-2xl border border-[#E9D9AA] bg-[#FAF3DD] px-8">
-          <div className="mb-5 h-1 w-12 rounded-full bg-[#C79A3B]" />
-          <h2 className="text-2xl font-semibold text-[#153E67] mb-6">Leadership &amp; Administration</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl">
+        <section className="py-16 border-t border-[#DED5C4]">
+          <div className="grid grid-cols-1 lg:grid-cols-[0.75fr_1.6fr] overflow-hidden rounded-3xl border border-[#D8CEB8] bg-white shadow-sm">
+            <div className="bg-[#285943] p-8 md:p-10 text-white">
+              <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#F4D98C]">Our journey</span>
+              <h2 className="font-diocesan text-4xl md:text-5xl font-bold mt-3">A Heritage of Faith and Mission</h2>
+              <p className="mt-5 text-sm leading-relaxed text-white/75">Rooted in the Cordillera and formed through generations of Catholic evangelization and education.</p>
+              <div className="mt-8 h-px w-20 bg-[#F4D98C]" />
+            </div>
+            <div className="p-8 md:p-10">
+              <div className="space-y-6 text-slate-600 leading-relaxed border-l border-[#C7A24B] pl-7">
+            {history.map((block, index) => {
+              const text = block.children?.map(child => child.text ?? '').join('')
+              if (!text) return null
+              if (block.style === 'h2') return <h2 key={block._key ?? index} className="font-diocesan text-3xl font-bold text-[#16324F]">{text}</h2>
+              if (block.style === 'h3') return <h3 key={block._key ?? index} className="font-diocesan text-2xl font-bold text-[#16324F]">{text}</h3>
+              return <p key={block._key ?? index} className="relative before:absolute before:-left-[2.08rem] before:top-2 before:h-3 before:w-3 before:rounded-full before:border-2 before:border-[#C7A24B] before:bg-white">{text}</p>
+            })}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-16 border-t border-[#DED5C4]">
+          <div className="text-center max-w-2xl mx-auto mb-10">
+            <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#8F3A3A]">Called to serve</span>
+            <h2 className="font-diocesan text-4xl md:text-5xl font-bold text-[#16324F] mt-2">Leadership &amp; Administration</h2>
+            <div className="mx-auto mt-4 h-px w-20 bg-[#C7A24B]" />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {leadership.map(person => (
-              <article key={person._key ?? person.name} className="rounded-xl border border-[#E9D9AA] bg-white p-6 shadow-sm flex items-center gap-5">
+              <article key={person._key ?? person.name} className="rounded-2xl border border-[#D8CEB8] bg-[#FFFDF7] p-7 shadow-sm flex items-center gap-5">
                 {person.photoUrl ? (
-                  <img src={person.photoUrl} alt={person.name} className="h-20 w-20 rounded-full object-cover shrink-0" />
+                  <img src={person.photoUrl} alt={person.name} className="h-20 w-20 rounded-full object-cover shrink-0 ring-2 ring-[#C7A24B] ring-offset-4 ring-offset-[#FFFDF7]" />
                 ) : (
-                  <div className="h-20 w-20 rounded-full bg-[#EAF3FA] text-[#153E67] ring-2 ring-[#C79A3B]/40 flex items-center justify-center text-2xl font-bold shrink-0" aria-hidden="true">
+                  <div className="font-diocesan h-20 w-20 rounded-full bg-[#16324F] text-[#F4D98C] ring-2 ring-[#C7A24B] ring-offset-4 ring-offset-[#FFFDF7] flex items-center justify-center text-2xl font-bold shrink-0" aria-hidden="true">
                     {person.name.split(' ').filter(word => /^[A-Z]/.test(word)).slice(0, 2).map(word => word[0]).join('')}
                   </div>
                 )}
                 <div>
-                  <h3 className="text-lg font-semibold text-[#153E67] mb-1">{person.name}</h3>
-                  <p className="text-sm text-slate-600">{person.role}</p>
+                  <h3 className="font-diocesan text-2xl font-bold text-[#16324F] mb-1">{person.name}</h3>
+                  <p className="text-sm font-medium leading-relaxed text-[#285943]">{person.role}</p>
                 </div>
               </article>
             ))}
           </div>
         </section>
+        </div>
       </div>
     </>
   )
