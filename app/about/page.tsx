@@ -122,7 +122,7 @@ export default async function AboutPage() {
           </div>
         </section>
 
-        <section className="section my-8 max-w-5xl rounded-2xl border border-[#D7E0E8] bg-white px-8 shadow-sm">
+        <section className="section my-8 rounded-2xl border border-[#D7E0E8] bg-white px-8 shadow-sm">
           <div className="mb-5 h-1 w-12 rounded-full bg-[#C79A3B]" />
           <h2 className="text-2xl font-semibold text-[#153E67] mb-6">History</h2>
           <div className="space-y-4 text-slate-600 leading-relaxed">
