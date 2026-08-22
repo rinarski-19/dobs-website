@@ -95,37 +95,37 @@ export default async function AboutPage() {
 
       <div className="page-wrapper">
         <section className="section grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="card">
-            <h2 className="card-title mb-4">Mission</h2>
-            <ol className="space-y-3 text-gray-600 leading-relaxed list-decimal pl-5">
+          <div className="rounded-2xl border border-[#C9DEEE] bg-[#EAF3FA] p-7 shadow-sm">
+            <div className="mb-5 h-1 w-12 rounded-full bg-[#C79A3B]" />
+            <h2 className="text-2xl font-semibold text-[#153E67] mb-4">Mission</h2>
+            <ol className="space-y-3 text-slate-600 leading-relaxed list-decimal pl-5 marker:font-semibold marker:text-[#1A6DB8]">
               {mission.map(item => <li key={item}>{item}</li>)}
             </ol>
           </div>
-          <div className="card">
-            <h2 className="card-title mb-4">Vision</h2>
-            <p className="text-gray-600 leading-relaxed">{content.vision || fallback.vision}</p>
+          <div className="rounded-2xl border border-[#E9D9AA] bg-[#FFF8E7] p-7 shadow-sm">
+            <div className="mb-5 h-1 w-12 rounded-full bg-[#C79A3B]" />
+            <h2 className="text-2xl font-semibold text-[#153E67] mb-4">Vision</h2>
+            <p className="text-slate-600 text-lg leading-relaxed">{content.vision || fallback.vision}</p>
           </div>
         </section>
 
-        <div className="divider" />
-
-        <section className="section">
-          <h2 className="section-heading">Core Values</h2>
+        <section className="section my-8 rounded-2xl bg-[#F4F7FA] px-8">
+          <div className="mb-5 h-1 w-12 rounded-full bg-[#C79A3B]" />
+          <h2 className="text-2xl font-semibold text-[#153E67] mb-6">Core Values</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {coreValues.map(value => (
-              <article key={value._key ?? value.name} className="card">
-                <h3 className="card-title mb-2">{value.name}</h3>
-                {value.description && <p className="card-body">{value.description}</p>}
+              <article key={value._key ?? value.name} className="rounded-xl border border-[#D7E0E8] border-t-4 border-t-[#C79A3B] bg-white p-6 shadow-sm">
+                <h3 className="text-lg font-semibold text-[#153E67] mb-2">{value.name}</h3>
+                {value.description && <p className="text-sm leading-relaxed text-slate-600">{value.description}</p>}
               </article>
             ))}
           </div>
         </section>
 
-        <div className="divider" />
-
-        <section className="section max-w-4xl">
-          <h2 className="section-heading">History</h2>
-          <div className="space-y-4 text-gray-600 leading-relaxed">
+        <section className="section my-8 max-w-5xl rounded-2xl border border-[#D7E0E8] bg-white px-8 shadow-sm">
+          <div className="mb-5 h-1 w-12 rounded-full bg-[#C79A3B]" />
+          <h2 className="text-2xl font-semibold text-[#153E67] mb-6">History</h2>
+          <div className="space-y-4 text-slate-600 leading-relaxed">
             {history.map((block, index) => {
               const text = block.children?.map(child => child.text ?? '').join('')
               if (!text) return null
@@ -136,23 +136,22 @@ export default async function AboutPage() {
           </div>
         </section>
 
-        <div className="divider" />
-
-        <section className="section">
-          <h2 className="section-heading">Leadership &amp; Administration</h2>
+        <section className="section my-8 rounded-2xl border border-[#E9D9AA] bg-[#FAF3DD] px-8">
+          <div className="mb-5 h-1 w-12 rounded-full bg-[#C79A3B]" />
+          <h2 className="text-2xl font-semibold text-[#153E67] mb-6">Leadership &amp; Administration</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl">
             {leadership.map(person => (
-              <article key={person._key ?? person.name} className="card flex items-center gap-5">
+              <article key={person._key ?? person.name} className="rounded-xl border border-[#E9D9AA] bg-white p-6 shadow-sm flex items-center gap-5">
                 {person.photoUrl ? (
                   <img src={person.photoUrl} alt={person.name} className="h-20 w-20 rounded-full object-cover shrink-0" />
                 ) : (
-                  <div className="h-20 w-20 rounded-full bg-primary-50 text-primary-700 flex items-center justify-center text-2xl font-bold shrink-0" aria-hidden="true">
+                  <div className="h-20 w-20 rounded-full bg-[#EAF3FA] text-[#153E67] ring-2 ring-[#C79A3B]/40 flex items-center justify-center text-2xl font-bold shrink-0" aria-hidden="true">
                     {person.name.split(' ').filter(word => /^[A-Z]/.test(word)).slice(0, 2).map(word => word[0]).join('')}
                   </div>
                 )}
                 <div>
-                  <h3 className="card-title mb-1">{person.name}</h3>
-                  <p className="card-body">{person.role}</p>
+                  <h3 className="text-lg font-semibold text-[#153E67] mb-1">{person.name}</h3>
+                  <p className="text-sm text-slate-600">{person.role}</p>
                 </div>
               </article>
             ))}
