@@ -14,18 +14,16 @@ export function urlFor(source: any) {
   return builder.image(source)
 }
 
-export async function getPageHeroImage(pageKey: string): Promise<string | undefined> {
+export async function getPageContent<T>(pageType: string): Promise<T | null> {
   try {
-    const content = await client.fetch<{ heroImage?: any } | null>(
-      `*[_type == "pageHero" && pageKey == $pageKey][0] { heroImage }`,
-      { pageKey },
-    )
-
-    return content?.heroImage
-      ? urlFor(content.heroImage).width(1800).height(900).fit('crop').url()
-      : undefined
+    return await client.fetch<T | null>(`*[_type == $pageType][0]`, { pageType })
   } catch (error) {
-    console.error(`Unable to load the ${pageKey} page hero image from Sanity:`, error)
-    return undefined
+    console.error(`Unable to load ${pageType} content from Sanity:`, error)
+    return null
   }
+}
+
+export function imageUrlFor(source: any, width = 1800, height = 900): string | undefined {
+  if (!source) return undefined
+  return urlFor(source).width(width).height(height).fit('crop').url()
 }

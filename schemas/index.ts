@@ -3,6 +3,23 @@ import event from './event'
 import school from './school'
 import programsPage from './programsPage'
 import aboutPage from './aboutPage'
-import pageHero from './pageHero'
+import homePage from './homePage'
+import eventsPage from './eventsPage'
+import newsPage from './newsPage'
+import enrollmentPage from './enrollmentPage'
+import contactPage from './contactPage'
+import schoolsPage from './schoolsPage'
 
-export const schemaTypes = [school, newsPost, event, programsPage, aboutPage, pageHero]
+export const schemaTypes = [
+  school,
+  newsPost,
+  event,
+  programsPage,
+  aboutPage,
+  homePage,
+  eventsPage,
+  newsPage,
+  enrollmentPage,
+  contactPage,
+  schoolsPage,
+]

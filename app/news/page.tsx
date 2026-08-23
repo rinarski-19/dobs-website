@@ -1,16 +1,31 @@
 import Hero from '@/components/Hero'
-import { getPageHeroImage } from '@/lib/sanity'
+import { getPageContent, imageUrlFor } from '@/lib/sanity'
+
+type NewsPageContent = {
+  heroTitle?: string
+  heroSubtitle?: string
+  heroDescription?: string
+  heroImage?: any
+  emptyStateText?: string
+}
+
+const fallbackPageContent = {
+  heroTitle: 'News & Announcements',
+  heroSubtitle: 'Latest Updates',
+  heroDescription: 'Stay updated with news, announcements, and stories from across the Diocese of Baguio Schools network.',
+  emptyStateText: 'News posts will be pulled from Sanity CMS.',
+}
 
 export default async function NewsPage() {
-  const heroImage = await getPageHeroImage('news')
+  const content = await getPageContent<NewsPageContent>('newsPage')
 
   return (
     <>
       <Hero
-        title="News & Announcements"
-        subtitle="Latest Updates"
-        description="Stay updated with news, announcements, and stories from across the Diocese of Baguio Schools network."
-        image={heroImage}
+        title={content?.heroTitle || fallbackPageContent.heroTitle}
+        subtitle={content?.heroSubtitle || fallbackPageContent.heroSubtitle}
+        description={content?.heroDescription || fallbackPageContent.heroDescription}
+        image={imageUrlFor(content?.heroImage)}
         imagePlaceholder="School Events Photo"
       />
 
@@ -35,7 +50,7 @@ export default async function NewsPage() {
         </div>
 
         <p className="text-sm text-gray-400 mt-8 text-center">
-          News posts will be pulled from Sanity CMS.
+          {content?.emptyStateText || fallbackPageContent.emptyStateText}
         </p>
 
       </div>

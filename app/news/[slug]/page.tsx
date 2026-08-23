@@ -1,5 +1,5 @@
 import Hero from '@/components/Hero'
-import { client, getPageHeroImage, urlFor } from '@/lib/sanity'
+import { client, getPageContent, imageUrlFor, urlFor } from '@/lib/sanity'
 import Link from 'next/link'
 import { ArrowLeft, Calendar, Tag, School, Clock } from 'lucide-react'
 
@@ -10,6 +10,8 @@ type NewsPostHero = {
   category?: string
   featuredImage?: any
 }
+
+type NewsPageContent = { heroImage?: any }
 
 async function getNewsPostHero(slug: string): Promise<NewsPostHero | null> {
   try {
@@ -25,13 +27,13 @@ async function getNewsPostHero(slug: string): Promise<NewsPostHero | null> {
 
 export default async function NewsPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const [post, defaultHeroImage] = await Promise.all([
+  const [post, newsPage] = await Promise.all([
     getNewsPostHero(slug),
-    getPageHeroImage('news'),
+    getPageContent<NewsPageContent>('newsPage'),
   ])
   const featuredImage = post?.featuredImage
     ? urlFor(post.featuredImage).width(1800).height(900).fit('crop').url()
-    : defaultHeroImage
+    : imageUrlFor(newsPage?.heroImage)
 
   return (
     <>

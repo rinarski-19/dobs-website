@@ -1,5 +1,17 @@
 import Hero from '@/components/Hero'
-import { getPageHeroImage } from '@/lib/sanity'
+import { getPageContent, imageUrlFor } from '@/lib/sanity'
+
+type EnrollmentPageContent = {
+  heroTitle?: string
+  heroSubtitle?: string
+  heroDescription?: string
+  heroImage?: any
+  processHeading?: string
+  steps?: Array<{ title: string; description: string }>
+  requirementsHeading?: string
+  requirements?: string[]
+  inquiryHeading?: string
+}
 
 const steps = [
   { step: 1, title: 'Choose a School', desc: 'Browse our member schools and find one near you.' },
@@ -9,16 +21,28 @@ const steps = [
   { step: 5, title: 'Complete Enrollment', desc: 'Submit required documents and complete enrollment at the school.' },
 ]
 
+const fallbackPageContent = {
+  heroTitle: 'Enrollment',
+  heroSubtitle: 'Now Enrolling',
+  heroDescription: "Join the Diocese of Baguio Schools community. Here's everything you need to know to get started.",
+  processHeading: 'Enrollment Process',
+  requirementsHeading: 'Requirements',
+  inquiryHeading: 'Send an Inquiry',
+}
+
 export default async function EnrollmentPage() {
-  const heroImage = await getPageHeroImage('enrollment')
+  const content = await getPageContent<EnrollmentPageContent>('enrollmentPage')
+  const enrollmentSteps = content?.steps?.length
+    ? content.steps.map((item, index) => ({ step: index + 1, title: item.title, desc: item.description }))
+    : steps
 
   return (
     <>
       <Hero
-        title="Enrollment"
-        subtitle="Now Enrolling"
-        description="Join the Diocese of Baguio Schools community. Here's everything you need to know to get started."
-        image={heroImage}
+        title={content?.heroTitle || fallbackPageContent.heroTitle}
+        subtitle={content?.heroSubtitle || fallbackPageContent.heroSubtitle}
+        description={content?.heroDescription || fallbackPageContent.heroDescription}
+        image={imageUrlFor(content?.heroImage)}
         imagePlaceholder="Students Photo"
         cta={{ label: 'Send an Inquiry', href: '#inquiry' }}
       />
@@ -26,9 +50,9 @@ export default async function EnrollmentPage() {
       <div className="page-wrapper">
 
         <section className="section">
-          <h2 className="section-heading">Enrollment Process</h2>
+          <h2 className="section-heading">{content?.processHeading || fallbackPageContent.processHeading}</h2>
           <div className="space-y-4">
-            {steps.map(({ step, title, desc }) => (
+            {enrollmentSteps.map(({ step, title, desc }) => (
               <div key={step} className="card flex gap-4 items-start">
                 <div className="w-9 h-9 rounded-full bg-primary-600 text-white text-sm font-bold flex items-center justify-center shrink-0">
                   {step}
@@ -45,14 +69,20 @@ export default async function EnrollmentPage() {
         <div className="divider" />
 
         <section className="section">
-          <h2 className="section-heading">Requirements</h2>
-          <div className="placeholder-block">[ Requirements per grade level — Sanity ]</div>
+          <h2 className="section-heading">{content?.requirementsHeading || fallbackPageContent.requirementsHeading}</h2>
+          {content?.requirements?.length ? (
+            <ul className="card space-y-3 text-gray-600 list-disc list-inside">
+              {content.requirements.map(requirement => <li key={requirement}>{requirement}</li>)}
+            </ul>
+          ) : (
+            <div className="placeholder-block">[ Requirements per grade level — Sanity ]</div>
+          )}
         </section>
 
         <div className="divider" />
 
         <section id="inquiry" className="section max-w-2xl">
-          <h2 className="section-heading">Send an Inquiry</h2>
+          <h2 className="section-heading">{content?.inquiryHeading || fallbackPageContent.inquiryHeading}</h2>
           <form className="card space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>

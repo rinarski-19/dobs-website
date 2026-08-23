@@ -1,16 +1,39 @@
 import Hero from '@/components/Hero'
-import { getPageHeroImage } from '@/lib/sanity'
+import { getPageContent, imageUrlFor } from '@/lib/sanity'
+
+type ContactPageContent = {
+  heroTitle?: string
+  heroSubtitle?: string
+  heroDescription?: string
+  heroImage?: any
+  officeAddress?: string
+  phone?: string
+  email?: string
+  officeHours?: string
+  messageHeading?: string
+}
+
+const fallbackPageContent = {
+  heroTitle: 'Contact Us',
+  heroSubtitle: 'Get in Touch',
+  heroDescription: "Reach out to the Diocese of Baguio Schools office. We're happy to answer your questions.",
+  officeAddress: 'Diocese of Baguio Schools Office Address\nBaguio City, Benguet, Philippines',
+  phone: '+63 (74) 000-0000',
+  email: 'info@dobsschools.edu.ph',
+  officeHours: 'Mon–Fri, 8:00 AM – 5:00 PM',
+  messageHeading: 'Send a Message',
+}
 
 export default async function ContactPage() {
-  const heroImage = await getPageHeroImage('contact')
+  const content = await getPageContent<ContactPageContent>('contactPage')
 
   return (
     <>
       <Hero
-        title="Contact Us"
-        subtitle="Get in Touch"
-        description="Reach out to the Diocese of Baguio Schools office. We're happy to answer your questions."
-        image={heroImage}
+        title={content?.heroTitle || fallbackPageContent.heroTitle}
+        subtitle={content?.heroSubtitle || fallbackPageContent.heroSubtitle}
+        description={content?.heroDescription || fallbackPageContent.heroDescription}
+        image={imageUrlFor(content?.heroImage)}
         imagePlaceholder="School Office Photo"
       />
 
@@ -21,21 +44,21 @@ export default async function ContactPage() {
           <div className="space-y-6">
             <div className="card">
               <h3 className="card-title mb-3">Office Address</h3>
-              <p className="section-body">[ Diocese of Baguio Schools Office Address ]<br />Baguio City, Benguet, Philippines</p>
+              <p className="section-body whitespace-pre-line">{content?.officeAddress || fallbackPageContent.officeAddress}</p>
             </div>
             <div className="card">
               <h3 className="card-title mb-3">Contact Details</h3>
               <ul className="space-y-2 text-sm text-gray-600">
-                <li><span className="font-medium">Phone:</span> +63 (74) 000-0000</li>
-                <li><span className="font-medium">Email:</span> info@dobsschools.edu.ph</li>
-                <li><span className="font-medium">Office Hours:</span> Mon–Fri, 8:00 AM – 5:00 PM</li>
+                <li><span className="font-medium">Phone:</span> {content?.phone || fallbackPageContent.phone}</li>
+                <li><span className="font-medium">Email:</span> {content?.email || fallbackPageContent.email}</li>
+                <li><span className="font-medium">Office Hours:</span> {content?.officeHours || fallbackPageContent.officeHours}</li>
               </ul>
             </div>
             <div className="placeholder-block">[ Google Map embed ]</div>
           </div>
 
           <div>
-            <h2 className="section-heading">Send a Message</h2>
+            <h2 className="section-heading">{content?.messageHeading || fallbackPageContent.messageHeading}</h2>
             <form className="card space-y-4">
               <div>
                 <label className="form-label">Full Name</label>

@@ -1,6 +1,23 @@
 import Hero from '@/components/Hero'
 import FeaturedEvent from '@/components/FeaturedEvent'
-import { getPageHeroImage } from '@/lib/sanity'
+import { getPageContent, imageUrlFor } from '@/lib/sanity'
+
+type EventsPageContent = {
+  heroTitle?: string
+  heroSubtitle?: string
+  heroDescription?: string
+  heroImage?: any
+  latestEventHeading?: string
+  allEventsHeading?: string
+}
+
+const fallbackPageContent = {
+  heroTitle: 'Events',
+  heroSubtitle: 'School Calendar',
+  heroDescription: 'Upcoming events, activities, and important dates across the Diocese of Baguio Schools network.',
+  latestEventHeading: 'Latest Event',
+  allEventsHeading: 'All Events',
+}
 
 const upcomingEvent = {
   title: '[ Featured Event Title from Sanity ]',
@@ -20,15 +37,15 @@ const events = Array.from({ length: 6 }, (_, i) => ({
 }))
 
 export default async function EventsPage() {
-  const heroImage = await getPageHeroImage('events')
+  const content = await getPageContent<EventsPageContent>('eventsPage')
 
   return (
     <>
       <Hero
-        title="Events"
-        subtitle="School Calendar"
-        description="Upcoming events, activities, and important dates across the Diocese of Baguio Schools network."
-        image={heroImage}
+        title={content?.heroTitle || fallbackPageContent.heroTitle}
+        subtitle={content?.heroSubtitle || fallbackPageContent.heroSubtitle}
+        description={content?.heroDescription || fallbackPageContent.heroDescription}
+        image={imageUrlFor(content?.heroImage)}
         imagePlaceholder="School Event Photo"
       />
 
@@ -36,7 +53,7 @@ export default async function EventsPage() {
 
         {/* Featured latest event */}
         <section>
-          <h2 className="section-heading mb-6">Latest Event</h2>
+          <h2 className="section-heading mb-6">{content?.latestEventHeading || fallbackPageContent.latestEventHeading}</h2>
           <FeaturedEvent {...upcomingEvent} />
         </section>
 
@@ -44,7 +61,7 @@ export default async function EventsPage() {
 
         {/* All events list */}
         <section>
-          <h2 className="section-heading mb-6">All Events</h2>
+          <h2 className="section-heading mb-6">{content?.allEventsHeading || fallbackPageContent.allEventsHeading}</h2>
           <div className="space-y-5">
             {events.map(({ id, title, category, description, date, school }) => (
               <div

@@ -1,5 +1,5 @@
 import Hero from '@/components/Hero'
-import { client, getPageHeroImage, urlFor } from '@/lib/sanity'
+import { client, getPageContent, imageUrlFor, urlFor } from '@/lib/sanity'
 import Link from 'next/link'
 import { MapPin } from 'lucide-react'
 
@@ -13,6 +13,21 @@ type School = {
   levels?: string[]
   coverPhoto?: any
   enrollmentOpen?: boolean
+}
+
+type SchoolsPageContent = {
+  heroTitle?: string
+  heroSubtitle?: string
+  heroDescription?: string
+  heroImage?: any
+  emptyStateText?: string
+}
+
+const fallbackPageContent = {
+  heroTitle: 'Our Schools',
+  heroSubtitle: 'Member Schools',
+  heroDescription: 'Browse all member schools under the Diocese of Baguio Schools network across Baguio City and Benguet.',
+  emptyStateText: 'No schools added yet. Add schools in the Sanity Studio.',
 }
 
 async function getSchools(): Promise<School[]> {
@@ -35,15 +50,18 @@ async function getSchools(): Promise<School[]> {
 }
 
 export default async function SchoolsPage() {
-  const [schools, heroImage] = await Promise.all([getSchools(), getPageHeroImage('schools')])
+  const [schools, content] = await Promise.all([
+    getSchools(),
+    getPageContent<SchoolsPageContent>('schoolsPage'),
+  ])
 
   return (
     <>
       <Hero
-        title="Our Schools"
-        subtitle="Member Schools"
-        description="Browse all member schools under the Diocese of Baguio Schools network across Baguio City and Benguet."
-        image={heroImage}
+        title={content?.heroTitle || fallbackPageContent.heroTitle}
+        subtitle={content?.heroSubtitle || fallbackPageContent.heroSubtitle}
+        description={content?.heroDescription || fallbackPageContent.heroDescription}
+        image={imageUrlFor(content?.heroImage)}
         imagePlaceholder="Schools Network Photo"
       />
 
@@ -51,7 +69,7 @@ export default async function SchoolsPage() {
 
         {schools.length === 0 ? (
           <div className="placeholder-block">
-            No schools added yet. Add schools in the{' '}
+            {content?.emptyStateText || fallbackPageContent.emptyStateText}{' '}
             <Link href="/studio" className="text-primary-600 underline">Sanity Studio</Link>.
           </div>
         ) : (

@@ -2,12 +2,19 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-const stats = [
+const fallbackStats = [
   { value: 12,   suffix: '+', label: 'Member Schools' },
   { value: 5000, suffix: '+', label: 'Students Enrolled' },
   { value: 400,  suffix: '+', label: 'Faculty & Staff' },
   { value: 50,   suffix: '+', label: 'Years of Service' },
 ]
+
+export type Stat = {
+  _key?: string
+  value: number
+  suffix?: string
+  label: string
+}
 
 function useCountUp(target: number, duration = 1800, started: boolean) {
   const [count, setCount] = useState(0)
@@ -29,7 +36,7 @@ function useCountUp(target: number, duration = 1800, started: boolean) {
   return count
 }
 
-function StatItem({ value, suffix, label, started }: typeof stats[0] & { started: boolean }) {
+function StatItem({ value, suffix = '', label, started }: Stat & { started: boolean }) {
   const count = useCountUp(value, 1800, started)
   return (
     <div className="text-center">
@@ -41,7 +48,7 @@ function StatItem({ value, suffix, label, started }: typeof stats[0] & { started
   )
 }
 
-export default function StatsCounter() {
+export default function StatsCounter({ stats = fallbackStats }: { stats?: Stat[] }) {
   const ref = useRef<HTMLDivElement>(null)
   const [started, setStarted] = useState(false)
 
