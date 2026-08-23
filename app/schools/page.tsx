@@ -1,5 +1,5 @@
 import Hero from '@/components/Hero'
-import { client, urlFor } from '@/lib/sanity'
+import { client, getPageHeroImage, urlFor } from '@/lib/sanity'
 import Link from 'next/link'
 import { MapPin } from 'lucide-react'
 
@@ -16,21 +16,26 @@ type School = {
 }
 
 async function getSchools(): Promise<School[]> {
-  return client.fetch(`
-    *[_type == "school"] | order(name asc) {
-      _id,
-      name,
-      slug,
-      city,
-      levels,
-      coverPhoto,
-      enrollmentOpen
-    }
-  `)
+  try {
+    return await client.fetch(`
+      *[_type == "school"] | order(name asc) {
+        _id,
+        name,
+        slug,
+        city,
+        levels,
+        coverPhoto,
+        enrollmentOpen
+      }
+    `)
+  } catch (error) {
+    console.error('Unable to load schools from Sanity:', error)
+    return []
+  }
 }
 
 export default async function SchoolsPage() {
-  const schools = await getSchools()
+  const [schools, heroImage] = await Promise.all([getSchools(), getPageHeroImage('schools')])
 
   return (
     <>
@@ -38,6 +43,7 @@ export default async function SchoolsPage() {
         title="Our Schools"
         subtitle="Member Schools"
         description="Browse all member schools under the Diocese of Baguio Schools network across Baguio City and Benguet."
+        image={heroImage}
         imagePlaceholder="Schools Network Photo"
       />
 

@@ -1,12 +1,16 @@
 import Hero from '@/components/Hero'
+import { getPageHeroImage } from '@/lib/sanity'
 
-export default function NewsPage() {
+export default async function NewsPage() {
+  const heroImage = await getPageHeroImage('news')
+
   return (
     <>
       <Hero
         title="News & Announcements"
         subtitle="Latest Updates"
         description="Stay updated with news, announcements, and stories from across the Diocese of Baguio Schools network."
+        image={heroImage}
         imagePlaceholder="School Events Photo"
       />
 

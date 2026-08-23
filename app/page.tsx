@@ -3,14 +3,18 @@ import Features from '@/components/Features'
 import StatsCounter from '@/components/StatsCounter'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
+import { getPageHeroImage } from '@/lib/sanity'
 
-export default function HomePage() {
+export default async function HomePage() {
+  const heroImage = await getPageHeroImage('home')
+
   return (
     <>
       <Hero
         title="Diocese of Baguio Schools"
         subtitle="Catholic Education Network"
         description="Forming young minds in faith, excellence, and service — serving Baguio City and the province of Benguet."
+        image={heroImage}
         imagePlaceholder="School Campus Photo"
         cta={{ label: 'Enroll Now', href: '/enrollment' }}
         ctaSecondary={{ label: 'Our Schools', href: '/schools' }}

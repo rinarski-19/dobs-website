@@ -1,12 +1,17 @@
-import { client } from '@/lib/sanity'
+import { client, urlFor } from '@/lib/sanity'
 import ProgramsPageClient, { ProgramsPageContent } from './ProgramsPageClient'
 
 export const revalidate = 60
+
+type ProgramsPageSanityContent = Omit<ProgramsPageContent, 'heroImageUrl'> & {
+  heroImage?: any
+}
 
 const fallbackContent: ProgramsPageContent = {
   heroTitle: 'Academic Programs',
   heroSubtitle: 'Curriculum',
   heroDescription: 'Programs offered across the Diocese of Baguio Schools network, from Pre-School through Senior High School.',
+  heroImageUrl: undefined,
   programs: [
     { title: 'Pre-School', grades: 'Nursery & Kindergarten', ages: 'Ages 3–5', description: 'A nurturing environment that develops foundational skills through play-based learning, creativity, and early childhood development principles.', imageUrl: '/images/programs-preschool.jpg' },
     { title: 'Elementary', grades: 'Grades 1–6', ages: 'Ages 6–12', description: 'A strong academic foundation in core subjects — Mathematics, Science, Filipino, English, and Values Education — guided by the K–12 curriculum.', imageUrl: '/images/programs-elementary.jpg' },
@@ -18,14 +23,15 @@ const fallbackContent: ProgramsPageContent = {
 }
 
 async function getProgramsPage(): Promise<ProgramsPageContent> {
-  let content: ProgramsPageContent | null = null
+  let content: ProgramsPageSanityContent | null = null
 
   try {
-    content = await client.fetch<ProgramsPageContent | null>(`
+    content = await client.fetch<ProgramsPageSanityContent | null>(`
       *[_type == "programsPage"][0] {
         heroTitle,
         heroSubtitle,
         heroDescription,
+        heroImage,
         programs[] {
           _key,
           title,
@@ -45,11 +51,16 @@ async function getProgramsPage(): Promise<ProgramsPageContent> {
 
   if (!content?.programs?.length) return fallbackContent
 
+  const { heroImage, ...pageContent } = content
+
   return {
     ...fallbackContent,
-    ...content,
-    heroTitle: content.heroTitle || fallbackContent.heroTitle,
-    programs: content.programs,
+    ...pageContent,
+    heroTitle: pageContent.heroTitle || fallbackContent.heroTitle,
+    heroImageUrl: heroImage
+      ? urlFor(heroImage).width(1800).height(900).fit('crop').url()
+      : fallbackContent.heroImageUrl,
+    programs: pageContent.programs,
   }
 }
 

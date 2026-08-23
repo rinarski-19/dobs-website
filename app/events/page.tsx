@@ -1,5 +1,6 @@
 import Hero from '@/components/Hero'
 import FeaturedEvent from '@/components/FeaturedEvent'
+import { getPageHeroImage } from '@/lib/sanity'
 
 const upcomingEvent = {
   title: '[ Featured Event Title from Sanity ]',
@@ -18,13 +19,16 @@ const events = Array.from({ length: 6 }, (_, i) => ({
   school: '[ School Name ]',
 }))
 
-export default function EventsPage() {
+export default async function EventsPage() {
+  const heroImage = await getPageHeroImage('events')
+
   return (
     <>
       <Hero
         title="Events"
         subtitle="School Calendar"
         description="Upcoming events, activities, and important dates across the Diocese of Baguio Schools network."
+        image={heroImage}
         imagePlaceholder="School Event Photo"
       />
 

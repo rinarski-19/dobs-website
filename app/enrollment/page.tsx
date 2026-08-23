@@ -1,4 +1,5 @@
 import Hero from '@/components/Hero'
+import { getPageHeroImage } from '@/lib/sanity'
 
 const steps = [
   { step: 1, title: 'Choose a School', desc: 'Browse our member schools and find one near you.' },
@@ -8,13 +9,16 @@ const steps = [
   { step: 5, title: 'Complete Enrollment', desc: 'Submit required documents and complete enrollment at the school.' },
 ]
 
-export default function EnrollmentPage() {
+export default async function EnrollmentPage() {
+  const heroImage = await getPageHeroImage('enrollment')
+
   return (
     <>
       <Hero
         title="Enrollment"
         subtitle="Now Enrolling"
         description="Join the Diocese of Baguio Schools community. Here's everything you need to know to get started."
+        image={heroImage}
         imagePlaceholder="Students Photo"
         cta={{ label: 'Send an Inquiry', href: '#inquiry' }}
       />

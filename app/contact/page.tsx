@@ -1,12 +1,16 @@
 import Hero from '@/components/Hero'
+import { getPageHeroImage } from '@/lib/sanity'
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const heroImage = await getPageHeroImage('contact')
+
   return (
     <>
       <Hero
         title="Contact Us"
         subtitle="Get in Touch"
         description="Reach out to the Diocese of Baguio Schools office. We're happy to answer your questions."
+        image={heroImage}
         imagePlaceholder="School Office Photo"
       />
 

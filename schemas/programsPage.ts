@@ -8,6 +8,7 @@ export default defineType({
     defineField({ name: 'heroTitle', title: 'Hero Title', type: 'string', initialValue: 'Academic Programs', validation: Rule => Rule.required() }),
     defineField({ name: 'heroSubtitle', title: 'Hero Subtitle', type: 'string', initialValue: 'Curriculum' }),
     defineField({ name: 'heroDescription', title: 'Hero Description', type: 'text', rows: 3 }),
+    defineField({ name: 'heroImage', title: 'Hero Image', type: 'image', options: { hotspot: true } }),
     defineField({
       name: 'programs', title: 'Programs', type: 'array',
       description: 'Drag programs to change the order in which they appear on the page.',

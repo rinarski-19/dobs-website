@@ -1,15 +1,45 @@
 import Hero from '@/components/Hero'
+import { client, getPageHeroImage, urlFor } from '@/lib/sanity'
 import Link from 'next/link'
 import { ArrowLeft, Calendar, Tag, School, Clock } from 'lucide-react'
 
+export const revalidate = 60
+
+type NewsPostHero = {
+  title?: string
+  category?: string
+  featuredImage?: any
+}
+
+async function getNewsPostHero(slug: string): Promise<NewsPostHero | null> {
+  try {
+    return await client.fetch<NewsPostHero | null>(
+      `*[_type == "newsPost" && slug.current == $slug][0] { title, category, featuredImage }`,
+      { slug },
+    )
+  } catch (error) {
+    console.error('Unable to load the news post hero from Sanity:', error)
+    return null
+  }
+}
+
 export default async function NewsPostPage({ params }: { params: Promise<{ slug: string }> }) {
-  await params
+  const { slug } = await params
+  const [post, defaultHeroImage] = await Promise.all([
+    getNewsPostHero(slug),
+    getPageHeroImage('news'),
+  ])
+  const featuredImage = post?.featuredImage
+    ? urlFor(post.featuredImage).width(1800).height(900).fit('crop').url()
+    : defaultHeroImage
+
   return (
     <>
       {/* Hero with featured image */}
       <Hero
-        title="[ Post Title from Sanity ]"
-        subtitle="Announcements"
+        title={post?.title || '[ Post Title from Sanity ]'}
+        subtitle={post?.category || 'Announcements'}
+        image={featuredImage}
         imagePlaceholder="Post Featured Image"
       />
 

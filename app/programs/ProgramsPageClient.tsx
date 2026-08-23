@@ -19,6 +19,7 @@ export type ProgramsPageContent = {
   heroTitle: string
   heroSubtitle?: string
   heroDescription?: string
+  heroImageUrl?: string
   programs: Program[]
   primaryButton?: { label?: string; href?: string }
   secondaryButton?: { label?: string; href?: string }
@@ -42,7 +43,7 @@ export default function ProgramsPageClient({ content }: { content: ProgramsPageC
 
   return (
     <>
-      <Hero title={content.heroTitle} subtitle={content.heroSubtitle} description={content.heroDescription} imagePlaceholder="Students in Classroom Photo" />
+      <Hero title={content.heroTitle} subtitle={content.heroSubtitle} description={content.heroDescription} image={content.heroImageUrl} imagePlaceholder="Students in Classroom Photo" />
 
       <div className="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3">
         {content.programs.map((program, i) => (
