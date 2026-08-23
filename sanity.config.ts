@@ -41,7 +41,7 @@ export default defineConfig({
           ...singletonPages.map(page => S.listItem()
             .id(page.type)
             .title(page.title)
-            .child(S.editor().title(page.title).schemaType(page.type).documentId(page.id))),
+            .child(S.document().title(page.title).schemaType(page.type).documentId(page.id))),
           S.divider(),
           ...S.documentTypeListItems().filter(item => !singletonTypes.includes(item.getId() ?? '')),
         ]),
