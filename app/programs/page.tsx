@@ -1,10 +1,15 @@
-import { client, urlFor } from '@/lib/sanity'
-import ProgramsPageClient, { ProgramsPageContent } from './ProgramsPageClient'
+import { client, imageUrlFor } from '@/lib/sanity'
+import ProgramsPageClient, { Program, ProgramsPageContent } from './ProgramsPageClient'
 
 export const revalidate = 60
 
-type ProgramsPageSanityContent = Omit<ProgramsPageContent, 'heroImageUrl'> & {
+type ProgramsPageSanityProgram = Omit<Program, 'imageUrl'> & {
+  image?: any
+}
+
+type ProgramsPageSanityContent = Omit<ProgramsPageContent, 'heroImageUrl' | 'programs'> & {
   heroImage?: any
+  programs: ProgramsPageSanityProgram[]
 }
 
 const fallbackContent: ProgramsPageContent = {
@@ -38,8 +43,7 @@ async function getProgramsPage(): Promise<ProgramsPageContent> {
           grades,
           ages,
           description,
-          "imageUrl": image.asset->url,
-          "imageAlt": image.alt
+          image,
         },
         primaryButton,
         secondaryButton
@@ -52,15 +56,19 @@ async function getProgramsPage(): Promise<ProgramsPageContent> {
   if (!content?.programs?.length) return fallbackContent
 
   const { heroImage, ...pageContent } = content
+  const programs = pageContent.programs.map(({ image, ...program }) => ({
+    ...program,
+    imageUrl: imageUrlFor(image, 1600, 1000),
+  }))
 
   return {
     ...fallbackContent,
     ...pageContent,
     heroTitle: pageContent.heroTitle || fallbackContent.heroTitle,
     heroImageUrl: heroImage
-      ? urlFor(heroImage).width(1800).height(900).fit('crop').url()
+      ? imageUrlFor(heroImage)
       : fallbackContent.heroImageUrl,
-    programs: pageContent.programs,
+    programs,
   }
 }
 

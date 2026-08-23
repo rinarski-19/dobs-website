@@ -11,7 +11,7 @@ export const client = createClient({
 const builder = createImageUrlBuilder(client)
 
 export function urlFor(source: any) {
-  return builder.image(source)
+  return builder.image(source).format('webp')
 }
 
 export async function getPageContent<T>(pageType: string): Promise<T | null> {

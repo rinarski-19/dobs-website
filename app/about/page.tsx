@@ -1,5 +1,5 @@
 import Hero from '@/components/Hero'
-import { client } from '@/lib/sanity'
+import { client, imageUrlFor } from '@/lib/sanity'
 import { Award, Church, HeartHandshake, Quote, ShieldCheck, Sprout } from 'lucide-react'
 
 export const revalidate = 60
@@ -8,7 +8,7 @@ type AboutPageContent = {
   heroTitle?: string
   heroSubtitle?: string
   heroDescription?: string
-  heroImageUrl?: string
+  heroImage?: any
   vision?: string
   mission?: string[]
   coreValues?: Array<{ _key?: string; name: string; description?: string }>
@@ -18,10 +18,10 @@ type AboutPageContent = {
     style?: string
     children?: Array<{ _key?: string; text?: string }>
   }>
-  leadership?: Array<{ _key?: string; name: string; role: string; photoUrl?: string }>
+  leadership?: Array<{ _key?: string; name: string; role: string; photo?: any }>
 }
 
-const fallback: Required<Omit<AboutPageContent, 'heroImageUrl'>> = {
+const fallback: Required<Omit<AboutPageContent, 'heroImage'>> = {
   heroTitle: 'About DOBS',
   heroSubtitle: 'Our Story',
   heroDescription: 'Learn about the mission, vision, core values, and history of the Diocese of Baguio Schools network.',
@@ -57,7 +57,7 @@ async function getAboutPage(): Promise<AboutPageContent> {
         heroTitle,
         heroSubtitle,
         heroDescription,
-        "heroImageUrl": heroImage.asset->url,
+        heroImage,
         vision,
         mission,
         coreValues,
@@ -66,7 +66,7 @@ async function getAboutPage(): Promise<AboutPageContent> {
           _key,
           name,
           role,
-          "photoUrl": photo.asset->url
+          photo
         }
       }
     `)
@@ -91,7 +91,7 @@ export default async function AboutPage() {
         title={content.heroTitle || fallback.heroTitle}
         subtitle={content.heroSubtitle || fallback.heroSubtitle}
         description={content.heroDescription || fallback.heroDescription}
-        image={content.heroImageUrl || '/images/about.png'}
+        image={imageUrlFor(content.heroImage) || '/images/about.png'}
         imagePlaceholder="Administration Building Photo"
       />
 
@@ -185,8 +185,8 @@ export default async function AboutPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {leadership.map(person => (
               <article key={person._key ?? person.name} className="rounded-2xl border border-[#D8CEB8] bg-[#FFFDF7] p-7 shadow-sm flex items-center gap-5">
-                {person.photoUrl ? (
-                  <img src={person.photoUrl} alt={person.name} className="h-20 w-20 rounded-full object-cover shrink-0 ring-2 ring-[#C7A24B] ring-offset-4 ring-offset-[#FFFDF7]" />
+                {person.photo ? (
+                  <img src={imageUrlFor(person.photo, 200, 200)} alt={person.name} className="h-20 w-20 rounded-full object-cover shrink-0 ring-2 ring-[#C7A24B] ring-offset-4 ring-offset-[#FFFDF7]" />
                 ) : (
                   <div className="font-diocesan h-20 w-20 rounded-full bg-[#16324F] text-[#F4D98C] ring-2 ring-[#C7A24B] ring-offset-4 ring-offset-[#FFFDF7] flex items-center justify-center text-2xl font-bold shrink-0" aria-hidden="true">
                     {person.name.split(' ').filter(word => /^[A-Z]/.test(word)).slice(0, 2).map(word => word[0]).join('')}
