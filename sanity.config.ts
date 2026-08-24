@@ -12,6 +12,7 @@ const singletonTypes = [
   'enrollmentPage',
   'contactPage',
   'schoolsPage',
+  'event',
 ]
 
 const singletonPages = [
