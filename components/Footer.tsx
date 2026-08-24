@@ -31,9 +31,20 @@ export default function Footer() {
         <div>
           <h3 className="font-semibold text-gold-300 mb-3 text-sm uppercase tracking-widest">Contact</h3>
           <ul className="space-y-2 text-sm text-white/70">
-            <li>Baguio City, Benguet, Philippines</li>
-            <li>info@dobsschools.edu.ph</li>
-            <li>+63 (74) 000-0000</li>
+            <li className="leading-relaxed">
+              72 Fr. Carlu Street, Barangay Kabayanihan<br />
+              2600 Baguio City, Benguet, Philippines
+            </li>
+            <li>
+              <a href="mailto:dioceseofbaguio2004@gmail.com" className="hover:text-white transition-colors">
+                dioceseofbaguio2004@gmail.com
+              </a>
+            </li>
+            <li>
+              <a href="tel:+63744423756" className="hover:text-white transition-colors">
+                (074) 442-3756
+              </a>
+            </li>
           </ul>
         </div>
       </div>
