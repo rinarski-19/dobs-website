@@ -60,12 +60,11 @@
 
   /* ── Buttons ── */
   .btn-primary {
-    @apply inline-flex items-center gap-2 px-5 py-2.5 text-white font-medium rounded-lg transition-opacity hover:opacity-90;
-    background: linear-gradient(135deg, #16324F, #285943);
+    @apply inline-flex items-center gap-2 px-5 py-2.5 border border-[#155896] bg-[#155896] text-white font-semibold rounded-lg shadow-sm transition-all hover:border-[#124A80] hover:bg-[#124A80] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 active:bg-[#0E3B67];
   }
 
   .btn-secondary {
-    @apply inline-flex items-center gap-2 px-5 py-2.5 border border-primary-200 text-primary-700 font-medium rounded-lg hover:bg-primary-50 transition-colors;
+    @apply inline-flex items-center gap-2 px-5 py-2.5 border border-[#155896] bg-transparent text-[#155896] font-semibold rounded-lg transition-all hover:bg-[#155896] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 active:bg-[#0E3B67];
   }
 
   /* ── Forms ── */

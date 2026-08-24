@@ -53,7 +53,7 @@ const fallback: Required<Omit<AboutPageContent, 'heroImage'>> = {
 async function getAboutPage(): Promise<AboutPageContent> {
   try {
     const content = await client.fetch<AboutPageContent | null>(`
-      *[_type == "aboutPage"][0] {
+      *[_type == "aboutPage"] | order(_updatedAt desc)[0] {
         heroTitle,
         heroSubtitle,
         heroDescription,

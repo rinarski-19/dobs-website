@@ -7,8 +7,7 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      // Brand colors — soft blue palette
-      // ⚠️ Exact shade TBD — update when official brand is confirmed
+      // Diocese of Baguio supporting palette; buttons use the main diocesan blue.
       colors: {
         primary: {
           50:  '#f0f4f0',

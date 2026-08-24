@@ -32,7 +32,7 @@ async function getProgramsPage(): Promise<ProgramsPageContent> {
 
   try {
     content = await client.fetch<ProgramsPageSanityContent | null>(`
-      *[_type == "programsPage"][0] {
+      *[_type == "programsPage"] | order(_updatedAt desc)[0] {
         heroTitle,
         heroSubtitle,
         heroDescription,

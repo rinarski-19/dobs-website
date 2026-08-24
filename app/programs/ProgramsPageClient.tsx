@@ -82,7 +82,7 @@ export default function ProgramsPageClient({ content }: { content: ProgramsPageC
               <p className="text-lg md:text-xl text-white/80 leading-relaxed max-w-xl mb-10">{program.description}</p>
               <div className="flex gap-4">
                 {content.primaryButton?.label && content.primaryButton.href && (
-                  <Link href={content.primaryButton.href} className="btn-primary bg-white text-blue-800 hover:bg-white/90">{content.primaryButton.label}</Link>
+                  <Link href={content.primaryButton.href} className="btn-primary">{content.primaryButton.label}</Link>
                 )}
                 {content.secondaryButton?.label && content.secondaryButton.href && (
                   <Link href={content.secondaryButton.href} className="btn-secondary border-white/40 text-white hover:bg-white/10">{content.secondaryButton.label}</Link>

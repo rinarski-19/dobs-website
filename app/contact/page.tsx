@@ -17,7 +17,7 @@ const fallbackPageContent = {
   heroTitle: 'Contact Us',
   heroSubtitle: 'Get in Touch',
   heroDescription: "Reach out to the Diocese of Baguio Schools office. We're happy to answer your questions.",
-  officeAddress: 'Diocese of Baguio Schools Office Address\nBaguio City, Benguet, Philippines',
+  officeAddress: '72 Fr. Carlu Street, Kabayanihan Barangay\nBaguio City, Benguet 2600, Philippines',
   phone: '+63 (74) 000-0000',
   email: 'info@dobsschools.edu.ph',
   officeHours: 'Mon–Fri, 8:00 AM – 5:00 PM',
@@ -54,7 +54,16 @@ export default async function ContactPage() {
                 <li><span className="font-medium">Office Hours:</span> {content?.officeHours || fallbackPageContent.officeHours}</li>
               </ul>
             </div>
-            <div className="placeholder-block">[ Google Map embed ]</div>
+            <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+              <iframe
+                title="Map showing the Diocese of Baguio Schools office"
+                src="https://www.google.com/maps?q=72%20Fr.%20Carlu%20Street%2C%20Kabayanihan%20Barangay%2C%20Baguio%20City%2C%20Philippines&output=embed"
+                className="h-80 w-full border-0"
+                loading="lazy"
+                allowFullScreen
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
           </div>
 
           <div>

@@ -121,7 +121,7 @@ export default function FeaturedEvent({
         {/* Register button */}
         <Link
           href={registerHref}
-          className="inline-flex items-center justify-center px-10 py-4 bg-gradient-to-r from-red-500 to-orange-400 text-white font-bold uppercase tracking-widest rounded-xl hover:opacity-90 transition-opacity text-sm w-full max-w-sm"
+          className="btn-primary justify-center px-10 py-4 uppercase tracking-widest text-sm w-full max-w-sm"
         >
           Register
         </Link>

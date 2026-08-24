@@ -5,7 +5,7 @@ export const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? '3tjt9t85',
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production',
   apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION ?? '2024-01-01',
-  useCdn: true,
+  useCdn: false,
 })
 
 const builder = createImageUrlBuilder(client)
@@ -16,7 +16,11 @@ export function urlFor(source: any) {
 
 export async function getPageContent<T>(pageType: string): Promise<T | null> {
   try {
-    return await client.fetch<T | null>(`*[_type == $pageType][0]`, { pageType })
+    return await client.fetch<T | null>(
+      `*[_type == $pageType] | order(_updatedAt desc)[0]`,
+      { pageType },
+      { next: { revalidate: 60 } },
+    )
   } catch (error) {
     console.error(`Unable to load ${pageType} content from Sanity:`, error)
     return null
