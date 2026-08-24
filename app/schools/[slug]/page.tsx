@@ -1,4 +1,5 @@
 import Hero from '@/components/Hero'
+import Image from 'next/image'
 import { client, urlFor } from '@/lib/sanity'
 import { MapPin, Phone, Mail, BookOpen } from 'lucide-react'
 import Link from 'next/link'
@@ -18,6 +19,10 @@ type School = {
   email?: string
   levels?: string[]
   description?: any[]
+  principalName?: string
+  principalTitle?: string
+  principalPhoto?: any
+  principalMessage?: any[]
   enrollmentOpen?: boolean
 }
 
@@ -26,7 +31,8 @@ async function getSchool(slug: string): Promise<School | null> {
     `*[_type == "school" && slug.current == $slug][0] {
       _id, name, slug, logo, coverPhoto,
       address, city, phone, email,
-      levels, description, enrollmentOpen
+      levels, description, enrollmentOpen,
+      principalName, principalTitle, principalPhoto, principalMessage
     }`,
     { slug }
   )
@@ -72,6 +78,46 @@ export default async function SchoolDetailPage({ params }: { params: Promise<{ s
                     }
                     return null
                   })}
+                </div>
+              </section>
+            )}
+
+            {school.principalName && (
+              <section className="section">
+                <span className="eyebrow mb-2">Leadership</span>
+                <h2 className="section-heading mb-0">Message from the Principal</h2>
+                <span className="gold-rule mb-6" />
+                <div className="flex flex-col gap-6 rounded-2xl border border-parchment-200 bg-white p-6 shadow-card sm:flex-row sm:items-start">
+                  {school.principalPhoto ? (
+                    <Image
+                      src={urlFor(school.principalPhoto).width(320).height(320).fit('crop').url()}
+                      alt={school.principalName}
+                      width={128}
+                      height={128}
+                      className="h-32 w-32 shrink-0 rounded-2xl object-cover ring-1 ring-parchment-200"
+                    />
+                  ) : (
+                    <div className="flex h-32 w-32 shrink-0 items-center justify-center rounded-2xl bg-primary-700 text-4xl font-bold text-white/90">
+                      {school.principalName.charAt(0)}
+                    </div>
+                  )}
+                  <div className="min-w-0">
+                    <h3 className="font-sans text-lg font-bold text-primary-800">{school.principalName}</h3>
+                    {school.principalTitle && (
+                      <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-gold-600">{school.principalTitle}</p>
+                    )}
+                    {school.principalMessage && school.principalMessage.length > 0 && (
+                      <div className="prose prose-gray max-w-none">
+                        {school.principalMessage.map((block: any, i: number) => {
+                          if (block._type === 'block' && block.children) {
+                            const text = block.children.map((c: any) => c.text).join('')
+                            return <p key={i} className="card-body mb-3">{text}</p>
+                          }
+                          return null
+                        })}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </section>
             )}

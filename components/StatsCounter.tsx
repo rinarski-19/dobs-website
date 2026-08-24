@@ -1,7 +1,3 @@
-'use client'
-
-import { useEffect, useRef, useState } from 'react'
-
 const fallbackStats = [
   { value: 12,   suffix: '+', label: 'Member Schools' },
   { value: 5000, suffix: '+', label: 'Students Enrolled' },
@@ -16,60 +12,23 @@ export type Stat = {
   label: string
 }
 
-function useCountUp(target: number, duration = 1800, started: boolean) {
-  const [count, setCount] = useState(0)
-
-  useEffect(() => {
-    if (!started) return
-    let startTime: number | null = null
-    const step = (timestamp: number) => {
-      if (!startTime) startTime = timestamp
-      const progress = Math.min((timestamp - startTime) / duration, 1)
-      // ease out
-      const eased = 1 - Math.pow(1 - progress, 3)
-      setCount(Math.floor(eased * target))
-      if (progress < 1) requestAnimationFrame(step)
-    }
-    requestAnimationFrame(step)
-  }, [started, target, duration])
-
-  return count
-}
-
-function StatItem({ value, suffix = '', label, started }: Stat & { started: boolean }) {
-  const count = useCountUp(value, 1800, started)
-  return (
-    <div className="text-center">
-      <div className="text-5xl font-bold text-white mb-2 tabular-nums">
-        {count.toLocaleString()}{suffix}
-      </div>
-      <div className="text-sky-200 text-sm font-medium uppercase tracking-widest">{label}</div>
-    </div>
-  )
-}
-
 export default function StatsCounter({ stats = fallbackStats }: { stats?: Stat[] }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [started, setStarted] = useState(false)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setStarted(true) },
-      { threshold: 0.3 }
-    )
-    if (ref.current) observer.observe(ref.current)
-    return () => observer.disconnect()
-  }, [])
-
   return (
     <section
-      ref={ref}
-      className="bg-gradient-to-r from-[#155896] to-[#2e86d4] py-16"
+      className="py-16 md:py-20"
+      style={{ background: 'linear-gradient(120deg, #0c1c2e 0%, #16324F 55%, #294f72 100%)' }}
     >
-      <div className="max-w-[1400px] mx-auto px-10">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-10">
+      <div className="max-w-[1400px] mx-auto px-6 md:px-10">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10 divide-gold-500/20 lg:divide-x">
           {stats.map(stat => (
-            <StatItem key={stat.label} {...stat} started={started} />
+            <div key={stat.label} className="text-center lg:px-4">
+              <div className="font-diocesan text-4xl md:text-5xl font-bold text-gold-300 mb-2 tabular-nums">
+                {stat.value.toLocaleString()}{stat.suffix ?? ''}
+              </div>
+              <div className="text-white/70 text-xs md:text-sm font-medium uppercase tracking-widest">
+                {stat.label}
+              </div>
+            </div>
           ))}
         </div>
       </div>

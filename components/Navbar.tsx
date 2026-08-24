@@ -21,17 +21,15 @@ export default function Navbar() {
   const [open, setOpen] = useState(false)
 
   return (
-    <header
-      className="sticky top-0 z-50 border-b border-blue-100"
-      style={{ background: 'linear-gradient(135deg, #f0f7ff 0%, #ffffff 60%, #e0efff 100%)' }}
-    >
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-parchment-200 shadow-sm">
       <nav className="max-w-[1400px] mx-auto px-6 flex items-center justify-between h-16">
 
         {/* Logo */}
-        <Link href="/" className="font-bold text-lg tracking-tight"
-          style={{ background: 'linear-gradient(135deg, #155896, #4a9eed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
-        >
-          DOBS · Diocese of Baguio Schools
+        <Link href="/" className="group flex items-baseline gap-2 font-diocesan font-bold tracking-tight">
+          <span className="text-xl text-primary-700">DOBS</span>
+          <span className="hidden sm:inline text-sm font-sans font-medium text-gray-500 group-hover:text-primary-700 transition-colors">
+            Diocese of Baguio Schools
+          </span>
         </Link>
 
         {/* Desktop links */}
@@ -42,10 +40,11 @@ export default function Navbar() {
               <li key={href}>
                 <Link
                   href={href}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  aria-current={active ? 'page' : undefined}
+                  className={`relative px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                     active
-                      ? 'text-primary-600 bg-primary-50'
-                      : 'text-gray-600 hover:text-primary-600 hover:bg-primary-50'
+                      ? 'text-primary-700 after:absolute after:inset-x-3 after:-bottom-0.5 after:h-0.5 after:rounded-full after:bg-gold-500'
+                      : 'text-gray-600 hover:text-primary-700 hover:bg-primary-50'
                   }`}
                 >
                   {label}
@@ -62,8 +61,12 @@ export default function Navbar() {
 
         {/* Mobile toggle */}
         <button
-          className="lg:hidden p-2 rounded-md text-primary-600 hover:bg-primary-50"
+          type="button"
+          className="lg:hidden flex h-11 w-11 items-center justify-center rounded-md text-primary-700 hover:bg-primary-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500"
           onClick={() => setOpen(!open)}
+          aria-label={open ? 'Close menu' : 'Open menu'}
+          aria-expanded={open}
+          aria-controls="mobile-menu"
         >
           {open ? <X size={20} /> : <Menu size={20} />}
         </button>
@@ -71,19 +74,27 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {open && (
-        <div className="lg:hidden border-t border-blue-100 bg-white px-6 py-4 space-y-1">
-          {links.map(({ label, href }) => (
-            <Link
-              key={href}
-              href={href}
-              onClick={() => setOpen(false)}
-              className="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-primary-50 hover:text-primary-600"
-            >
-              {label}
-            </Link>
-          ))}
+        <div id="mobile-menu" className="lg:hidden border-t border-parchment-200 bg-white px-6 py-4 space-y-1">
+          {links.map(({ label, href }) => {
+            const active = pathname === href
+            return (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setOpen(false)}
+                aria-current={active ? 'page' : undefined}
+                className={`block px-3 py-2.5 rounded-md text-sm font-medium transition-colors ${
+                  active
+                    ? 'bg-primary-50 text-primary-700'
+                    : 'text-gray-700 hover:bg-primary-50 hover:text-primary-700'
+                }`}
+              >
+                {label}
+              </Link>
+            )
+          })}
           <div className="pt-2">
-            <Link href="/enrollment" className="btn-primary w-full justify-center text-sm">
+            <Link href="/enrollment" onClick={() => setOpen(false)} className="btn-primary w-full justify-center text-sm">
               Enroll Now
             </Link>
           </div>

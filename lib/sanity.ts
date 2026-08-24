@@ -10,8 +10,11 @@ export const client = createClient({
 
 const builder = createImageUrlBuilder(client)
 
+// Keep WebP compression efficient without introducing visible softness in photos.
+const WEBP_QUALITY = 90
+
 export function urlFor(source: any) {
-  return builder.image(source).format('webp')
+  return builder.image(source).format('webp').quality(WEBP_QUALITY)
 }
 
 export async function getPageContent<T>(pageType: string): Promise<T | null> {
@@ -19,7 +22,7 @@ export async function getPageContent<T>(pageType: string): Promise<T | null> {
     return await client.fetch<T | null>(
       `*[_type == $pageType] | order(_updatedAt desc)[0]`,
       { pageType },
-      { cache: 'no-store' },
+      { next: { revalidate: 300 } },
     )
   } catch (error) {
     console.error(`Unable to load ${pageType} content from Sanity:`, error)

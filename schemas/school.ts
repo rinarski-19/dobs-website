@@ -68,6 +68,29 @@ export default defineType({
       of: [{ type: 'block' }],
     }),
     defineField({
+      name: 'principalName',
+      title: 'Principal — Name',
+      type: 'string',
+    }),
+    defineField({
+      name: 'principalTitle',
+      title: 'Principal — Title',
+      type: 'string',
+      initialValue: 'School Principal',
+    }),
+    defineField({
+      name: 'principalPhoto',
+      title: 'Principal — Photo',
+      type: 'image',
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: 'principalMessage',
+      title: 'Principal — Message',
+      type: 'array',
+      of: [{ type: 'block' }],
+    }),
+    defineField({
       name: 'enrollmentOpen',
       title: 'Enrollment Currently Open?',
       type: 'boolean',

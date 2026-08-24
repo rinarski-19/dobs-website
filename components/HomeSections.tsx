@@ -1,0 +1,270 @@
+import Link from 'next/link'
+import Image from 'next/image'
+import { ArrowRight, ArrowUpRight, CalendarDays, MapPin, Quote } from 'lucide-react'
+
+export type HomeNewsItem = {
+  _id: string
+  title: string
+  slug: string
+  category?: string
+  excerpt?: string
+  publishedAt?: string
+  imageUrl?: string
+  schoolName?: string
+}
+
+export type HomeEventItem = {
+  _id: string
+  title: string
+  startDate: string
+  location?: string
+  schoolName?: string
+  description?: string
+}
+
+export type Testimonial = {
+  _key?: string
+  quote: string
+  name: string
+  role?: string
+  school?: string
+}
+
+export type BirthdayCelebrant = {
+  _key?: string
+  name: string
+  role?: string
+  school?: string
+  greeting?: string
+  imageUrl?: string
+}
+
+function formatDate(value: string, options: Intl.DateTimeFormatOptions) {
+  return new Intl.DateTimeFormat('en-PH', options).format(new Date(value))
+}
+
+export function LatestNewsSection({ items, heading }: { items: HomeNewsItem[]; heading: string }) {
+  return (
+    <section className="section">
+      <div className="mb-6 flex items-end justify-between gap-4">
+        <div>
+          <span className="eyebrow mb-2">Newsroom</span>
+          <h2 className="section-heading mb-0">{heading}</h2>
+          <span className="gold-rule" />
+        </div>
+        <Link href="/news" className="hidden items-center gap-1 text-sm font-semibold text-primary-700 hover:text-gold-600 transition-colors sm:inline-flex">
+          View all <ArrowRight size={15} />
+        </Link>
+      </div>
+
+      {items.length === 0 ? (
+        <div className="placeholder-block">News and announcements will appear here.</div>
+      ) : (
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          {items.map(item => (
+            <Link key={item._id} href={`/news/${item.slug}`} className="card group overflow-hidden p-0 transition-all hover:-translate-y-1 hover:shadow-md">
+              <div className="relative h-44 w-full overflow-hidden">
+                {item.imageUrl ? (
+                  <Image src={item.imageUrl} alt={item.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary-800 to-primary-500 text-sm text-white/80">DOBS News</div>
+                )}
+              </div>
+              <div className="p-6">
+                {item.category && <span className="badge mb-3">{item.category}</span>}
+                <h3 className="card-title transition-colors group-hover:text-primary-700">{item.title}</h3>
+                {item.excerpt && <p className="card-body mt-2 line-clamp-3">{item.excerpt}</p>}
+                {item.publishedAt && <p className="mt-4 text-xs text-gray-400">{formatDate(item.publishedAt, { month: 'long', day: 'numeric', year: 'numeric' })}</p>}
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
+
+      <Link href="/news" className="btn-secondary mt-5 sm:hidden">View All News <ArrowRight size={16} /></Link>
+    </section>
+  )
+}
+
+export function UpcomingEventsSection({ items, heading }: { items: HomeEventItem[]; heading: string }) {
+  return (
+    <section className="section">
+      <div className="mb-6 flex items-end justify-between gap-4">
+        <div>
+          <span className="eyebrow mb-2">Calendar</span>
+          <h2 className="section-heading mb-0">{heading}</h2>
+          <span className="gold-rule" />
+        </div>
+        <Link href="/events" className="hidden items-center gap-1 text-sm font-semibold text-primary-700 hover:text-gold-600 transition-colors sm:inline-flex">
+          View calendar <ArrowRight size={15} />
+        </Link>
+      </div>
+
+      {items.length === 0 ? (
+        <div className="placeholder-block">Upcoming school events will appear here.</div>
+      ) : (
+        <div className="space-y-4">
+          {items.map(item => (
+            <div key={item._id} className="flex flex-col gap-5 rounded-2xl border border-parchment-200 bg-white p-5 shadow-card transition-shadow hover:shadow-md sm:flex-row sm:items-center">
+              <div className="flex h-20 w-20 shrink-0 flex-col items-center justify-center rounded-xl bg-primary-700 text-white">
+                <span className="text-xs font-bold uppercase text-gold-300">{formatDate(item.startDate, { month: 'short' })}</span>
+                <span className="text-3xl font-bold leading-none">{formatDate(item.startDate, { day: 'numeric' })}</span>
+              </div>
+              <div className="min-w-0 flex-1">
+                <h3 className="font-sans text-lg font-bold text-gray-900">{item.title}</h3>
+                <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500">
+                  <span className="inline-flex items-center gap-1"><CalendarDays size={14} /> {formatDate(item.startDate, { weekday: 'short', month: 'long', day: 'numeric', year: 'numeric' })}</span>
+                  {item.location && <span className="inline-flex items-center gap-1"><MapPin size={14} /> {item.location}</span>}
+                  {item.schoolName && <span>{item.schoolName}</span>}
+                </div>
+                {item.description && <p className="mt-2 line-clamp-2 text-sm text-gray-500">{item.description}</p>}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <Link href="/events" className="btn-secondary mt-5">View All Events <ArrowRight size={16} /></Link>
+    </section>
+  )
+}
+
+export function TestimonialsSection({ items, heading }: { items: Testimonial[]; heading: string }) {
+  if (items.length === 0) return null
+
+  return (
+    <section className="section">
+      <div className="mb-6">
+        <span className="eyebrow mb-2">Our Community</span>
+        <h2 className="section-heading mb-0">{heading}</h2>
+        <span className="gold-rule" />
+      </div>
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        {items.map((item, index) => (
+          <figure key={item._key ?? `${item.name}-${index}`} className="card relative border-parchment-200 bg-parchment-50">
+            <Quote className="absolute right-5 top-5 text-gold-300" size={32} />
+            <blockquote className="pr-8 text-gray-700 leading-relaxed">“{item.quote}”</blockquote>
+            <figcaption className="mt-6 border-t border-parchment-200 pt-4">
+              <div className="font-semibold text-primary-800">{item.name}</div>
+              {(item.role || item.school) && <div className="text-sm text-gray-500">{[item.role, item.school].filter(Boolean).join(' · ')}</div>}
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+export function BirthdaySection({ title, message, celebrants }: { title: string; message?: string; celebrants: BirthdayCelebrant[] }) {
+  return (
+    <section className="section">
+      <div className="rounded-3xl bg-gradient-to-br from-[#0c1c2e] via-[#285943] to-[#16324F] p-8 text-white md:p-10">
+        <div className="mb-8 max-w-2xl">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-gold-300">A special celebration</p>
+          <h2 className="font-diocesan text-3xl font-semibold md:text-4xl">{title}</h2>
+          {message && <p className="mt-3 text-white/75">{message}</p>}
+        </div>
+        {celebrants.length === 0 ? (
+          <div className="rounded-2xl bg-white/10 p-6 text-center text-white/75 backdrop-blur-sm">
+            Birthday greetings for our school community will appear here.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+            {celebrants.map((celebrant, index) => (
+              <div key={celebrant._key ?? `${celebrant.name}-${index}`} className="flex items-center gap-5 rounded-2xl bg-white/10 p-5 backdrop-blur-sm">
+                {celebrant.imageUrl ? (
+                  <Image src={celebrant.imageUrl} alt={celebrant.name} width={80} height={80} className="h-20 w-20 shrink-0 rounded-full object-cover ring-2 ring-gold-300/50" />
+                ) : (
+                  <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-white/15 text-2xl font-bold text-white/80">{celebrant.name.charAt(0)}</div>
+                )}
+                <div>
+                  <h3 className="text-lg font-semibold">{celebrant.name}</h3>
+                  {(celebrant.role || celebrant.school) && <p className="mt-1 text-sm text-white/65">{[celebrant.role, celebrant.school].filter(Boolean).join(' · ')}</p>}
+                  {celebrant.greeting && <p className="mt-3 text-sm leading-relaxed text-white/80">{celebrant.greeting}</p>}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  )
+}
+
+type LocationSchool = { _id: string; name: string; slug?: string; city?: string }
+
+export function SchoolLocationsSection({ schools, heading }: { schools: LocationSchool[]; heading: string }) {
+  const locations = Array.from(
+    schools.reduce((groups, school) => {
+      const city = school.city || 'Baguio and Benguet'
+      const current = groups.get(city) ?? []
+      current.push(school)
+      groups.set(city, current)
+      return groups
+    }, new Map<string, LocationSchool[]>())
+  )
+
+  if (locations.length === 0) return null
+
+  return (
+    <section className="section">
+      <div className="mb-6 flex items-end justify-between gap-4">
+        <div>
+          <span className="eyebrow mb-2">Where We Serve</span>
+          <h2 className="section-heading mb-0">{heading}</h2>
+          <span className="gold-rule" />
+          <p className="section-body mt-3">Find a Diocese of Baguio school serving your community.</p>
+        </div>
+        <Link href="/schools" className="hidden items-center gap-1 text-sm font-semibold text-primary-700 hover:text-gold-600 transition-colors sm:inline-flex">Browse schools <ArrowRight size={15} /></Link>
+      </div>
+
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {locations.map(([city, citySchools]) => (
+          <div
+            key={city}
+            className="flex flex-col rounded-2xl border border-parchment-200 bg-white p-5 shadow-card transition-shadow hover:shadow-md"
+          >
+            <div className="mb-3 flex items-start justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-50 text-primary-700">
+                  <MapPin size={18} />
+                </span>
+                <div>
+                  <h3 className="font-sans font-semibold leading-tight text-gray-900">{city}</h3>
+                  <p className="text-xs text-gray-500">{citySchools.length} {citySchools.length === 1 ? 'school' : 'schools'}</p>
+                </div>
+              </div>
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${city}, Philippines`)}`}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`View ${city} on Google Maps`}
+                className="-mr-1 -mt-1 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-primary-50 hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500"
+              >
+                <ArrowUpRight size={22} strokeWidth={2.25} />
+              </a>
+            </div>
+
+            <ul className="space-y-1 border-t border-parchment-200 pt-3">
+              {citySchools.map(school => (
+                <li key={school._id}>
+                  {school.slug ? (
+                    <Link
+                      href={`/schools/${school.slug}`}
+                      className="group flex items-center justify-between gap-2 rounded px-1 py-1 text-sm text-gray-600 transition-colors hover:bg-primary-50 hover:text-primary-700"
+                    >
+                      <span className="truncate">{school.name}</span>
+                      <ArrowRight size={13} className="shrink-0 -translate-x-1 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100" />
+                    </Link>
+                  ) : (
+                    <span className="block px-1 py-1 text-sm text-gray-600">{school.name}</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}

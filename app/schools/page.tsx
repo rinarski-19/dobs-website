@@ -1,19 +1,10 @@
 import Hero from '@/components/Hero'
-import { client, getPageContent, imageUrlFor, urlFor } from '@/lib/sanity'
+import { getPageContent, imageUrlFor, urlFor } from '@/lib/sanity'
+import { getSchools } from '@/lib/schools'
 import Link from 'next/link'
 import { MapPin } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
-
-type School = {
-  _id: string
-  name: string
-  slug: { current: string }
-  city?: string
-  levels?: string[]
-  coverPhoto?: any
-  enrollmentOpen?: boolean
-}
 
 type SchoolsPageContent = {
   heroTitle?: string
@@ -28,25 +19,6 @@ const fallbackPageContent = {
   heroSubtitle: 'Member Schools',
   heroDescription: 'Browse all member schools under the Diocese of Baguio Schools network across Baguio City and Benguet.',
   emptyStateText: 'No schools added yet. Add schools in the Sanity Studio.',
-}
-
-async function getSchools(): Promise<School[]> {
-  try {
-    return await client.fetch(`
-      *[_type == "school"] | order(name asc) {
-        _id,
-        name,
-        slug,
-        city,
-        levels,
-        coverPhoto,
-        enrollmentOpen
-      }
-    `)
-  } catch (error) {
-    console.error('Unable to load schools from Sanity:', error)
-    return []
-  }
 }
 
 export default async function SchoolsPage() {

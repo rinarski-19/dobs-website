@@ -80,7 +80,7 @@ export default async function EnrollmentPage() {
           ) : (
             <div className="placeholder-block">[ Requirements per grade level — Sanity ]</div>
           )}
-          <aside className="mt-5 flex items-start gap-3 rounded-xl border border-[#155896]/20 bg-[#F0F7FF] px-5 py-4 text-[#144A7C]">
+          <aside className="mt-5 flex items-start gap-3 rounded-xl border border-primary-700/20 bg-primary-50 px-5 py-4 text-primary-800">
             <Info className="mt-0.5 shrink-0" size={20} aria-hidden="true" />
             <p className="text-sm leading-relaxed">
               Requirements, schedules, assessments, and fees vary by member school. Contact the selected school before submitting an application.
