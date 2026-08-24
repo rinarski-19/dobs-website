@@ -7,19 +7,19 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      // Diocese of Baguio supporting palette; buttons use the main diocesan blue.
+      // Diocese of Baguio primary blue palette.
       colors: {
         primary: {
-          50:  '#f0f4f0',
-          100: '#d6e4da',
-          200: '#adc9b6',
-          300: '#7aaa8e',
-          400: '#4e8c6d',
-          500: '#285943',  // forest green — main
-          600: '#1e4433',
-          700: '#163324',
-          800: '#16324F',  // deep navy — headings
-          900: '#0f2035',
+          50:  '#f0f7ff',
+          100: '#e0efff',
+          200: '#baddff',
+          300: '#84c1ff',
+          400: '#4a9eed',
+          500: '#2e86d4',
+          600: '#1a6db8',
+          700: '#155896',
+          800: '#144a7c',
+          900: '#153e67',
         },
         gold: {
           400: '#D9BC72',

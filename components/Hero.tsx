@@ -32,7 +32,7 @@ export default function Hero({
       style={
         image
           ? { backgroundImage: `url(${image})`, backgroundSize: 'cover', backgroundPosition: 'center' }
-          : { background: 'linear-gradient(135deg, #16324F 0%, #285943 100%)' }
+          : { background: 'linear-gradient(135deg, #153e67 0%, #155896 100%)' }
       }
     >
       {/* Overlay — only shown when there's a real image */}

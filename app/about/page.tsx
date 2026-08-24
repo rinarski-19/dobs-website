@@ -113,7 +113,7 @@ export default async function AboutPage() {
               <ol className="space-y-4 text-slate-600 leading-relaxed">
                 {mission.map((item, index) => (
                   <li key={item} className="flex gap-4">
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#285943] text-xs font-semibold text-white">{index + 1}</span>
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#155896] text-xs font-semibold text-white">{index + 1}</span>
                     <span>{item}</span>
                   </li>
                 ))}
@@ -143,7 +143,7 @@ export default async function AboutPage() {
               const Icon = valueIcons[index % valueIcons.length]
               return (
                 <article key={value._key ?? value.name} className="group rounded-2xl border border-[#D8CEB8] bg-[#FFFDF7] p-7 transition-all hover:-translate-y-1 hover:shadow-md">
-                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-[#285943] text-[#F4D98C]">
+                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-[#155896] text-[#F4D98C]">
                     <Icon size={23} strokeWidth={1.7} />
                   </div>
                   <h3 className="font-diocesan text-2xl font-bold text-[#16324F] mb-2">{value.name}</h3>
@@ -156,7 +156,7 @@ export default async function AboutPage() {
 
         <section className="py-16 border-t border-[#DED5C4]">
           <div className="grid grid-cols-1 lg:grid-cols-[0.75fr_1.6fr] overflow-hidden rounded-3xl border border-[#D8CEB8] bg-white shadow-sm">
-            <div className="bg-[#285943] p-8 md:p-10 text-white">
+            <div className="bg-[#155896] p-8 md:p-10 text-white">
               <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#F4D98C]">Our journey</span>
               <h2 className="font-diocesan text-4xl md:text-5xl font-bold mt-3">A Heritage of Faith and Mission</h2>
               <p className="mt-5 text-sm leading-relaxed text-white/75">Rooted in the Cordillera and formed through generations of Catholic evangelization and education.</p>
@@ -194,7 +194,7 @@ export default async function AboutPage() {
                 )}
                 <div>
                   <h3 className="font-diocesan text-2xl font-bold text-[#16324F] mb-1">{person.name}</h3>
-                  <p className="text-sm font-medium leading-relaxed text-[#285943]">{person.role}</p>
+                  <p className="text-sm font-medium leading-relaxed text-[#155896]">{person.role}</p>
                 </div>
               </article>
             ))}
