@@ -19,7 +19,7 @@ export async function getPageContent<T>(pageType: string): Promise<T | null> {
     return await client.fetch<T | null>(
       `*[_type == $pageType] | order(_updatedAt desc)[0]`,
       { pageType },
-      { next: { revalidate: 60 } },
+      { cache: 'no-store' },
     )
   } catch (error) {
     console.error(`Unable to load ${pageType} content from Sanity:`, error)

@@ -2,7 +2,7 @@ import Hero from '@/components/Hero'
 import { client, imageUrlFor } from '@/lib/sanity'
 import { Award, Church, HeartHandshake, Quote, ShieldCheck, Sprout } from 'lucide-react'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 type AboutPageContent = {
   heroTitle?: string
@@ -69,7 +69,7 @@ async function getAboutPage(): Promise<AboutPageContent> {
           photo
         }
       }
-    `)
+    `, {}, { cache: 'no-store' })
     return content ?? fallback
   } catch (error) {
     console.error('Unable to load About Page content from Sanity:', error)

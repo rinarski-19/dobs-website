@@ -1,7 +1,7 @@
 import { client, imageUrlFor } from '@/lib/sanity'
 import ProgramsPageClient, { Program, ProgramsPageContent } from './ProgramsPageClient'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 type ProgramsPageSanityProgram = Omit<Program, 'imageUrl'> & {
   image?: any
@@ -48,7 +48,7 @@ async function getProgramsPage(): Promise<ProgramsPageContent> {
         primaryButton,
         secondaryButton
       }
-    `)
+    `, {}, { cache: 'no-store' })
   } catch (error) {
     console.error('Unable to load Programs Page content from Sanity:', error)
   }

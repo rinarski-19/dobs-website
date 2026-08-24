@@ -1,5 +1,8 @@
 import Hero from '@/components/Hero'
 import { getPageContent, imageUrlFor } from '@/lib/sanity'
+import { Info } from 'lucide-react'
+
+export const dynamic = 'force-dynamic'
 
 type EnrollmentPageContent = {
   heroTitle?: string
@@ -77,6 +80,12 @@ export default async function EnrollmentPage() {
           ) : (
             <div className="placeholder-block">[ Requirements per grade level — Sanity ]</div>
           )}
+          <aside className="mt-5 flex items-start gap-3 rounded-xl border border-[#155896]/20 bg-[#F0F7FF] px-5 py-4 text-[#144A7C]">
+            <Info className="mt-0.5 shrink-0" size={20} aria-hidden="true" />
+            <p className="text-sm leading-relaxed">
+              Requirements, schedules, assessments, and fees vary by member school. Contact the selected school before submitting an application.
+            </p>
+          </aside>
         </section>
 
         <div className="divider" />

@@ -2,6 +2,8 @@ import Hero from '@/components/Hero'
 import FeaturedEvent from '@/components/FeaturedEvent'
 import { getPageContent, imageUrlFor } from '@/lib/sanity'
 
+export const dynamic = 'force-dynamic'
+
 type EventsPageContent = {
   heroTitle?: string
   heroSubtitle?: string

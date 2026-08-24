@@ -1,6 +1,8 @@
 import Hero from '@/components/Hero'
 import { getPageContent, imageUrlFor } from '@/lib/sanity'
 
+export const dynamic = 'force-dynamic'
+
 type NewsPageContent = {
   heroTitle?: string
   heroSubtitle?: string

@@ -3,7 +3,7 @@ import { client, getPageContent, imageUrlFor, urlFor } from '@/lib/sanity'
 import Link from 'next/link'
 import { MapPin } from 'lucide-react'
 
-export const revalidate = 60 // refresh every 60 seconds
+export const dynamic = 'force-dynamic'
 
 type School = {
   _id: string

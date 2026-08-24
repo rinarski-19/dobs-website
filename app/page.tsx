@@ -7,6 +7,8 @@ import { Feature } from '@/components/Features'
 import { Stat } from '@/components/StatsCounter'
 import { getPageContent, imageUrlFor } from '@/lib/sanity'
 
+export const dynamic = 'force-dynamic'
+
 type HomePageContent = {
   heroTitle?: string
   heroSubtitle?: string
