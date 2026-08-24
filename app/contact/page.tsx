@@ -28,6 +28,9 @@ const fallbackPageContent = {
 
 export default async function ContactPage() {
   const content = await getPageContent<ContactPageContent>('contactPage')
+  const phone = content?.phone || fallbackPageContent.phone
+  const email = content?.email || fallbackPageContent.email
+  const phoneHref = phone.replace(/[^\d+]/g, '')
 
   return (
     <>
@@ -51,8 +54,18 @@ export default async function ContactPage() {
             <div className="card">
               <h3 className="card-title mb-3">Contact Details</h3>
               <ul className="space-y-2 text-sm text-gray-600">
-                <li><span className="font-medium">Phone:</span> {content?.phone || fallbackPageContent.phone}</li>
-                <li><span className="font-medium">Email:</span> {content?.email || fallbackPageContent.email}</li>
+                <li>
+                  <span className="font-medium">Phone:</span>{' '}
+                  <a href={`tel:${phoneHref}`} className="text-primary-700 transition-colors hover:text-primary-500 hover:underline">
+                    {phone}
+                  </a>
+                </li>
+                <li>
+                  <span className="font-medium">Email:</span>{' '}
+                  <a href={`mailto:${email.trim()}`} className="break-all text-primary-700 transition-colors hover:text-primary-500 hover:underline">
+                    {email}
+                  </a>
+                </li>
                 <li><span className="font-medium">Office Hours:</span> {content?.officeHours || fallbackPageContent.officeHours}</li>
               </ul>
             </div>

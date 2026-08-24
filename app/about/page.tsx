@@ -91,7 +91,7 @@ export default async function AboutPage() {
         title={content.heroTitle || fallback.heroTitle}
         subtitle={content.heroSubtitle || fallback.heroSubtitle}
         description={content.heroDescription || fallback.heroDescription}
-        image={imageUrlFor(content.heroImage) || '/images/about.png'}
+        image={imageUrlFor(content.heroImage) || '/images/about.jpeg'}
         imagePlaceholder="Administration Building Photo"
       />
 
