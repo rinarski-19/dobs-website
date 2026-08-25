@@ -2,6 +2,7 @@ import Hero from '@/components/Hero'
 import { getPageContent, imageUrlFor } from '@/lib/sanity'
 import {
   BadgeCheck,
+  CheckCircle2,
   ClipboardCheck,
   FileText,
   Info,
@@ -138,9 +139,28 @@ export default async function EnrollmentPage() {
             </p>
           </div>
           {content?.requirements?.length ? (
-            <ul className="card space-y-3 text-gray-600 list-disc list-inside">
-              {content.requirements.map(requirement => <li key={requirement}>{requirement}</li>)}
-            </ul>
+            <div className="overflow-hidden rounded-2xl border-2 border-primary-100 bg-white shadow-card">
+              <div className="flex items-start gap-4 border-b border-primary-100 bg-primary-50 px-6 py-5 md:px-8">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary-700 text-white shadow-sm">
+                  <FileText size={24} strokeWidth={1.8} aria-hidden="true" />
+                </span>
+                <div>
+                  <h3 className="font-diocesan text-2xl font-bold text-primary-700">General document checklist</h3>
+                  <p className="mt-1 text-sm leading-6 text-gray-600">
+                    Gather the following documents in advance. Your selected school may request additional requirements.
+                  </p>
+                </div>
+              </div>
+
+              <ul className="grid grid-cols-1 gap-x-10 gap-y-4 px-6 py-7 text-gray-700 md:grid-cols-2 md:px-8 md:py-8">
+                {content.requirements.map(requirement => (
+                  <li key={requirement} className="flex items-start gap-3 text-sm leading-6">
+                    <CheckCircle2 className="mt-0.5 shrink-0 text-primary-600" size={20} strokeWidth={2} aria-hidden="true" />
+                    <span>{requirement}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           ) : (
             <div className="placeholder-block">[ Requirements per grade level — Sanity ]</div>
           )}
