@@ -139,7 +139,7 @@ export default async function EnrollmentPage() {
             </p>
           </div>
           {content?.requirements?.length ? (
-            <div className="overflow-hidden rounded-2xl border-2 border-primary-100 bg-white shadow-card">
+            <div className="overflow-hidden rounded-t-2xl border-2 border-primary-100 bg-white shadow-card">
               <div className="flex items-start gap-4 border-b border-primary-100 bg-primary-50 px-6 py-5 md:px-8">
                 <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary-700 text-white shadow-sm">
                   <FileText size={24} strokeWidth={1.8} aria-hidden="true" />
@@ -164,11 +164,16 @@ export default async function EnrollmentPage() {
           ) : (
             <div className="placeholder-block">[ Requirements per grade level — Sanity ]</div>
           )}
-          <aside className="mt-5 flex items-start gap-3 rounded-xl border border-primary-700/20 bg-primary-50 px-5 py-4 text-primary-800">
-            <Info className="mt-0.5 shrink-0" size={20} aria-hidden="true" />
-            <p className="text-sm leading-relaxed">
-              Requirements, schedules, assessments, and fees vary by member school. Contact the selected school before submitting an application.
-            </p>
+          <aside className="-mt-0.5 flex items-start gap-4 rounded-b-2xl border-2 border-t-0 border-primary-200 bg-primary-100 px-6 py-5 text-primary-900 shadow-card md:px-8">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-700 text-white">
+              <Info size={20} strokeWidth={2} aria-hidden="true" />
+            </span>
+            <div>
+              <h3 className="text-sm font-bold uppercase tracking-[0.12em] text-primary-800">Important Notice</h3>
+              <p className="mt-1 text-sm leading-6 text-primary-800">
+                Requirements, schedules, assessments, and fees vary by member school. Contact the selected school before submitting an application.
+              </p>
+            </div>
           </aside>
           </div>
         </section>
