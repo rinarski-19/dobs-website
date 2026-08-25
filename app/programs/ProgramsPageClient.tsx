@@ -137,9 +137,14 @@ export default function ProgramsPageClient({ content }: { content: ProgramsPageC
               ref={el => { sectionRefs.current[i] = el }}
               data-idx={i + 1}
               className="programs-snap-section relative flex min-h-[calc(100svh-4rem)] items-center justify-center overflow-hidden bg-gray-900 py-20"
-              style={{ backgroundImage: program.imageUrl ? `url(${program.imageUrl})` : undefined, backgroundSize: 'cover', backgroundPosition: 'center' }}
+              style={{
+                backgroundImage: program.imageUrl ? `url(${program.imageUrl})` : undefined,
+                backgroundSize: 'cover',
+                backgroundPosition: i % 2 === 0 ? '65% center' : '35% center',
+              }}
             >
-              <div className="absolute inset-0 bg-black/55" />
+              <div className="absolute inset-0 bg-primary-950/45" />
+              <div className={`absolute inset-0 ${i % 2 === 0 ? 'bg-gradient-to-r from-primary-950/90 via-primary-950/55 to-primary-900/10' : 'bg-gradient-to-l from-primary-950/90 via-primary-950/55 to-primary-900/10'}`} />
               <span className={`absolute bottom-4 text-[18rem] font-black text-white/5 leading-none select-none pointer-events-none ${i % 2 === 0 ? 'right-12' : 'left-12'}`}>
                 {String(i + 1).padStart(2, '0')}
               </span>

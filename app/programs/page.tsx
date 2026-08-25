@@ -66,7 +66,7 @@ async function getProgramsPage(): Promise<ProgramsPageContent> {
       learningFocus: program.learningFocus || fallbackProgram?.learningFocus,
       faithFormation: program.faithFormation || fallbackProgram?.faithFormation,
       availableSchools: program.availableSchools || fallbackProgram?.availableSchools,
-      imageUrl: imageUrlFor(image, 1600, 1000),
+      imageUrl: imageUrlFor(image, 1920, 1080),
     }
   })
 

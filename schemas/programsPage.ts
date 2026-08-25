@@ -25,7 +25,8 @@ export default defineType({
           defineField({ name: 'description', title: 'Description', type: 'text', rows: 4, validation: Rule => Rule.required() }),
           defineField({
             name: 'image', title: 'Background Image', type: 'image', options: { hotspot: true },
-            fields: [defineField({ name: 'alt', title: 'Alternative Text', type: 'string' })],
+            description: 'Upload a high-resolution 16:9 landscape photo, ideally 1920 × 1080 or larger. Keep the main subject away from the text side, use natural and consistent lighting, and do not use images containing text or logos. Set the hotspot on the important subject.',
+            fields: [defineField({ name: 'alt', title: 'Alternative Text', type: 'string', description: 'Briefly describe the people, activity, and setting shown.', validation: Rule => Rule.required() })],
           }),
         ],
         preview: { select: { title: 'title', subtitle: 'grades', media: 'image' } },
