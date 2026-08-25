@@ -10,6 +10,7 @@ import {
   Mail,
   PhoneCall,
   School,
+  Send,
   UserCheck,
 } from 'lucide-react'
 
@@ -239,11 +240,11 @@ export default async function EnrollmentPage() {
 
           <form className="rounded-2xl border border-primary-100 bg-white p-6 shadow-card md:p-8 lg:p-10">
             <div className="mb-7">
-              <span className="eyebrow">Learner information</span>
+              <span className="eyebrow">Enrollment Inquiry</span>
               <h3 className="mt-2 font-diocesan text-3xl font-bold text-primary-700">Complete the inquiry form</h3>
               <p className="mt-2 text-sm leading-6 text-gray-600">Provide your contact details and enrollment preferences below.</p>
             </div>
-            <div className="space-y-5">
+            <div className="space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="guardian-name" className="form-label">Parent / Guardian Name</label>
@@ -284,7 +285,9 @@ export default async function EnrollmentPage() {
               <label htmlFor="inquiry-message" className="form-label">Message (optional)</label>
               <textarea id="inquiry-message" name="message" className="form-textarea bg-parchment-50" rows={5} placeholder="Any questions or additional information..." />
             </div>
-            <button type="submit" className="btn-primary w-full sm:w-auto">Submit Inquiry</button>
+            <button type="submit" className="btn-primary w-full sm:w-auto">
+              Submit Inquiry <Send size={17} aria-hidden="true" />
+            </button>
             </div>
           </form>
           </div>
