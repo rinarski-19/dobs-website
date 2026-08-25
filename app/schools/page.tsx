@@ -79,7 +79,8 @@ export default async function SchoolsPage({
         imagePlaceholder="Schools Network Photo"
       />
 
-      <div className="page-wrapper">
+      <section className="bg-parchment-100">
+        <div className="page-wrapper">
 
         <div className="mb-10 max-w-3xl">
           <span className="eyebrow mb-3 text-gold-700">Our Network</span>
@@ -90,12 +91,7 @@ export default async function SchoolsPage({
           </p>
         </div>
 
-        {schools.length === 0 ? (
-          <div className="placeholder-block">
-            {content?.emptyStateText || fallbackPageContent.emptyStateText}{' '}
-            <Link href="/studio" className="text-primary-600 underline">Sanity Studio</Link>.
-          </div>
-        ) : (
+        {schools.length > 0 && (
           <>
             <div className="mb-9 rounded-2xl border border-primary-100 bg-primary-50/60 p-5 md:p-6">
               <div className="mb-5 flex items-center gap-2 text-primary-900">
@@ -159,7 +155,20 @@ export default async function SchoolsPage({
                 <Link href="/schools" className="btn-secondary">Reset</Link>
               </form>
             </div>
+          </>
+        )}
+        </div>
+      </section>
 
+      <section className="bg-white">
+        <div className="page-wrapper">
+        {schools.length === 0 ? (
+          <div className="placeholder-block">
+            {content?.emptyStateText || fallbackPageContent.emptyStateText}{' '}
+            <Link href="/studio" className="text-primary-600 underline">Sanity Studio</Link>.
+          </div>
+        ) : (
+          <>
             <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 pb-4">
               <p className="text-base font-semibold text-primary-900" aria-live="polite">
                 Showing {filteredSchools.length} member {filteredSchools.length === 1 ? 'school' : 'schools'}
@@ -317,7 +326,8 @@ export default async function SchoolsPage({
           </>
         )}
 
-      </div>
+        </div>
+      </section>
     </>
   )
 }
