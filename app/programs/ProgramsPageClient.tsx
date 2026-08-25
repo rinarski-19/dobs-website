@@ -76,6 +76,8 @@ export default function ProgramsPageClient({ content }: { content: ProgramsPageC
             image={content.heroImageUrl}
             imagePlaceholder="Students in Classroom Photo"
             viewport
+            showBottomFade={false}
+            contentClassName="max-w-6xl rounded-3xl border border-white/25 bg-primary-950/80 p-6 shadow-2xl backdrop-blur-sm md:p-8 lg:p-10"
           />
 
           <nav aria-label="Explore academic programs" className="absolute inset-x-0 bottom-5 z-20 px-4 md:bottom-8 md:px-8">
