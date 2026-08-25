@@ -3,7 +3,7 @@
 import Hero from '@/components/Hero'
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import { BookOpen, GraduationCap, Heart, School, Target, Users } from 'lucide-react'
+import { ArrowRight, BookOpen, GraduationCap, Heart, School, Target, Users } from 'lucide-react'
 
 export type Program = {
   _key?: string
@@ -182,10 +182,19 @@ export default function ProgramsPageClient({ content }: { content: ProgramsPageC
 
                 <div className="flex flex-wrap gap-4">
                   {content.primaryButton?.label && content.primaryButton.href && (
-                    <Link href={content.primaryButton.href} className="btn-primary">{content.primaryButton.label}</Link>
+                    <Link href={content.primaryButton.href} className="btn-primary group/button">
+                      {content.primaryButton.label}
+                      <ArrowRight className="transition-transform group-hover/button:translate-x-1" size={17} aria-hidden="true" />
+                    </Link>
                   )}
                   {content.secondaryButton?.label && content.secondaryButton.href && (
-                    <Link href={content.secondaryButton.href} className="btn-secondary border-white/40 text-white hover:bg-white/10">{content.secondaryButton.label}</Link>
+                    <Link
+                      href={content.secondaryButton.href}
+                      className="group/button inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border-2 border-white bg-transparent px-5 py-2.5 font-semibold text-white shadow-sm transition-all hover:border-gold-400 hover:bg-gold-400 hover:text-primary-950 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-950"
+                    >
+                      {content.secondaryButton.label}
+                      <ArrowRight className="transition-transform group-hover/button:translate-x-1" size={17} aria-hidden="true" />
+                    </Link>
                   )}
                 </div>
               </div>
