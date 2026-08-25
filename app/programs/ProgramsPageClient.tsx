@@ -220,6 +220,29 @@ export default function ProgramsPageClient({ content }: { content: ProgramsPageC
               </div>
             </section>
           ))}
+
+          <section className="relative bg-primary-800 text-white">
+            <div className="page-wrapper py-16 md:py-20">
+              <div className="mx-auto max-w-4xl text-center">
+                <span className="eyebrow mb-4 text-gold-300">Take the Next Step</span>
+                <h2 className="font-diocesan text-4xl font-semibold leading-tight md:text-5xl">Find the right program for your child</h2>
+                <span className="mx-auto my-6 block h-0.5 w-12 rounded-full bg-gold-500" />
+                <p className="mx-auto max-w-2xl leading-7 text-primary-100">
+                  Explore our member schools or contact the Diocese of Baguio Schools office for enrollment guidance.
+                </p>
+                <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+                  <Link href="/schools" className="group/button inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-white px-6 py-3 font-semibold text-primary-800 shadow-sm transition-all hover:bg-primary-50 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800">
+                    Browse Member Schools
+                    <ArrowRight className="transition-transform group-hover/button:translate-x-1" size={18} aria-hidden="true" />
+                  </Link>
+                  <Link href="/enrollment" className="group/button inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border-2 border-white px-6 py-3 font-semibold text-white transition-all hover:border-gold-400 hover:bg-gold-400 hover:text-primary-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800">
+                    Send an Enrollment Inquiry
+                    <ArrowRight className="transition-transform group-hover/button:translate-x-1" size={18} aria-hidden="true" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
     </>
