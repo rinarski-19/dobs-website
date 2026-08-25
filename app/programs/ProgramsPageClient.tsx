@@ -3,13 +3,16 @@
 import Hero from '@/components/Hero'
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import { BookOpen } from 'lucide-react'
+import { BookOpen, GraduationCap, Heart, School, Target, Users } from 'lucide-react'
 
 export type Program = {
   _key?: string
   title: string
   grades?: string
   ages?: string
+  learningFocus?: string
+  faithFormation?: string
+  availableSchools?: string
   description: string
   imageUrl?: string
   imageAlt?: string
@@ -133,7 +136,7 @@ export default function ProgramsPageClient({ content }: { content: ProgramsPageC
               key={program._key ?? `${program.title}-${i}`}
               ref={el => { sectionRefs.current[i] = el }}
               data-idx={i + 1}
-              className="programs-snap-section relative h-[calc(100svh-4rem)] min-h-[28rem] flex items-center justify-center overflow-hidden bg-gray-900"
+              className="programs-snap-section relative flex min-h-[calc(100svh-4rem)] items-center justify-center overflow-hidden bg-gray-900 py-20"
               style={{ backgroundImage: program.imageUrl ? `url(${program.imageUrl})` : undefined, backgroundSize: 'cover', backgroundPosition: 'center' }}
             >
               <div className="absolute inset-0 bg-black/55" />
@@ -141,16 +144,36 @@ export default function ProgramsPageClient({ content }: { content: ProgramsPageC
                 {String(i + 1).padStart(2, '0')}
               </span>
 
-              <div className={`relative z-10 max-w-3xl px-8 text-white ${i % 2 === 0 ? 'mr-auto ml-16' : 'ml-auto mr-16'}`}>
+              <div className={`relative z-10 w-full max-w-6xl px-6 text-white md:px-10 ${i % 2 === 0 ? 'mr-auto lg:ml-12' : 'ml-auto lg:mr-12'}`}>
                 {(program.grades || program.ages) && (
                   <span className="inline-block text-xs font-semibold uppercase tracking-widest mb-6 px-3 py-1.5 rounded-full bg-white/10 text-white/90">
                     <BookOpen size={11} className="inline mr-1.5" />
                     {[program.grades, program.ages].filter(Boolean).join(' · ')}
                   </span>
                 )}
-                <h2 className="text-6xl md:text-7xl lg:text-8xl font-black leading-none mb-6 tracking-tight">{program.title}</h2>
-                <p className="text-lg md:text-xl text-white/80 leading-relaxed max-w-xl mb-10">{program.description}</p>
-                <div className="flex gap-4">
+                <h2 className="mb-5 text-5xl font-black leading-none tracking-tight md:text-7xl lg:text-8xl">{program.title}</h2>
+                <p className="mb-7 max-w-3xl text-base leading-relaxed text-white/80 md:text-lg">{program.description}</p>
+
+                <div className="mb-8 grid grid-cols-2 gap-3 md:grid-cols-5">
+                  {[
+                    { label: 'Grade / Level', value: program.grades || 'Contact a member school', icon: GraduationCap },
+                    { label: 'Typical Age', value: program.ages || 'Varies by learner', icon: Users },
+                    { label: 'Learning Focus', value: program.learningFocus || 'Holistic academic formation', icon: Target },
+                    { label: 'Faith Formation', value: program.faithFormation || 'Catholic values and prayer life', icon: Heart },
+                    { label: 'Available Schools', value: program.availableSchools || 'Selected member schools', icon: School },
+                  ].map(detail => {
+                    const Icon = detail.icon
+                    return (
+                      <div key={detail.label} className="rounded-xl border border-white/20 bg-primary-950/55 p-3.5 shadow-lg backdrop-blur-md">
+                        <Icon className="mb-2 text-gold-300" size={18} aria-hidden="true" />
+                        <p className="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-gold-200">{detail.label}</p>
+                        <p className="mt-1 text-xs font-medium leading-5 text-white/90 md:text-sm">{detail.value}</p>
+                      </div>
+                    )
+                  })}
+                </div>
+
+                <div className="flex flex-wrap gap-4">
                   {content.primaryButton?.label && content.primaryButton.href && (
                     <Link href={content.primaryButton.href} className="btn-primary">{content.primaryButton.label}</Link>
                   )}

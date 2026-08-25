@@ -19,6 +19,9 @@ export default defineType({
           defineField({ name: 'title', title: 'Program Name', type: 'string', validation: Rule => Rule.required() }),
           defineField({ name: 'grades', title: 'Grades / Level', type: 'string' }),
           defineField({ name: 'ages', title: 'Age Range', type: 'string' }),
+          defineField({ name: 'learningFocus', title: 'Main Learning Focus', type: 'string' }),
+          defineField({ name: 'faithFormation', title: 'Faith-Formation Component', type: 'string' }),
+          defineField({ name: 'availableSchools', title: 'Available Member Schools', type: 'string', description: 'Brief availability summary, such as “Available at selected member schools.”' }),
           defineField({ name: 'description', title: 'Description', type: 'text', rows: 4, validation: Rule => Rule.required() }),
           defineField({
             name: 'image', title: 'Background Image', type: 'image', options: { hotspot: true },
