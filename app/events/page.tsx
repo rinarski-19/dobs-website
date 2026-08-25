@@ -1,7 +1,7 @@
 import Hero from '@/components/Hero'
 import FeaturedEvent from '@/components/FeaturedEvent'
 import { getPageContent, imageUrlFor } from '@/lib/sanity'
-import { ArrowRight, MapPin, School } from 'lucide-react'
+import { ArrowRight, Building2, CalendarDays, MapPin, RotateCcw, Search, School, Tag } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -66,6 +66,60 @@ export default async function EventsPage() {
         {/* All events list */}
         <section>
           <h2 className="section-heading mb-6">{content?.allEventsHeading || fallbackPageContent.allEventsHeading}</h2>
+          <form className="mb-8 rounded-2xl border border-primary-100 bg-primary-50 p-5 shadow-card md:p-6">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-[1.4fr_1fr_1fr_1.2fr_auto]">
+              <label className="relative block">
+                <span className="form-label">Search events</span>
+                <Search className="pointer-events-none absolute bottom-3 left-3.5 text-primary-500" size={18} aria-hidden="true" />
+                <input
+                  type="search"
+                  name="search"
+                  className="form-input bg-white pl-11"
+                  placeholder="Search by event title"
+                />
+              </label>
+
+              <label className="relative block">
+                <span className="form-label">Month</span>
+                <CalendarDays className="pointer-events-none absolute bottom-3 left-3.5 text-primary-500" size={18} aria-hidden="true" />
+                <select name="month" className="form-input bg-white pl-11">
+                  <option value="">All months</option>
+                  {['January','February','March','April','May','June','July','August','September','October','November','December'].map(month => (
+                    <option key={month} value={month.toLowerCase()}>{month}</option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="relative block">
+                <span className="form-label">Category</span>
+                <Tag className="pointer-events-none absolute bottom-3 left-3.5 text-primary-500" size={18} aria-hidden="true" />
+                <select name="category" className="form-input bg-white pl-11">
+                  <option value="">All categories</option>
+                  <option value="school-event">School Event</option>
+                  <option value="academic">Academic</option>
+                  <option value="faith-formation">Faith Formation</option>
+                  <option value="community">Community</option>
+                  <option value="sports">Sports</option>
+                </select>
+              </label>
+
+              <label className="relative block">
+                <span className="form-label">Member school</span>
+                <Building2 className="pointer-events-none absolute bottom-3 left-3.5 text-primary-500" size={18} aria-hidden="true" />
+                <select name="school" className="form-input bg-white pl-11">
+                  <option value="">All member schools</option>
+                  <option value="school-name">[ School Name ]</option>
+                </select>
+              </label>
+
+              <div className="flex items-end">
+                <button type="reset" className="btn-secondary w-full whitespace-nowrap xl:w-auto">
+                  <RotateCcw size={17} aria-hidden="true" /> All Events
+                </button>
+              </div>
+            </div>
+          </form>
+
           <div className="grid grid-cols-1 gap-7 lg:grid-cols-3">
             {events.map(({ id, title, category, description, date, school, location }) => (
               <article
