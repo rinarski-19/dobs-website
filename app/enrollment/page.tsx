@@ -4,8 +4,10 @@ import {
   BadgeCheck,
   CheckCircle2,
   ClipboardCheck,
+  Clock3,
   FileText,
   Info,
+  Mail,
   PhoneCall,
   School,
   UserCheck,
@@ -190,29 +192,80 @@ export default async function EnrollmentPage() {
               Tell us about the learner and your preferred school so we can guide you toward the next step.
             </p>
           </div>
-          <form className="card max-w-2xl space-y-4">
+          <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-12">
+            <div className="overflow-hidden rounded-2xl border border-primary-100 bg-primary-700 text-white shadow-card">
+              <div className="border-b border-white/10 px-6 py-7 md:px-8">
+                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-gold-300">Before you submit</span>
+                <h3 className="mt-2 font-diocesan text-3xl font-bold md:text-4xl">Enrollment guidance</h3>
+                <p className="mt-3 text-sm leading-6 text-primary-100">
+                  An inquiry helps us direct you to the appropriate member school. Final admission requirements and schedules are confirmed by the selected school.
+                </p>
+              </div>
+
+              <div className="divide-y divide-white/10 px-6 md:px-8">
+                <div className="flex gap-4 py-5">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 text-gold-300">
+                    <School size={19} aria-hidden="true" />
+                  </span>
+                  <div>
+                    <p className="font-semibold">Choose a preferred school</p>
+                    <p className="mt-1 text-sm leading-6 text-primary-100">Review the member-school directory before completing the form.</p>
+                  </div>
+                </div>
+                <div className="flex gap-4 py-5">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 text-gold-300">
+                    <Clock3 size={19} aria-hidden="true" />
+                  </span>
+                  <div>
+                    <p className="font-semibold">Response during office hours</p>
+                    <p className="mt-1 text-sm leading-6 text-primary-100">Monday–Friday, 8:00 AM–5:00 PM, excluding public holidays.</p>
+                  </div>
+                </div>
+                <div className="flex gap-4 py-5">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 text-gold-300">
+                    <PhoneCall size={19} aria-hidden="true" />
+                  </span>
+                  <div>
+                    <p className="font-semibold">Contact the DOBS office</p>
+                    <a href="tel:+63744423756" className="mt-1 block text-sm text-primary-100 transition-colors hover:text-white hover:underline">(074) 442-3756</a>
+                    <a href="mailto:dioceseofbaguio2004@gmail.com" className="mt-1 flex items-center gap-2 break-all text-sm text-primary-100 transition-colors hover:text-white hover:underline">
+                      <Mail size={15} className="shrink-0" aria-hidden="true" />
+                      dioceseofbaguio2004@gmail.com
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          <form className="rounded-2xl border border-primary-100 bg-white p-6 shadow-card md:p-8 lg:p-10">
+            <div className="mb-7">
+              <span className="eyebrow">Learner information</span>
+              <h3 className="mt-2 font-diocesan text-3xl font-bold text-primary-700">Complete the inquiry form</h3>
+              <p className="mt-2 text-sm leading-6 text-gray-600">Provide your contact details and enrollment preferences below.</p>
+            </div>
+            <div className="space-y-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="form-label">Parent / Guardian Name</label>
-                <input type="text" className="form-input" placeholder="Juan dela Cruz" />
+                <label htmlFor="guardian-name" className="form-label">Parent / Guardian Name</label>
+                <input id="guardian-name" name="guardianName" type="text" className="form-input bg-parchment-50" placeholder="Juan dela Cruz" />
               </div>
               <div>
-                <label className="form-label">Contact Number</label>
-                <input type="tel" className="form-input" placeholder="+63 900 000 0000" />
+                <label htmlFor="guardian-phone" className="form-label">Contact Number</label>
+                <input id="guardian-phone" name="phone" type="tel" className="form-input bg-parchment-50" placeholder="+63 900 000 0000" />
               </div>
             </div>
             <div>
-              <label className="form-label">Email Address</label>
-              <input type="email" className="form-input" placeholder="juan@email.com" />
+              <label htmlFor="guardian-email" className="form-label">Email Address</label>
+              <input id="guardian-email" name="email" type="email" className="form-input bg-parchment-50" placeholder="juan@email.com" />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="form-label">Child&apos;s Name</label>
-                <input type="text" className="form-input" placeholder="Maria dela Cruz" />
+                <label htmlFor="learner-name" className="form-label">Child&apos;s Name</label>
+                <input id="learner-name" name="learnerName" type="text" className="form-input bg-parchment-50" placeholder="Maria dela Cruz" />
               </div>
               <div>
-                <label className="form-label">Grade Level</label>
-                <select className="form-input">
+                <label htmlFor="grade-level" className="form-label">Grade Level</label>
+                <select id="grade-level" name="gradeLevel" className="form-input bg-parchment-50">
                   <option value="">Select grade level</option>
                   {['Nursery','Kindergarten','Grade 1','Grade 2','Grade 3','Grade 4','Grade 5','Grade 6','Grade 7','Grade 8','Grade 9','Grade 10','Grade 11','Grade 12'].map(g => (
                     <option key={g}>{g}</option>
@@ -221,18 +274,20 @@ export default async function EnrollmentPage() {
               </div>
             </div>
             <div>
-              <label className="form-label">Preferred School</label>
-              <select className="form-input">
+              <label htmlFor="preferred-school" className="form-label">Preferred School</label>
+              <select id="preferred-school" name="preferredSchool" className="form-input bg-parchment-50">
                 <option value="">Select a school</option>
                 <option>[ Schools will be listed here ]</option>
               </select>
             </div>
             <div>
-              <label className="form-label">Message (optional)</label>
-              <textarea className="form-textarea" rows={4} placeholder="Any questions or additional information..." />
+              <label htmlFor="inquiry-message" className="form-label">Message (optional)</label>
+              <textarea id="inquiry-message" name="message" className="form-textarea bg-parchment-50" rows={5} placeholder="Any questions or additional information..." />
             </div>
-            <button type="submit" className="btn-primary">Submit Inquiry</button>
+            <button type="submit" className="btn-primary w-full sm:w-auto">Submit Inquiry</button>
+            </div>
           </form>
+          </div>
           </div>
         </section>
 
