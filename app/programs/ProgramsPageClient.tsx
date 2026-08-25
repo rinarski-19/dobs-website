@@ -65,7 +65,7 @@ export default function ProgramsPageClient({ content }: { content: ProgramsPageC
     <>
       <div className="relative">
         <div ref={overviewRef} data-idx="0" aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-[calc(100svh-4rem)]" />
-        <div className="programs-snap-section sticky top-16 z-0 h-[calc(100svh-4rem)]">
+        <div className="programs-snap-section relative h-[calc(100svh-4rem)] min-h-[34rem] overflow-hidden">
           <Hero
             title={content.heroTitle}
             subtitle={content.heroSubtitle}
@@ -73,7 +73,6 @@ export default function ProgramsPageClient({ content }: { content: ProgramsPageC
             image={content.heroImageUrl}
             imagePlaceholder="Students in Classroom Photo"
             viewport
-            parallax
           />
 
           <nav aria-label="Explore academic programs" className="absolute inset-x-0 bottom-5 z-20 px-4 md:bottom-8 md:px-8">
