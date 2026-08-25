@@ -103,12 +103,14 @@ export default async function NewsPage({
   const content = await getPageContent<NewsPageContent>('newsPage')
   const posts = await getNewsPosts()
   const displayPosts = posts.length > 0 ? posts : demoNewsPosts
+  const featuredPost = displayPosts[0]
+  const archivePosts = displayPosts.slice(1)
   const resolvedSearchParams = await searchParams
   const selectedCategory = resolvedSearchParams?.category || 'all'
   const searchQuery = resolvedSearchParams?.query?.trim() || ''
   const categoryPosts = selectedCategory === 'all'
-    ? displayPosts
-    : displayPosts.filter(post => normalizeCategory(post.category) === selectedCategory)
+    ? archivePosts
+    : archivePosts.filter(post => normalizeCategory(post.category) === selectedCategory)
   const normalizedSearchQuery = searchQuery.toLowerCase()
   const filteredPosts = normalizedSearchQuery
     ? categoryPosts.filter(post => [post.title, post.excerpt, post.school, post.category]
@@ -125,7 +127,62 @@ export default async function NewsPage({
         imagePlaceholder="School Events Photo"
       />
 
-      <div className="page-wrapper">
+      <section className="bg-parchment-100">
+        <div className="page-wrapper">
+          <div className="mb-9 max-w-3xl">
+            <span className="eyebrow mb-3 text-gold-700">Featured</span>
+            <h2 className="font-diocesan text-4xl font-semibold leading-tight text-primary-900 md:text-5xl">Featured Story</h2>
+            <span className="gold-rule mt-5" />
+          </div>
+
+          {featuredPost && (
+            <Link
+              href={featuredPost.slug ? `/news/${featuredPost.slug}` : '#latest-stories'}
+              aria-label={featuredPost.isDemo ? `Sample layout for ${featuredPost.title}` : `Read ${featuredPost.title}`}
+              className="group grid overflow-hidden rounded-3xl border border-parchment-300 bg-white shadow-card transition-all hover:-translate-y-1 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 lg:grid-cols-[1.15fr_1fr]"
+            >
+              <div className="relative aspect-video min-h-full border-b-2 border-dashed border-parchment-300 bg-parchment-50 lg:border-b-0 lg:border-r-2">
+                {featuredPost.image && (
+                  <Image
+                    src={featuredPost.image}
+                    alt={featuredPost.title}
+                    fill
+                    sizes="(min-width: 1024px) 55vw, 100vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                )}
+              </div>
+              <div className="flex flex-col justify-center p-7 md:p-10">
+                <span className="mb-4 inline-flex w-fit rounded-full bg-primary-50 px-3 py-1 text-xs font-semibold text-primary-700">
+                  {featuredPost.category}
+                </span>
+                <h3 className="font-diocesan text-3xl font-semibold leading-tight text-primary-900 md:text-4xl">{featuredPost.title}</h3>
+                <p className="mt-4 line-clamp-3 leading-7 text-gray-600">{featuredPost.excerpt}</p>
+                <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm text-gray-500">
+                  <span className="flex items-center gap-2"><School className="text-primary-600" size={16} aria-hidden="true" />{featuredPost.school}</span>
+                  <span className="flex items-center gap-2"><CalendarDays className="text-primary-600" size={16} aria-hidden="true" />
+                    {featuredPost.publishedAt
+                      ? new Date(featuredPost.publishedAt).toLocaleDateString('en-PH', { month: 'long', day: 'numeric', year: 'numeric' })
+                      : 'Publication date to be announced'}
+                  </span>
+                </div>
+                <span className="mt-7 inline-flex items-center gap-2 font-semibold text-primary-700 transition-colors group-hover:text-primary-500">
+                  Read Featured Story <ArrowRight size={18} aria-hidden="true" />
+                </span>
+              </div>
+            </Link>
+          )}
+        </div>
+      </section>
+
+      <section id="latest-stories" className="bg-white">
+        <div className="page-wrapper">
+          <div className="mb-9 max-w-3xl">
+            <span className="eyebrow mb-3 text-gold-700">Latest Stories</span>
+            <h2 className="font-diocesan text-4xl font-semibold leading-tight text-primary-900 md:text-5xl">News Archive</h2>
+            <span className="gold-rule mt-5" />
+            <p className="mt-5 max-w-2xl leading-7 text-gray-600">Browse announcements, achievements, campus stories, pastoral activities, and enrollment updates from our school community.</p>
+          </div>
 
         <div className="mb-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
           <nav aria-label="Filter news by category" className="flex flex-wrap gap-3">
@@ -236,7 +293,8 @@ export default async function NewsPage({
           </div>
         )}
 
-      </div>
+        </div>
+      </section>
     </>
   )
 }
