@@ -18,8 +18,6 @@ type HeroProps = {
   }
   viewport?: boolean
   parallax?: boolean
-  contentClassName?: string
-  showBottomFade?: boolean
 }
 
 export default function Hero({
@@ -32,8 +30,6 @@ export default function Hero({
   ctaSecondary,
   viewport = false,
   parallax = false,
-  contentClassName = '',
-  showBottomFade = true,
 }: HeroProps) {
   // Parallax pages keep the CSS fixed-background technique (next/image can't do
   // background-attachment: fixed); every other hero uses an optimized next/image.
@@ -81,18 +77,16 @@ export default function Hero({
       )}
 
       {/* Soft fade into the page surface below */}
-      {showBottomFade && (
-        <div
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-56 md:h-64 z-[5]"
-          style={{
-            background:
-              'linear-gradient(to top, #F7F3EA 0%, rgba(247,243,234,0.92) 14%, rgba(247,243,234,0.75) 30%, rgba(247,243,234,0.5) 48%, rgba(247,243,234,0.28) 66%, rgba(247,243,234,0.12) 82%, rgba(247,243,234,0) 100%)',
-          }}
-        />
-      )}
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-56 md:h-64 z-[5]"
+        style={{
+          background:
+            'linear-gradient(to top, #F7F3EA 0%, rgba(247,243,234,0.92) 14%, rgba(247,243,234,0.75) 30%, rgba(247,243,234,0.5) 48%, rgba(247,243,234,0.28) 66%, rgba(247,243,234,0.12) 82%, rgba(247,243,234,0) 100%)',
+        }}
+      />
 
       {/* Content */}
-      <div className={`relative z-10 max-w-[1400px] mx-auto px-6 w-full text-white ${contentClassName}`}>
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 w-full text-white">
         {subtitle && (
           <span className="eyebrow mb-4 px-3 py-1 rounded-full bg-gold-500 text-primary-900">
             {subtitle}
