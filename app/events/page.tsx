@@ -36,7 +36,7 @@ const events = Array.from({ length: 6 }, (_, i) => ({
   title: `Event Title ${i + 1}`,
   category: i % 2 === 0 ? 'Free' : 'School Event',
   description: '[ Short event description from Sanity. ]',
-  date: { day: '01', month: 'Sep' },
+  date: { day: '01', month: 'Sep', year: '2026' },
   school: '[ School Name ]',
   location: '[ Event Location ]',
 }))
@@ -144,9 +144,10 @@ export default async function EventsPage() {
                 className="group flex h-full flex-col overflow-hidden rounded-2xl border border-primary-100 bg-white shadow-card transition-all hover:-translate-y-1 hover:border-primary-200 hover:shadow-lg"
               >
                 <div className="relative aspect-[4/3] overflow-hidden border-b border-primary-100 bg-primary-50">
-                  <div className="absolute left-4 top-4 min-w-16 rounded-xl border border-white/70 bg-white px-3 py-2 text-center shadow-lg">
-                    <div className="text-2xl font-bold leading-none text-primary-700">{date.day}</div>
-                    <div className="mt-1 text-xs font-semibold uppercase tracking-wider text-gold-700">{date.month}</div>
+                  <div className="absolute left-4 top-4 min-w-20 rounded-xl border border-white/30 bg-primary-700 px-4 py-3 text-center text-white shadow-lg">
+                    <div className="text-3xl font-bold leading-none">{date.day}</div>
+                    <div className="mt-1.5 text-sm font-bold uppercase tracking-[0.14em]">{date.month}</div>
+                    <div className="mt-1 border-t border-white/25 pt-1 text-[11px] font-medium tracking-wider text-white/85">{date.year}</div>
                   </div>
                 </div>
 
