@@ -1,5 +1,6 @@
 import Hero from '@/components/Hero'
 import FeaturedEvent from '@/components/FeaturedEvent'
+import EventViewSwitcher from '@/components/EventViewSwitcher'
 import { getPageContent, imageUrlFor } from '@/lib/sanity'
 import Link from 'next/link'
 import { ArrowRight, Building2, CalendarDays, ChevronLeft, ChevronRight, MapPin, RotateCcw, Search, School, Tag } from 'lucide-react'
@@ -137,6 +138,7 @@ export default async function EventsPage() {
             </div>
           </form>
 
+          <EventViewSwitcher events={events}>
           <div className="grid grid-cols-1 gap-7 lg:grid-cols-3">
             {events.map(({ id, title, category, description, date, school, location }) => (
               <article
@@ -219,6 +221,7 @@ export default async function EventsPage() {
               </button>
             </nav>
           </div>
+          </EventViewSwitcher>
           </div>
         </section>
 
