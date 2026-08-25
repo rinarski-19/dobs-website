@@ -2,7 +2,7 @@ import Hero from '@/components/Hero'
 import { client, getPageContent, imageUrlFor } from '@/lib/sanity'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, CalendarDays, ChevronLeft, ChevronRight, School, Search } from 'lucide-react'
+import { ArrowRight, CalendarDays, ChevronLeft, ChevronRight, ExternalLink, Mail, School, Search } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -388,6 +388,35 @@ export default async function NewsPage({
           </div>
         )}
 
+        </div>
+      </section>
+
+      <section className="bg-primary-800 text-white">
+        <div className="page-wrapper py-16 md:py-20">
+          <div className="mx-auto max-w-4xl text-center">
+            <span className="eyebrow mb-4 text-gold-300">Stay Informed</span>
+            <h2 className="font-diocesan text-4xl font-semibold leading-tight md:text-5xl">Stay connected with our school community</h2>
+            <span className="mx-auto my-6 block h-0.5 w-12 rounded-full bg-gold-500" />
+            <p className="mx-auto max-w-2xl leading-7 text-primary-100">
+              Follow the Diocese of Baguio for community updates, pastoral announcements, and stories of faith and service.
+            </p>
+            <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+              <a
+                href="https://www.facebook.com/dioceseofbaguio2004"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-white px-6 py-3 font-semibold text-primary-800 transition-colors hover:bg-primary-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800"
+              >
+                Official Facebook Page <ExternalLink size={18} aria-hidden="true" />
+              </a>
+              <Link
+                href="/contact"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border-2 border-white px-6 py-3 font-semibold text-white transition-colors hover:border-gold-300 hover:bg-gold-300 hover:text-primary-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800"
+              >
+                Contact the DOBS Office <Mail size={18} aria-hidden="true" />
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
     </>
