@@ -39,6 +39,15 @@ export default async function SchoolsPage() {
 
       <div className="page-wrapper">
 
+        <div className="mb-10 max-w-3xl">
+          <span className="eyebrow mb-3 text-gold-700">Our Network</span>
+          <h2 className="font-diocesan text-4xl font-semibold leading-tight text-primary-900 md:text-5xl">Find a Member School</h2>
+          <span className="gold-rule mt-5" />
+          <p className="mt-5 max-w-2xl text-base leading-7 text-gray-600 md:text-lg">
+            Explore Catholic schools serving families across Baguio City and Benguet, and find the community, location, and educational level that best support your child.
+          </p>
+        </div>
+
         {schools.length === 0 ? (
           <div className="placeholder-block">
             {content?.emptyStateText || fallbackPageContent.emptyStateText}{' '}
