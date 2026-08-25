@@ -18,7 +18,7 @@ const fallbackPageContent = {
   heroTitle: 'News & Announcements',
   heroSubtitle: 'Latest Updates',
   heroDescription: 'Stay updated with news, announcements, and stories from across the Diocese of Baguio Schools network.',
-  emptyStateText: 'News posts will be pulled from Sanity CMS.',
+  emptyStateText: 'No news articles are currently available.',
 }
 
 type NewsPost = {
@@ -289,7 +289,8 @@ export default async function NewsPage({
 
         {posts.length === 0 && (
           <div className="mt-8 rounded-xl border border-primary-100 bg-primary-50 px-5 py-4 text-center text-sm leading-6 text-primary-800">
-            These are sample cards showing the information to add in Sanity. Published News Posts will replace them automatically.
+            <strong>No news articles are currently available.</strong>{' '}
+            These sample cards show the information to add in Sanity. Published News Posts will replace them automatically.
           </div>
         )}
 

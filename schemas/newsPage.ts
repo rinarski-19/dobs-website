@@ -11,7 +11,7 @@ export default defineType({
       subtitle: 'Latest Updates',
       description: 'Stay updated with news, announcements, and stories from across the Diocese of Baguio Schools network.',
     }),
-    defineField({ name: 'emptyStateText', title: 'Empty State Text', type: 'string', initialValue: 'News posts will be pulled from Sanity CMS.' }),
+    defineField({ name: 'emptyStateText', title: 'Empty State Text', type: 'string', initialValue: 'No news articles are currently available.' }),
   ],
   preview: { prepare: () => ({ title: 'News Page' }) },
 })
