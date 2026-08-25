@@ -50,11 +50,12 @@ export default function ProgramsPageClient({ content }: { content: ProgramsPageC
   }, [content.programs])
 
   const scrollTo = (idx: number) => {
+    const behavior: ScrollBehavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
     if (idx === 0) {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      window.scrollTo({ top: 0, behavior })
       return
     }
-    sectionRefs.current[idx - 1]?.scrollIntoView({ behavior: 'smooth' })
+    sectionRefs.current[idx - 1]?.scrollIntoView({ behavior })
   }
 
   const navigationItems = [

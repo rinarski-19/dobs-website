@@ -143,6 +143,15 @@
     .hero-parallax {
       background-attachment: scroll;
     }
+
+    html.programs-scroll-page {
+      scroll-snap-type: none;
+    }
+
+    html.programs-scroll-page .programs-snap-section {
+      scroll-snap-align: none;
+      scroll-snap-stop: normal;
+    }
   }
 }
 
