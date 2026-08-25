@@ -3,7 +3,7 @@ import { getPageContent, imageUrlFor, urlFor } from '@/lib/sanity'
 import { getSchools } from '@/lib/schools'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, BadgeCheck, MapPin, Search, SlidersHorizontal } from 'lucide-react'
+import { ArrowRight, BadgeCheck, MapPin, Search, SearchX, SlidersHorizontal } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -148,9 +148,17 @@ export default async function SchoolsPage({
               </form>
             </div>
 
-            <p className="mb-5 text-sm font-medium text-gray-600">
-              Showing {filteredSchools.length} of {schools.length} member schools
-            </p>
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 pb-4">
+              <p className="text-base font-semibold text-primary-900" aria-live="polite">
+                Showing {filteredSchools.length} member {filteredSchools.length === 1 ? 'school' : 'schools'}
+                {filteredSchools.length !== schools.length && <span className="font-normal text-gray-500"> of {schools.length}</span>}
+              </p>
+              {(searchQuery || selectedLocation !== 'all' || selectedLevel !== 'all' || selectedEnrollment !== 'all') && (
+                <Link href="/schools" className="text-sm font-semibold text-primary-700 underline decoration-primary-300 underline-offset-4 transition-colors hover:text-primary-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500">
+                  Clear all filters
+                </Link>
+              )}
+            </div>
 
             {filteredSchools.length > 0 ? (
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -221,8 +229,15 @@ export default async function SchoolsPage({
               ))}
               </div>
             ) : (
-              <div className="rounded-2xl border border-primary-200 bg-primary-50 px-6 py-12 text-center text-primary-900">
-                No member schools match your search or selected filters. Try another school name, location, level, or enrollment status.
+              <div className="rounded-2xl border border-primary-200 bg-primary-50 px-6 py-14 text-center text-primary-900">
+                <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-primary-700 shadow-sm">
+                  <SearchX size={30} aria-hidden="true" />
+                </span>
+                <h3 className="mt-5 font-diocesan text-3xl font-semibold">No member schools found</h3>
+                <p className="mx-auto mt-3 max-w-xl leading-7 text-gray-600">
+                  No member schools match your search or selected filters. Try another school name, location, education level, or enrollment status.
+                </p>
+                <Link href="/schools" className="btn-primary mt-6">Clear Filters</Link>
               </div>
             )}
           </>
