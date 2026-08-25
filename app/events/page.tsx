@@ -57,7 +57,13 @@ export default async function EventsPage() {
 
         {/* Featured latest event */}
         <section>
-          <h2 className="section-heading mb-6">{content?.latestEventHeading || fallbackPageContent.latestEventHeading}</h2>
+          <div className="mb-8 max-w-2xl">
+            <span className="eyebrow">Featured</span>
+            <h2 className="mt-3 font-diocesan text-4xl font-bold text-primary-700 md:text-5xl">
+              {content?.latestEventHeading || fallbackPageContent.latestEventHeading}
+            </h2>
+            <span className="gold-rule" />
+          </div>
           <FeaturedEvent {...upcomingEvent} />
         </section>
 
@@ -65,7 +71,16 @@ export default async function EventsPage() {
 
         {/* All events list */}
         <section>
-          <h2 className="section-heading mb-6">{content?.allEventsHeading || fallbackPageContent.allEventsHeading}</h2>
+          <div className="mb-8 max-w-2xl">
+            <span className="eyebrow">Calendar</span>
+            <h2 className="mt-3 font-diocesan text-4xl font-bold text-primary-700 md:text-5xl">
+              {content?.allEventsHeading || fallbackPageContent.allEventsHeading}
+            </h2>
+            <span className="gold-rule" />
+            <p className="mt-5 leading-7 text-gray-600">
+              Explore upcoming activities, celebrations, academic programs, and important dates across the Diocese of Baguio Schools network.
+            </p>
+          </div>
           <form className="mb-8 rounded-2xl border border-primary-100 bg-primary-50 p-5 shadow-card md:p-6">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-[1.4fr_1fr_1fr_1.2fr_auto]">
               <label className="relative block">
