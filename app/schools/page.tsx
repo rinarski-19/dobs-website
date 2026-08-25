@@ -3,7 +3,7 @@ import { getPageContent, imageUrlFor, urlFor } from '@/lib/sanity'
 import { getSchools } from '@/lib/schools'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, BadgeCheck, MapPin, Search, SearchX, SlidersHorizontal } from 'lucide-react'
+import { ArrowRight, BadgeCheck, ExternalLink, Grid3X3, Map, MapPin, Search, SearchX, SlidersHorizontal } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -25,7 +25,7 @@ const fallbackPageContent = {
 export default async function SchoolsPage({
   searchParams,
 }: {
-  searchParams?: Promise<{ query?: string; location?: string; level?: string; enrollment?: string }>
+  searchParams?: Promise<{ query?: string; location?: string; level?: string; enrollment?: string; view?: string }>
 }) {
   const [schools, content] = await Promise.all([
     getSchools(),
@@ -36,6 +36,7 @@ export default async function SchoolsPage({
   const selectedLevel = resolvedSearchParams?.level || 'all'
   const selectedEnrollment = resolvedSearchParams?.enrollment || 'all'
   const searchQuery = resolvedSearchParams?.query?.trim() || ''
+  const selectedView = resolvedSearchParams?.view === 'map' ? 'map' : 'grid'
   const normalizedSearchQuery = searchQuery.toLowerCase()
   const locations = Array.from(new Set(schools.map(school => school.city).filter((city): city is string => Boolean(city)))).sort()
   const levels = Array.from(new Set(schools.flatMap(school => school.levels || []))).sort()
@@ -55,6 +56,16 @@ export default async function SchoolsPage({
     if (selectedLevel !== 'all') params.set('level', selectedLevel)
     if (selectedEnrollment !== 'all') params.set('enrollment', selectedEnrollment)
     if (searchQuery) params.set('query', searchQuery)
+    if (selectedView === 'map') params.set('view', 'map')
+    return params.size ? `/schools?${params.toString()}` : '/schools'
+  }
+  const viewHref = (view: 'grid' | 'map') => {
+    const params = new URLSearchParams()
+    if (searchQuery) params.set('query', searchQuery)
+    if (selectedLocation !== 'all') params.set('location', selectedLocation)
+    if (selectedLevel !== 'all') params.set('level', selectedLevel)
+    if (selectedEnrollment !== 'all') params.set('enrollment', selectedEnrollment)
+    if (view === 'map') params.set('view', 'map')
     return params.size ? `/schools?${params.toString()}` : '/schools'
   }
 
@@ -114,6 +125,7 @@ export default async function SchoolsPage({
 
               <form action="/schools" method="get" role="search" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[minmax(16rem,1.35fr)_1fr_1fr_auto_auto] lg:items-end">
                 {selectedLocation !== 'all' && <input type="hidden" name="location" value={selectedLocation} />}
+                {selectedView === 'map' && <input type="hidden" name="view" value="map" />}
                 <div>
                   <label htmlFor="school-search" className="form-label">Search Schools</label>
                   <div className="relative">
@@ -153,15 +165,34 @@ export default async function SchoolsPage({
                 Showing {filteredSchools.length} member {filteredSchools.length === 1 ? 'school' : 'schools'}
                 {filteredSchools.length !== schools.length && <span className="font-normal text-gray-500"> of {schools.length}</span>}
               </p>
-              {(searchQuery || selectedLocation !== 'all' || selectedLevel !== 'all' || selectedEnrollment !== 'all') && (
-                <Link href="/schools" className="text-sm font-semibold text-primary-700 underline decoration-primary-300 underline-offset-4 transition-colors hover:text-primary-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500">
-                  Clear all filters
-                </Link>
-              )}
+              <div className="flex flex-wrap items-center gap-3">
+                {(searchQuery || selectedLocation !== 'all' || selectedLevel !== 'all' || selectedEnrollment !== 'all') && (
+                  <Link href={selectedView === 'map' ? '/schools?view=map' : '/schools'} className="text-sm font-semibold text-primary-700 underline decoration-primary-300 underline-offset-4 transition-colors hover:text-primary-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500">
+                    Clear all filters
+                  </Link>
+                )}
+                <div className="inline-flex rounded-lg border border-primary-200 bg-primary-50 p-1" aria-label="School directory view">
+                  <Link
+                    href={viewHref('grid')}
+                    aria-current={selectedView === 'grid' ? 'page' : undefined}
+                    className={`inline-flex min-h-10 items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 ${selectedView === 'grid' ? 'bg-primary-700 text-white shadow-sm' : 'text-primary-700 hover:bg-white'}`}
+                  >
+                    <Grid3X3 size={16} aria-hidden="true" /> Grid View
+                  </Link>
+                  <Link
+                    href={viewHref('map')}
+                    aria-current={selectedView === 'map' ? 'page' : undefined}
+                    className={`inline-flex min-h-10 items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 ${selectedView === 'map' ? 'bg-primary-700 text-white shadow-sm' : 'text-primary-700 hover:bg-white'}`}
+                  >
+                    <Map size={16} aria-hidden="true" /> Map View
+                  </Link>
+                </div>
+              </div>
             </div>
 
             {filteredSchools.length > 0 ? (
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              selectedView === 'grid' ? (
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {filteredSchools.map(school => (
                 <Link
                   key={school._id}
@@ -228,6 +259,49 @@ export default async function SchoolsPage({
                 </Link>
               ))}
               </div>
+              ) : (
+                <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+                  <div className="min-h-[30rem] overflow-hidden rounded-2xl border border-primary-200 bg-primary-50 shadow-card">
+                    <iframe
+                      title="Map of Diocese of Baguio member school area"
+                      src="https://www.google.com/maps?q=Catholic%20schools%20Baguio%20City%20Benguet&output=embed"
+                      className="h-full min-h-[30rem] w-full border-0"
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      allowFullScreen
+                    />
+                  </div>
+                  <div className="space-y-3 lg:max-h-[38rem] lg:overflow-y-auto lg:pr-2">
+                    {filteredSchools.map(school => {
+                      const mapQuery = encodeURIComponent([school.name, school.address, school.city, 'Philippines'].filter(Boolean).join(', '))
+                      return (
+                        <div key={school._id} className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+                          <h3 className="font-diocesan text-xl font-semibold text-primary-950">{school.name}</h3>
+                          {(school.address || school.city) && (
+                            <p className="mt-2 flex items-start gap-2 text-sm leading-6 text-gray-600">
+                              <MapPin className="mt-1 shrink-0 text-primary-600" size={15} aria-hidden="true" />
+                              {[school.address, school.city].filter(Boolean).join(', ')}
+                            </p>
+                          )}
+                          <div className="mt-4 flex flex-wrap gap-3">
+                            <a
+                              href={`https://www.google.com/maps/search/?api=1&query=${mapQuery}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary-700 hover:text-primary-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500"
+                            >
+                              Open in Google Maps <ExternalLink size={14} aria-hidden="true" />
+                            </a>
+                            <Link href={`/schools/${school.slug.current}`} className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary-700 hover:text-primary-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500">
+                              View School <ArrowRight size={14} aria-hidden="true" />
+                            </Link>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              )
             ) : (
               <div className="rounded-2xl border border-primary-200 bg-primary-50 px-6 py-14 text-center text-primary-900">
                 <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-primary-700 shadow-sm">
