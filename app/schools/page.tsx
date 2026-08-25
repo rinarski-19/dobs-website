@@ -2,7 +2,7 @@ import Hero from '@/components/Hero'
 import { getPageContent, imageUrlFor, urlFor } from '@/lib/sanity'
 import { getSchools } from '@/lib/schools'
 import Link from 'next/link'
-import { MapPin, SlidersHorizontal } from 'lucide-react'
+import { MapPin, Search, SlidersHorizontal } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -24,7 +24,7 @@ const fallbackPageContent = {
 export default async function SchoolsPage({
   searchParams,
 }: {
-  searchParams?: Promise<{ location?: string; level?: string; enrollment?: string }>
+  searchParams?: Promise<{ query?: string; location?: string; level?: string; enrollment?: string }>
 }) {
   const [schools, content] = await Promise.all([
     getSchools(),
@@ -34,20 +34,26 @@ export default async function SchoolsPage({
   const selectedLocation = resolvedSearchParams?.location || 'all'
   const selectedLevel = resolvedSearchParams?.level || 'all'
   const selectedEnrollment = resolvedSearchParams?.enrollment || 'all'
+  const searchQuery = resolvedSearchParams?.query?.trim() || ''
+  const normalizedSearchQuery = searchQuery.toLowerCase()
   const locations = Array.from(new Set(schools.map(school => school.city).filter((city): city is string => Boolean(city)))).sort()
   const levels = Array.from(new Set(schools.flatMap(school => school.levels || []))).sort()
   const filteredSchools = schools.filter(school => {
+    const matchesSearch = !normalizedSearchQuery
+      || school.name.toLowerCase().includes(normalizedSearchQuery)
+      || school.city?.toLowerCase().includes(normalizedSearchQuery)
     const matchesLocation = selectedLocation === 'all' || school.city === selectedLocation
     const matchesLevel = selectedLevel === 'all' || school.levels?.includes(selectedLevel)
     const matchesEnrollment = selectedEnrollment === 'all'
       || (selectedEnrollment === 'open' ? school.enrollmentOpen : !school.enrollmentOpen)
-    return matchesLocation && matchesLevel && matchesEnrollment
+    return matchesSearch && matchesLocation && matchesLevel && matchesEnrollment
   })
   const locationHref = (location: string) => {
     const params = new URLSearchParams()
     if (location !== 'all') params.set('location', location)
     if (selectedLevel !== 'all') params.set('level', selectedLevel)
     if (selectedEnrollment !== 'all') params.set('enrollment', selectedEnrollment)
+    if (searchQuery) params.set('query', searchQuery)
     return params.size ? `/schools?${params.toString()}` : '/schools'
   }
 
@@ -105,8 +111,22 @@ export default async function SchoolsPage({
                 })}
               </nav>
 
-              <form action="/schools" method="get" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_auto_auto] lg:items-end">
+              <form action="/schools" method="get" role="search" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[minmax(16rem,1.35fr)_1fr_1fr_auto_auto] lg:items-end">
                 {selectedLocation !== 'all' && <input type="hidden" name="location" value={selectedLocation} />}
+                <div>
+                  <label htmlFor="school-search" className="form-label">Search Schools</label>
+                  <div className="relative">
+                    <Search className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-primary-600" size={18} aria-hidden="true" />
+                    <input
+                      id="school-search"
+                      name="query"
+                      type="search"
+                      defaultValue={searchQuery}
+                      placeholder="Search by school name or location"
+                      className="form-input bg-white pl-11"
+                    />
+                  </div>
+                </div>
                 <div>
                   <label htmlFor="school-level" className="form-label">Education Level</label>
                   <select id="school-level" name="level" defaultValue={selectedLevel} className="form-input bg-white">
@@ -175,7 +195,7 @@ export default async function SchoolsPage({
               </div>
             ) : (
               <div className="rounded-2xl border border-primary-200 bg-primary-50 px-6 py-12 text-center text-primary-900">
-                No member schools match the selected filters. Try another location, level, or enrollment status.
+                No member schools match your search or selected filters. Try another school name, location, level, or enrollment status.
               </div>
             )}
           </>
