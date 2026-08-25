@@ -37,7 +37,7 @@ const demoNewsPosts: NewsPost[] = Array.from({ length: 6 }, (_, index) => ({
   id: `demo-news-${index + 1}`,
   title: `News Post Title ${index + 1}`,
   slug: '',
-  category: ['Announcement', 'Event', 'School News'][index % 3],
+  category: ['Announcements', 'Achievements', 'Campus Life', 'Pastoral Activities', 'Enrollment'][index % 5],
   excerpt: 'Add a short two- or three-line summary explaining the announcement, school story, achievement, or important update.',
   publishedAt: '2026-08-01T08:00:00+08:00',
   school: index % 2 === 0 ? 'Diocese of Baguio Schools' : '[ Publishing School Name ]',
@@ -84,10 +84,29 @@ async function getNewsPosts(): Promise<NewsPost[]> {
   }
 }
 
-export default async function NewsPage() {
+const newsCategories = [
+  { label: 'All News', value: 'all' },
+  { label: 'Announcements', value: 'announcements' },
+  { label: 'Achievements', value: 'achievements' },
+  { label: 'Campus Life', value: 'campus-life' },
+  { label: 'Pastoral Activities', value: 'pastoral-activities' },
+  { label: 'Enrollment', value: 'enrollment' },
+]
+
+const normalizeCategory = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+
+export default async function NewsPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ category?: string }>
+}) {
   const content = await getPageContent<NewsPageContent>('newsPage')
   const posts = await getNewsPosts()
   const displayPosts = posts.length > 0 ? posts : demoNewsPosts
+  const selectedCategory = (await searchParams)?.category || 'all'
+  const filteredPosts = selectedCategory === 'all'
+    ? displayPosts
+    : displayPosts.filter(post => normalizeCategory(post.category) === selectedCategory)
 
   return (
     <>
@@ -101,15 +120,29 @@ export default async function NewsPage() {
 
       <div className="page-wrapper">
 
-        <div className="flex gap-3 mb-8 flex-wrap">
-          <span className="badge">All</span>
-          <span className="badge">Announcements</span>
-          <span className="badge">Events</span>
-          <span className="badge">School News</span>
-        </div>
+        <nav aria-label="Filter news by category" className="mb-10 flex flex-wrap gap-3">
+          {newsCategories.map(category => {
+            const isActive = selectedCategory === category.value
+
+            return (
+              <Link
+                key={category.value}
+                href={category.value === 'all' ? '/news#news-articles' : `/news?category=${category.value}#news-articles`}
+                aria-current={isActive ? 'page' : undefined}
+                className={`inline-flex min-h-11 items-center justify-center rounded-full border-2 px-5 py-2 text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 ${
+                  isActive
+                    ? 'border-primary-700 bg-primary-700 text-white shadow-sm'
+                    : 'border-primary-600 bg-white text-primary-700 hover:border-primary-800 hover:bg-primary-50 hover:text-primary-900'
+                }`}
+              >
+                {category.label}
+              </Link>
+            )
+          })}
+        </nav>
 
         <div id="news-articles" className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3">
-            {displayPosts.map(post => (
+            {filteredPosts.map(post => (
               <Link
                 key={post.id}
                 href={post.slug ? `/news/${post.slug}` : '#news-articles'}
@@ -159,6 +192,12 @@ export default async function NewsPage() {
               </Link>
             ))}
           </div>
+
+        {filteredPosts.length === 0 && (
+          <div className="rounded-2xl border border-primary-200 bg-primary-50 px-6 py-12 text-center text-primary-900">
+            No news posts are currently available in this category.
+          </div>
+        )}
 
         {posts.length === 0 && (
           <div className="mt-8 rounded-xl border border-primary-100 bg-primary-50 px-5 py-4 text-center text-sm leading-6 text-primary-800">
