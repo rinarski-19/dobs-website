@@ -1,6 +1,14 @@
 import Hero from '@/components/Hero'
 import { getPageContent, imageUrlFor } from '@/lib/sanity'
-import { Info } from 'lucide-react'
+import {
+  BadgeCheck,
+  ClipboardCheck,
+  FileText,
+  Info,
+  PhoneCall,
+  School,
+  UserCheck,
+} from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -33,11 +41,18 @@ const fallbackPageContent = {
   inquiryHeading: 'Send an Inquiry',
 }
 
+const stepIcons = [School, PhoneCall, FileText, ClipboardCheck, UserCheck, BadgeCheck]
+
 export default async function EnrollmentPage() {
   const content = await getPageContent<EnrollmentPageContent>('enrollmentPage')
   const enrollmentSteps = content?.steps?.length
     ? content.steps.map((item, index) => ({ step: index + 1, title: item.title, desc: item.description }))
     : steps
+  const timelineSplit = Math.ceil(enrollmentSteps.length / 2)
+  const timelineColumns = [
+    enrollmentSteps.slice(0, timelineSplit),
+    enrollmentSteps.slice(timelineSplit),
+  ]
 
   return (
     <>
@@ -50,29 +65,78 @@ export default async function EnrollmentPage() {
         cta={{ label: 'Send an Inquiry', href: '#inquiry' }}
       />
 
-      <div className="page-wrapper">
+      <div>
+        <section className="bg-white">
+          <div className="page-wrapper py-16 md:py-20">
+          <div className="mb-10 max-w-2xl">
+            <span className="eyebrow">Step-by-step guide</span>
+            <h2 className="mt-3 font-diocesan text-4xl font-bold text-primary-700 md:text-5xl">
+              {content?.processHeading || fallbackPageContent.processHeading}
+            </h2>
+            <span className="gold-rule" />
+            <p className="mt-5 leading-7 text-gray-600">
+              Follow these steps to complete the enrollment process with your chosen member school.
+            </p>
+          </div>
 
-        <section className="section">
-          <h2 className="section-heading">{content?.processHeading || fallbackPageContent.processHeading}</h2>
-          <div className="space-y-4">
-            {enrollmentSteps.map(({ step, title, desc }) => (
-              <div key={step} className="card flex gap-4 items-start">
-                <div className="w-9 h-9 rounded-full bg-primary-600 text-white text-sm font-bold flex items-center justify-center shrink-0">
-                  {step}
-                </div>
-                <div>
-                  <h3 className="card-title">{title}</h3>
-                  <p className="card-body">{desc}</p>
-                </div>
+          <div className="grid grid-cols-1 gap-x-10 md:grid-cols-2">
+            {timelineColumns.map((column, columnIndex) => (
+              <div key={columnIndex}>
+                {column.map(({ step, title, desc }, itemIndex) => {
+                  const StepIcon = stepIcons[step - 1] || FileText
+                  const isLastOverall = step === enrollmentSteps.length
+                  const isLastInColumn = itemIndex === column.length - 1
+
+                  return (
+                    <div key={step} className="group relative flex gap-5 pb-8 md:pb-10">
+                      {!isLastOverall && (
+                        <span
+                          className="absolute left-6 top-12 h-[calc(100%-2.25rem)] w-0.5 bg-primary-200 md:hidden"
+                          aria-hidden="true"
+                        />
+                      )}
+                      {!isLastInColumn && (
+                        <span
+                          className="absolute left-6 top-12 hidden h-[calc(100%-1.5rem)] w-0.5 bg-primary-200 md:block"
+                          aria-hidden="true"
+                        />
+                      )}
+
+                      <div className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-4 border-primary-100 bg-primary-700 text-base font-bold text-white shadow-sm transition-transform group-hover:scale-105">
+                        {step}
+                      </div>
+
+                      <article className="min-h-36 flex-1 rounded-2xl border border-primary-100 bg-white p-6 shadow-card transition-all group-hover:-translate-y-0.5 group-hover:border-primary-200 group-hover:shadow-md">
+                        <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-primary-50 text-primary-700">
+                          <StepIcon size={22} strokeWidth={1.8} aria-hidden="true" />
+                        </div>
+                        <p className="mb-1 text-xs font-semibold uppercase tracking-[0.16em] text-gold-600">
+                          Step {step}
+                        </p>
+                        <h3 className="font-diocesan text-2xl font-bold text-primary-700">{title}</h3>
+                        <p className="mt-2 text-sm leading-6 text-gray-600">{desc}</p>
+                      </article>
+                    </div>
+                  )
+                })}
               </div>
             ))}
           </div>
+          </div>
         </section>
 
-        <div className="divider" />
-
-        <section className="section">
-          <h2 className="section-heading">{content?.requirementsHeading || fallbackPageContent.requirementsHeading}</h2>
+        <section className="bg-parchment-100">
+          <div className="page-wrapper py-16 md:py-20">
+          <div className="mb-10 max-w-2xl">
+            <span className="eyebrow">What to prepare</span>
+            <h2 className="mt-3 font-diocesan text-4xl font-bold text-primary-700 md:text-5xl">
+              {content?.requirementsHeading || fallbackPageContent.requirementsHeading}
+            </h2>
+            <span className="gold-rule" />
+            <p className="mt-5 leading-7 text-gray-600">
+              Prepare these general documents before contacting your preferred member school.
+            </p>
+          </div>
           {content?.requirements?.length ? (
             <ul className="card space-y-3 text-gray-600 list-disc list-inside">
               {content.requirements.map(requirement => <li key={requirement}>{requirement}</li>)}
@@ -86,13 +150,22 @@ export default async function EnrollmentPage() {
               Requirements, schedules, assessments, and fees vary by member school. Contact the selected school before submitting an application.
             </p>
           </aside>
+          </div>
         </section>
 
-        <div className="divider" />
-
-        <section id="inquiry" className="section max-w-2xl">
-          <h2 className="section-heading">{content?.inquiryHeading || fallbackPageContent.inquiryHeading}</h2>
-          <form className="card space-y-4">
+        <section id="inquiry" className="scroll-mt-20 bg-white">
+          <div className="page-wrapper py-16 md:py-20">
+          <div className="mb-10 max-w-2xl">
+            <span className="eyebrow">Start your application</span>
+            <h2 className="mt-3 font-diocesan text-4xl font-bold text-primary-700 md:text-5xl">
+              {content?.inquiryHeading || fallbackPageContent.inquiryHeading}
+            </h2>
+            <span className="gold-rule" />
+            <p className="mt-5 leading-7 text-gray-600">
+              Tell us about the learner and your preferred school so we can guide you toward the next step.
+            </p>
+          </div>
+          <form className="card max-w-2xl space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="form-label">Parent / Guardian Name</label>
@@ -135,6 +208,7 @@ export default async function EnrollmentPage() {
             </div>
             <button type="submit" className="btn-primary">Submit Inquiry</button>
           </form>
+          </div>
         </section>
 
       </div>
