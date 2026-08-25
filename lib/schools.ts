@@ -5,7 +5,9 @@ export type School = {
   name: string
   slug: { current: string }
   city?: string
+  address?: string
   levels?: string[]
+  logo?: any
   coverPhoto?: any
   enrollmentOpen?: boolean
 }
@@ -17,7 +19,9 @@ export async function getSchools(): Promise<School[]> {
         _id,
         name,
         slug,
+        logo,
         city,
+        address,
         levels,
         coverPhoto,
         enrollmentOpen

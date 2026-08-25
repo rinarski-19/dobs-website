@@ -1,8 +1,9 @@
 import Hero from '@/components/Hero'
 import { getPageContent, imageUrlFor, urlFor } from '@/lib/sanity'
 import { getSchools } from '@/lib/schools'
+import Image from 'next/image'
 import Link from 'next/link'
-import { MapPin, Search, SlidersHorizontal } from 'lucide-react'
+import { ArrowRight, BadgeCheck, MapPin, Search, SlidersHorizontal } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -157,38 +158,64 @@ export default async function SchoolsPage({
                 <Link
                   key={school._id}
                   href={`/schools/${school.slug.current}`}
-                  className="card hover:shadow-md transition-shadow group"
+                  aria-label={`View ${school.name}`}
+                  className="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-primary-300 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2"
                 >
-                  {/* Cover photo */}
-                  {school.coverPhoto ? (
-                    <img
-                      src={urlFor(school.coverPhoto).width(600).height(300).fit('crop').url()}
-                      alt={school.name}
-                      className="w-full h-40 object-cover rounded-lg mb-4"
-                    />
-                  ) : (
-                    <div className="placeholder-block mb-4 h-40">[ School Photo ]</div>
-                  )}
+                  <div className="relative aspect-video overflow-visible bg-parchment-100">
+                    <div className="absolute inset-0 overflow-hidden">
+                      {school.coverPhoto ? (
+                        <Image
+                          src={urlFor(school.coverPhoto).width(1200).height(675).fit('crop').url()}
+                          alt={`${school.name} campus`}
+                          fill
+                          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="flex h-full items-center justify-center bg-gradient-to-br from-primary-800 to-primary-600 text-sm font-medium text-white/75">School campus photo</div>
+                      )}
+                    </div>
 
-                  <h3 className="card-title group-hover:text-primary-600 transition-colors">
-                    {school.name}
-                  </h3>
+                    <div className="absolute -bottom-7 left-5 z-10 flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl border-4 border-white bg-white text-xl font-bold text-primary-800 shadow-md">
+                      {school.logo ? (
+                        <Image
+                          src={urlFor(school.logo).width(160).height(160).fit('max').url()}
+                          alt={`${school.name} logo`}
+                          fill
+                          sizes="64px"
+                          className="object-contain p-1"
+                        />
+                      ) : school.name.charAt(0)}
+                    </div>
+                  </div>
 
-                  {school.city && (
-                    <p className="card-body flex items-center gap-1 mb-3">
-                      <MapPin size={13} /> {school.city}
-                    </p>
-                  )}
+                  <div className="flex flex-1 flex-col px-6 pb-6 pt-11">
+                    <h3 className="font-diocesan text-2xl font-semibold leading-tight text-primary-950 transition-colors group-hover:text-primary-700 md:text-[1.7rem]">
+                      {school.name}
+                    </h3>
 
-                  <div className="flex flex-wrap gap-2">
-                    {school.levels?.map(level => (
-                      <span key={level} className="badge">{level}</span>
-                    ))}
-                    {school.enrollmentOpen && (
-                      <span className="inline-block text-xs font-medium px-2.5 py-0.5 rounded-full bg-green-50 text-green-700">
-                        Enrolling
-                      </span>
+                    {(school.address || school.city) && (
+                      <p className="mt-3 flex items-start gap-2 text-sm leading-6 text-gray-600">
+                        <MapPin className="mt-1 shrink-0 text-primary-600" size={16} aria-hidden="true" />
+                        <span>{[school.address, school.city].filter(Boolean).join(', ')}</span>
+                      </p>
                     )}
+
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      {school.levels?.map(level => (
+                        <span key={level} className="inline-flex rounded-full bg-primary-50 px-3 py-1 text-xs font-semibold text-primary-700">{level}</span>
+                      ))}
+                      {school.enrollmentOpen && (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-primary-700 px-3 py-1 text-xs font-semibold text-white">
+                          <BadgeCheck size={13} aria-hidden="true" /> Open for Enrollment
+                        </span>
+                      )}
+                    </div>
+
+                    <span className="mt-auto inline-flex items-center gap-2 pt-6 text-sm font-semibold text-primary-700">
+                      View School
+                      <ArrowRight className="transition-transform group-hover:translate-x-1" size={17} aria-hidden="true" />
+                    </span>
                   </div>
                 </Link>
               ))}
