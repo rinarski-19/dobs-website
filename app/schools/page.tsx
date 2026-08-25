@@ -2,7 +2,7 @@ import Hero from '@/components/Hero'
 import { getPageContent, imageUrlFor, urlFor } from '@/lib/sanity'
 import { getSchools } from '@/lib/schools'
 import Link from 'next/link'
-import { MapPin } from 'lucide-react'
+import { MapPin, SlidersHorizontal } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -21,11 +21,35 @@ const fallbackPageContent = {
   emptyStateText: 'No schools added yet. Add schools in the Sanity Studio.',
 }
 
-export default async function SchoolsPage() {
+export default async function SchoolsPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ location?: string; level?: string; enrollment?: string }>
+}) {
   const [schools, content] = await Promise.all([
     getSchools(),
     getPageContent<SchoolsPageContent>('schoolsPage'),
   ])
+  const resolvedSearchParams = await searchParams
+  const selectedLocation = resolvedSearchParams?.location || 'all'
+  const selectedLevel = resolvedSearchParams?.level || 'all'
+  const selectedEnrollment = resolvedSearchParams?.enrollment || 'all'
+  const locations = Array.from(new Set(schools.map(school => school.city).filter((city): city is string => Boolean(city)))).sort()
+  const levels = Array.from(new Set(schools.flatMap(school => school.levels || []))).sort()
+  const filteredSchools = schools.filter(school => {
+    const matchesLocation = selectedLocation === 'all' || school.city === selectedLocation
+    const matchesLevel = selectedLevel === 'all' || school.levels?.includes(selectedLevel)
+    const matchesEnrollment = selectedEnrollment === 'all'
+      || (selectedEnrollment === 'open' ? school.enrollmentOpen : !school.enrollmentOpen)
+    return matchesLocation && matchesLevel && matchesEnrollment
+  })
+  const locationHref = (location: string) => {
+    const params = new URLSearchParams()
+    if (location !== 'all') params.set('location', location)
+    if (selectedLevel !== 'all') params.set('level', selectedLevel)
+    if (selectedEnrollment !== 'all') params.set('enrollment', selectedEnrollment)
+    return params.size ? `/schools?${params.toString()}` : '/schools'
+  }
 
   return (
     <>
@@ -55,16 +79,61 @@ export default async function SchoolsPage() {
           </div>
         ) : (
           <>
-            {/* Filter tabs — will be interactive once we know all cities/levels */}
-            <div className="flex gap-3 mb-8 flex-wrap">
-              <span className="badge">All ({schools.length})</span>
-              {Array.from(new Set(schools.map(s => s.city).filter(Boolean))).map(city => (
-                <span key={city} className="badge">{city}</span>
-              ))}
+            <div className="mb-9 rounded-2xl border border-primary-100 bg-primary-50/60 p-5 md:p-6">
+              <div className="mb-5 flex items-center gap-2 text-primary-900">
+                <SlidersHorizontal size={20} aria-hidden="true" />
+                <h3 className="font-sans text-base font-bold">Filter Member Schools</h3>
+              </div>
+
+              <nav aria-label="Filter schools by location" className="mb-5 flex flex-wrap gap-2.5">
+                {['all', ...locations].map(location => {
+                  const isActive = selectedLocation === location
+                  return (
+                    <Link
+                      key={location}
+                      href={locationHref(location)}
+                      aria-current={isActive ? 'page' : undefined}
+                      className={`inline-flex min-h-10 items-center rounded-full border-2 px-4 py-2 text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 ${
+                        isActive
+                          ? 'border-primary-700 bg-primary-700 text-white shadow-sm'
+                          : 'border-primary-500 bg-white text-primary-700 hover:border-primary-800 hover:bg-primary-50'
+                      }`}
+                    >
+                      {location === 'all' ? `All Locations (${schools.length})` : location}
+                    </Link>
+                  )
+                })}
+              </nav>
+
+              <form action="/schools" method="get" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_auto_auto] lg:items-end">
+                {selectedLocation !== 'all' && <input type="hidden" name="location" value={selectedLocation} />}
+                <div>
+                  <label htmlFor="school-level" className="form-label">Education Level</label>
+                  <select id="school-level" name="level" defaultValue={selectedLevel} className="form-input bg-white">
+                    <option value="all">All education levels</option>
+                    {levels.map(level => <option key={level} value={level}>{level}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label htmlFor="school-enrollment" className="form-label">Enrollment Status</label>
+                  <select id="school-enrollment" name="enrollment" defaultValue={selectedEnrollment} className="form-input bg-white">
+                    <option value="all">All enrollment statuses</option>
+                    <option value="open">Open for enrollment</option>
+                    <option value="closed">Not marked open</option>
+                  </select>
+                </div>
+                <button type="submit" className="btn-primary">Apply Filters</button>
+                <Link href="/schools" className="btn-secondary">Reset</Link>
+              </form>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {schools.map(school => (
+            <p className="mb-5 text-sm font-medium text-gray-600">
+              Showing {filteredSchools.length} of {schools.length} member schools
+            </p>
+
+            {filteredSchools.length > 0 ? (
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {filteredSchools.map(school => (
                 <Link
                   key={school._id}
                   href={`/schools/${school.slug.current}`}
@@ -103,7 +172,12 @@ export default async function SchoolsPage() {
                   </div>
                 </Link>
               ))}
-            </div>
+              </div>
+            ) : (
+              <div className="rounded-2xl border border-primary-200 bg-primary-50 px-6 py-12 text-center text-primary-900">
+                No member schools match the selected filters. Try another location, level, or enrollment status.
+              </div>
+            )}
           </>
         )}
 
