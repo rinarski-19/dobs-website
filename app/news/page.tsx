@@ -2,7 +2,7 @@ import Hero from '@/components/Hero'
 import { client, getPageContent, imageUrlFor } from '@/lib/sanity'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, CalendarDays, School } from 'lucide-react'
+import { ArrowRight, CalendarDays, School, Search } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -98,15 +98,22 @@ const normalizeCategory = (value: string) => value.toLowerCase().trim().replace(
 export default async function NewsPage({
   searchParams,
 }: {
-  searchParams?: Promise<{ category?: string }>
+  searchParams?: Promise<{ category?: string; query?: string }>
 }) {
   const content = await getPageContent<NewsPageContent>('newsPage')
   const posts = await getNewsPosts()
   const displayPosts = posts.length > 0 ? posts : demoNewsPosts
-  const selectedCategory = (await searchParams)?.category || 'all'
-  const filteredPosts = selectedCategory === 'all'
+  const resolvedSearchParams = await searchParams
+  const selectedCategory = resolvedSearchParams?.category || 'all'
+  const searchQuery = resolvedSearchParams?.query?.trim() || ''
+  const categoryPosts = selectedCategory === 'all'
     ? displayPosts
     : displayPosts.filter(post => normalizeCategory(post.category) === selectedCategory)
+  const normalizedSearchQuery = searchQuery.toLowerCase()
+  const filteredPosts = normalizedSearchQuery
+    ? categoryPosts.filter(post => [post.title, post.excerpt, post.school, post.category]
+        .some(value => value.toLowerCase().includes(normalizedSearchQuery)))
+    : categoryPosts
 
   return (
     <>
@@ -120,26 +127,48 @@ export default async function NewsPage({
 
       <div className="page-wrapper">
 
-        <nav aria-label="Filter news by category" className="mb-10 flex flex-wrap gap-3">
-          {newsCategories.map(category => {
-            const isActive = selectedCategory === category.value
+        <div className="mb-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+          <nav aria-label="Filter news by category" className="flex flex-wrap gap-3">
+            {newsCategories.map(category => {
+              const isActive = selectedCategory === category.value
+              const categoryParams = new URLSearchParams()
+              if (category.value !== 'all') categoryParams.set('category', category.value)
+              if (searchQuery) categoryParams.set('query', searchQuery)
+              const categoryHref = categoryParams.size ? `/news?${categoryParams.toString()}#news-articles` : '/news#news-articles'
 
-            return (
-              <Link
-                key={category.value}
-                href={category.value === 'all' ? '/news#news-articles' : `/news?category=${category.value}#news-articles`}
-                aria-current={isActive ? 'page' : undefined}
-                className={`inline-flex min-h-11 items-center justify-center rounded-full border-2 px-5 py-2 text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 ${
-                  isActive
-                    ? 'border-primary-700 bg-primary-700 text-white shadow-sm'
-                    : 'border-primary-600 bg-white text-primary-700 hover:border-primary-800 hover:bg-primary-50 hover:text-primary-900'
-                }`}
-              >
-                {category.label}
-              </Link>
-            )
-          })}
-        </nav>
+              return (
+                <Link
+                  key={category.value}
+                  href={categoryHref}
+                  aria-current={isActive ? 'page' : undefined}
+                  className={`inline-flex min-h-11 items-center justify-center rounded-full border-2 px-5 py-2 text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 ${
+                    isActive
+                      ? 'border-primary-700 bg-primary-700 text-white shadow-sm'
+                      : 'border-primary-600 bg-white text-primary-700 hover:border-primary-800 hover:bg-primary-50 hover:text-primary-900'
+                  }`}
+                >
+                  {category.label}
+                </Link>
+              )
+            })}
+          </nav>
+
+          <form action="/news" method="get" role="search" className="w-full lg:max-w-sm">
+            {selectedCategory !== 'all' && <input type="hidden" name="category" value={selectedCategory} />}
+            <label htmlFor="news-search" className="sr-only">Search news and announcements</label>
+            <div className="relative">
+              <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-primary-600" size={20} aria-hidden="true" />
+              <input
+                id="news-search"
+                name="query"
+                type="search"
+                defaultValue={searchQuery}
+                placeholder="Search news and announcements"
+                className="min-h-12 w-full rounded-full border-2 border-primary-300 bg-white py-3 pl-12 pr-5 text-sm text-gray-900 shadow-sm outline-none transition placeholder:text-gray-500 hover:border-primary-500 focus:border-primary-700 focus:ring-2 focus:ring-primary-200"
+              />
+            </div>
+          </form>
+        </div>
 
         <div id="news-articles" className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3">
             {filteredPosts.map(post => (
@@ -195,7 +224,9 @@ export default async function NewsPage({
 
         {filteredPosts.length === 0 && (
           <div className="rounded-2xl border border-primary-200 bg-primary-50 px-6 py-12 text-center text-primary-900">
-            No news posts are currently available in this category.
+            {searchQuery
+              ? `No news posts match “${searchQuery}”.`
+              : 'No news posts are currently available in this category.'}
           </div>
         )}
 
