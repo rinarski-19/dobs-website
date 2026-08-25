@@ -2,7 +2,7 @@ import Hero from '@/components/Hero'
 import FeaturedEvent from '@/components/FeaturedEvent'
 import { getPageContent, imageUrlFor } from '@/lib/sanity'
 import Link from 'next/link'
-import { ArrowRight, Building2, CalendarDays, MapPin, RotateCcw, Search, School, Tag } from 'lucide-react'
+import { ArrowRight, Building2, CalendarDays, ChevronLeft, ChevronRight, MapPin, RotateCcw, Search, School, Tag } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -181,19 +181,43 @@ export default async function EventsPage() {
           </div>
 
           {/* Pagination */}
-          <div className="flex items-center justify-center gap-2 mt-10">
-            {[1, 2, 3].map(p => (
+          <div className="mt-12 flex flex-col items-center justify-between gap-5 border-t border-gray-100 pt-8 sm:flex-row">
+            <p className="text-sm font-medium text-gray-600">Showing 1–6 of 18 events</p>
+
+            <nav className="flex items-center gap-3" aria-label="Events pagination">
               <button
-                key={p}
-                className={`w-9 h-9 rounded-lg text-sm font-medium transition-colors ${
-                  p === 1
-                    ? 'bg-primary-600 text-white'
-                    : 'text-gray-500 hover:bg-gray-100'
-                }`}
+                type="button"
+                className="flex h-11 w-11 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-400 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+                aria-label="Previous page"
+                disabled
               >
-                {p}
+                <ChevronLeft size={20} aria-hidden="true" />
               </button>
-            ))}
+
+              {[1, 2, 3].map(p => (
+                <button
+                  key={p}
+                  type="button"
+                  aria-label={`Go to page ${p}`}
+                  aria-current={p === 1 ? 'page' : undefined}
+                  className={`h-11 min-w-11 rounded-lg px-3 text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 ${
+                    p === 1
+                      ? 'bg-primary-700 text-white shadow-sm'
+                      : 'border border-gray-200 bg-white text-primary-700 hover:border-primary-200 hover:bg-primary-50'
+                  }`}
+                >
+                  {p}
+                </button>
+              ))}
+
+              <button
+                type="button"
+                className="flex h-11 w-11 items-center justify-center rounded-lg border border-primary-200 bg-white text-primary-700 transition-colors hover:bg-primary-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2"
+                aria-label="Next page"
+              >
+                <ChevronRight size={20} aria-hidden="true" />
+              </button>
+            </nav>
           </div>
           </div>
         </section>
