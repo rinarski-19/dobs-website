@@ -75,6 +75,31 @@ export default function ProgramsPageClient({ content }: { content: ProgramsPageC
             viewport
             parallax
           />
+
+          <nav aria-label="Explore academic programs" className="absolute inset-x-0 bottom-5 z-20 px-4 md:bottom-8 md:px-8">
+            <div className="mx-auto max-w-6xl">
+              <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-gold-300 drop-shadow-md">Explore Our Programs</p>
+              <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-4 md:overflow-visible md:pb-0">
+                {content.programs.slice(0, 4).map((program, index) => {
+                  const label = ['Pre-School', 'Grade School', 'Junior High', 'Senior High'][index] || program.title
+
+                  return (
+                    <button
+                      key={program._key ?? `${program.title}-hero-tab`}
+                      type="button"
+                      onClick={() => scrollTo(index + 1)}
+                      className="group min-h-24 min-w-[13.5rem] snap-start rounded-xl border border-white/30 bg-primary-900/85 px-5 py-4 text-left text-white shadow-xl backdrop-blur-md transition-all hover:-translate-y-1 hover:border-gold-300 hover:bg-primary-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-900 md:min-w-0"
+                    >
+                      <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-gold-300">
+                        <BookOpen size={15} aria-hidden="true" /> Program {String(index + 1).padStart(2, '0')}
+                      </span>
+                      <span className="mt-2 block font-diocesan text-xl font-semibold leading-tight md:text-2xl">{label}</span>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          </nav>
         </div>
 
         <nav aria-label="Programs sections" className="fixed right-3 top-1/2 z-50 flex -translate-y-1/2 flex-col items-end gap-1 md:right-6">
