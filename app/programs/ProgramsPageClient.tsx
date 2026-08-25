@@ -13,6 +13,7 @@ export type Program = {
   learningFocus?: string
   faithFormation?: string
   availableSchools?: string
+  strands?: string[]
   description: string
   imageUrl?: string
   imageAlt?: string
@@ -180,6 +181,24 @@ export default function ProgramsPageClient({ content }: { content: ProgramsPageC
                     )
                   })}
                 </div>
+
+                {program.strands && program.strands.length > 0 && (
+                  <div className="mb-8 rounded-xl border border-gold-400/40 bg-primary-950/85 p-4">
+                    <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                      <div>
+                        <p className="text-xs font-bold uppercase tracking-[0.16em] text-gold-300">Senior High Pathways</p>
+                        <p className="mt-1 text-xs leading-5 text-white/80">Strand offerings vary by member school. Contact your preferred school to confirm availability.</p>
+                      </div>
+                      <div className="flex flex-wrap gap-2 md:justify-end">
+                        {program.strands.map(strand => (
+                          <span key={strand} className="inline-flex rounded-full border border-gold-300/60 bg-gold-400 px-3 py-1 text-xs font-bold text-primary-950 shadow-sm">
+                            {strand}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 <div className="flex flex-wrap gap-4">
                   {content.primaryButton?.label && content.primaryButton.href && (

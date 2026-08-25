@@ -22,6 +22,14 @@ export default defineType({
           defineField({ name: 'learningFocus', title: 'Main Learning Focus', type: 'string' }),
           defineField({ name: 'faithFormation', title: 'Faith-Formation Component', type: 'string' }),
           defineField({ name: 'availableSchools', title: 'Available Member Schools', type: 'string', description: 'Brief availability summary, such as “Available at selected member schools.”' }),
+          defineField({
+            name: 'strands',
+            title: 'Senior High School Strands',
+            type: 'array',
+            description: 'For Senior High School only. Add the pathways supported across member schools; actual offerings may vary by school.',
+            of: [{ type: 'string' }],
+            options: { layout: 'tags' },
+          }),
           defineField({ name: 'description', title: 'Description', type: 'text', rows: 4, validation: Rule => Rule.required() }),
           defineField({
             name: 'image', title: 'Background Image', type: 'image', options: { hotspot: true },
