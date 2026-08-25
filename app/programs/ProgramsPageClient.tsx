@@ -143,13 +143,13 @@ export default function ProgramsPageClient({ content }: { content: ProgramsPageC
                 backgroundPosition: i % 2 === 0 ? '65% center' : '35% center',
               }}
             >
-              <div className="absolute inset-0 bg-primary-950/45" />
-              <div className={`absolute inset-0 ${i % 2 === 0 ? 'bg-gradient-to-r from-primary-950/90 via-primary-950/55 to-primary-900/10' : 'bg-gradient-to-l from-primary-950/90 via-primary-950/55 to-primary-900/10'}`} />
+              <div className="absolute inset-0 bg-primary-950/65" />
+              <div className={`absolute inset-0 ${i % 2 === 0 ? 'bg-gradient-to-r from-primary-950 via-primary-950/85 to-primary-900/35' : 'bg-gradient-to-l from-primary-950 via-primary-950/85 to-primary-900/35'}`} />
               <span className={`absolute bottom-4 text-[18rem] font-black text-white/5 leading-none select-none pointer-events-none ${i % 2 === 0 ? 'right-12' : 'left-12'}`}>
                 {String(i + 1).padStart(2, '0')}
               </span>
 
-              <div className={`relative z-10 w-full max-w-6xl px-6 text-white md:px-10 ${i % 2 === 0 ? 'mr-auto lg:ml-12' : 'ml-auto lg:mr-12'}`}>
+              <div className={`relative z-10 w-[calc(100%_-_2rem)] max-w-6xl rounded-3xl border border-white/15 bg-primary-950/55 p-6 text-white shadow-2xl backdrop-blur-sm md:p-8 lg:p-10 ${i % 2 === 0 ? 'mr-auto lg:ml-12' : 'ml-auto lg:mr-12'}`}>
                 {(program.grades || program.ages) && (
                   <span className="inline-block text-xs font-semibold uppercase tracking-widest mb-6 px-3 py-1.5 rounded-full bg-white/10 text-white/90">
                     <BookOpen size={11} className="inline mr-1.5" />
@@ -157,7 +157,7 @@ export default function ProgramsPageClient({ content }: { content: ProgramsPageC
                   </span>
                 )}
                 <h2 className="mb-5 text-5xl font-black leading-none tracking-tight md:text-7xl lg:text-8xl">{program.title}</h2>
-                <p className="mb-7 max-w-3xl text-base leading-relaxed text-white/80 md:text-lg">{program.description}</p>
+                <p className="mb-7 max-w-3xl text-base font-medium leading-relaxed text-white/95 md:text-lg">{program.description}</p>
 
                 <div className="mb-8 grid grid-cols-2 gap-3 md:grid-cols-5">
                   {[
@@ -169,10 +169,10 @@ export default function ProgramsPageClient({ content }: { content: ProgramsPageC
                   ].map(detail => {
                     const Icon = detail.icon
                     return (
-                      <div key={detail.label} className="rounded-xl border border-white/20 bg-primary-950/55 p-3.5 shadow-lg backdrop-blur-md">
+                      <div key={detail.label} className="rounded-xl border border-white/25 bg-primary-950/85 p-3.5 shadow-lg backdrop-blur-md">
                         <Icon className="mb-2 text-gold-300" size={18} aria-hidden="true" />
                         <p className="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-gold-200">{detail.label}</p>
-                        <p className="mt-1 text-xs font-medium leading-5 text-white/90 md:text-sm">{detail.value}</p>
+                        <p className="mt-1 text-xs font-semibold leading-5 text-white md:text-sm">{detail.value}</p>
                       </div>
                     )
                   })}
