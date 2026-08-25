@@ -2,7 +2,7 @@ import Hero from '@/components/Hero'
 import { client, getPageContent, imageUrlFor } from '@/lib/sanity'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, CalendarDays, School, Search } from 'lucide-react'
+import { ArrowRight, CalendarDays, ChevronLeft, ChevronRight, School, Search } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -33,7 +33,7 @@ type NewsPost = {
   isDemo?: boolean
 }
 
-const demoNewsPosts: NewsPost[] = Array.from({ length: 6 }, (_, index) => ({
+const demoNewsPosts: NewsPost[] = Array.from({ length: 13 }, (_, index) => ({
   id: `demo-news-${index + 1}`,
   title: `News Post Title ${index + 1}`,
   slug: '',
@@ -98,7 +98,7 @@ const normalizeCategory = (value: string) => value.toLowerCase().trim().replace(
 export default async function NewsPage({
   searchParams,
 }: {
-  searchParams?: Promise<{ category?: string; query?: string }>
+  searchParams?: Promise<{ category?: string; query?: string; page?: string }>
 }) {
   const content = await getPageContent<NewsPageContent>('newsPage')
   const posts = await getNewsPosts()
@@ -116,6 +116,18 @@ export default async function NewsPage({
     ? categoryPosts.filter(post => [post.title, post.excerpt, post.school, post.category]
         .some(value => value.toLowerCase().includes(normalizedSearchQuery)))
     : categoryPosts
+  const storiesPerPage = 6
+  const totalPages = Math.max(1, Math.ceil(filteredPosts.length / storiesPerPage))
+  const requestedPage = Number.parseInt(resolvedSearchParams?.page || '1', 10)
+  const currentPage = Number.isFinite(requestedPage) ? Math.min(Math.max(requestedPage, 1), totalPages) : 1
+  const paginatedPosts = filteredPosts.slice((currentPage - 1) * storiesPerPage, currentPage * storiesPerPage)
+  const paginationHref = (page: number) => {
+    const params = new URLSearchParams()
+    if (selectedCategory !== 'all') params.set('category', selectedCategory)
+    if (searchQuery) params.set('query', searchQuery)
+    if (page > 1) params.set('page', String(page))
+    return params.size ? `/news?${params.toString()}#news-articles` : '/news#news-articles'
+  }
 
   return (
     <>
@@ -228,7 +240,7 @@ export default async function NewsPage({
         </div>
 
         <div id="news-articles" className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredPosts.map(post => (
+            {paginatedPosts.map(post => (
               <Link
                 key={post.id}
                 href={post.slug ? `/news/${post.slug}` : '#news-articles'}
@@ -278,6 +290,52 @@ export default async function NewsPage({
               </Link>
             ))}
           </div>
+
+        {filteredPosts.length > storiesPerPage && (
+          <nav aria-label="News archive pagination" className="mt-12 flex flex-wrap items-center justify-center gap-2">
+            <Link
+              href={paginationHref(Math.max(1, currentPage - 1))}
+              aria-disabled={currentPage === 1}
+              tabIndex={currentPage === 1 ? -1 : undefined}
+              className={`inline-flex min-h-11 items-center gap-2 rounded-lg border px-4 py-2 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 ${
+                currentPage === 1
+                  ? 'pointer-events-none border-gray-200 bg-gray-50 text-gray-400'
+                  : 'border-primary-300 bg-white text-primary-700 hover:border-primary-700 hover:bg-primary-50'
+              }`}
+            >
+              <ChevronLeft size={17} aria-hidden="true" /> Previous
+            </Link>
+
+            {Array.from({ length: totalPages }, (_, index) => index + 1).map(page => (
+              <Link
+                key={page}
+                href={paginationHref(page)}
+                aria-current={page === currentPage ? 'page' : undefined}
+                aria-label={`Go to news page ${page}`}
+                className={`inline-flex h-11 min-w-11 items-center justify-center rounded-lg border px-3 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 ${
+                  page === currentPage
+                    ? 'border-primary-700 bg-primary-700 text-white'
+                    : 'border-primary-300 bg-white text-primary-700 hover:border-primary-700 hover:bg-primary-50'
+                }`}
+              >
+                {page}
+              </Link>
+            ))}
+
+            <Link
+              href={paginationHref(Math.min(totalPages, currentPage + 1))}
+              aria-disabled={currentPage === totalPages}
+              tabIndex={currentPage === totalPages ? -1 : undefined}
+              className={`inline-flex min-h-11 items-center gap-2 rounded-lg border px-4 py-2 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 ${
+                currentPage === totalPages
+                  ? 'pointer-events-none border-gray-200 bg-gray-50 text-gray-400'
+                  : 'border-primary-300 bg-white text-primary-700 hover:border-primary-700 hover:bg-primary-50'
+              }`}
+            >
+              Next <ChevronRight size={17} aria-hidden="true" />
+            </Link>
+          </nav>
+        )}
 
         {filteredPosts.length === 0 && (
           <div className="rounded-2xl border border-primary-200 bg-primary-50 px-6 py-12 text-center text-primary-900">
