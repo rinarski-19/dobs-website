@@ -130,13 +130,13 @@
 
   /* The Programs page uses the document scroll, with each image locking below the navbar. */
   html.programs-scroll-page {
-    scroll-snap-type: y mandatory;
+    scroll-snap-type: y proximity;
     scroll-padding-top: 4rem;
   }
 
   html.programs-scroll-page .programs-snap-section {
     scroll-snap-align: start;
-    scroll-snap-stop: always;
+    scroll-snap-stop: normal;
   }
 
   @media (max-width: 767px), (prefers-reduced-motion: reduce) {
