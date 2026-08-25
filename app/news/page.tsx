@@ -39,7 +39,7 @@ const demoNewsPosts: NewsPost[] = Array.from({ length: 13 }, (_, index) => ({
   slug: '',
   category: ['Announcements', 'Achievements', 'Campus Life', 'Pastoral Activities', 'Enrollment'][index % 5],
   excerpt: 'Add a short two- or three-line summary explaining the announcement, school story, achievement, or important update.',
-  publishedAt: '2026-08-01T08:00:00+08:00',
+  publishedAt: `2026-${String(8 - (index % 6)).padStart(2, '0')}-01T08:00:00+08:00`,
   school: index % 2 === 0 ? 'Diocese of Baguio Schools' : '[ Publishing School Name ]',
   isDemo: true,
 }))
@@ -98,7 +98,7 @@ const normalizeCategory = (value: string) => value.toLowerCase().trim().replace(
 export default async function NewsPage({
   searchParams,
 }: {
-  searchParams?: Promise<{ category?: string; query?: string; page?: string }>
+  searchParams?: Promise<{ category?: string; query?: string; archive?: string; page?: string }>
 }) {
   const content = await getPageContent<NewsPageContent>('newsPage')
   const posts = await getNewsPosts()
@@ -108,9 +108,18 @@ export default async function NewsPage({
   const resolvedSearchParams = await searchParams
   const selectedCategory = resolvedSearchParams?.category || 'all'
   const searchQuery = resolvedSearchParams?.query?.trim() || ''
-  const categoryPosts = selectedCategory === 'all'
+  const selectedArchive = resolvedSearchParams?.archive || 'all'
+  const archiveOptions = Array.from(new Set(
+    archivePosts
+      .map(post => post.publishedAt?.slice(0, 7))
+      .filter((value): value is string => Boolean(value)),
+  )).sort((a, b) => b.localeCompare(a))
+  const datedArchivePosts = selectedArchive === 'all'
     ? archivePosts
-    : archivePosts.filter(post => normalizeCategory(post.category) === selectedCategory)
+    : archivePosts.filter(post => post.publishedAt?.startsWith(selectedArchive))
+  const categoryPosts = selectedCategory === 'all'
+    ? datedArchivePosts
+    : datedArchivePosts.filter(post => normalizeCategory(post.category) === selectedCategory)
   const normalizedSearchQuery = searchQuery.toLowerCase()
   const filteredPosts = normalizedSearchQuery
     ? categoryPosts.filter(post => [post.title, post.excerpt, post.school, post.category]
@@ -125,6 +134,7 @@ export default async function NewsPage({
     const params = new URLSearchParams()
     if (selectedCategory !== 'all') params.set('category', selectedCategory)
     if (searchQuery) params.set('query', searchQuery)
+    if (selectedArchive !== 'all') params.set('archive', selectedArchive)
     if (page > 1) params.set('page', String(page))
     return params.size ? `/news?${params.toString()}#news-articles` : '/news#news-articles'
   }
@@ -203,6 +213,7 @@ export default async function NewsPage({
               const categoryParams = new URLSearchParams()
               if (category.value !== 'all') categoryParams.set('category', category.value)
               if (searchQuery) categoryParams.set('query', searchQuery)
+              if (selectedArchive !== 'all') categoryParams.set('archive', selectedArchive)
               const categoryHref = categoryParams.size ? `/news?${categoryParams.toString()}#news-articles` : '/news#news-articles'
 
               return (
@@ -222,21 +233,46 @@ export default async function NewsPage({
             })}
           </nav>
 
-          <form action="/news" method="get" role="search" className="w-full lg:max-w-sm">
-            {selectedCategory !== 'all' && <input type="hidden" name="category" value={selectedCategory} />}
-            <label htmlFor="news-search" className="sr-only">Search news and announcements</label>
-            <div className="relative">
-              <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-primary-600" size={20} aria-hidden="true" />
-              <input
-                id="news-search"
-                name="query"
-                type="search"
-                defaultValue={searchQuery}
-                placeholder="Search news and announcements"
-                className="min-h-12 w-full rounded-full border-2 border-primary-300 bg-white py-3 pl-12 pr-5 text-sm text-gray-900 shadow-sm outline-none transition placeholder:text-gray-500 hover:border-primary-500 focus:border-primary-700 focus:ring-2 focus:ring-primary-200"
-              />
-            </div>
-          </form>
+          <div className="flex w-full flex-col gap-3 sm:flex-row lg:w-auto">
+            <form action="/news" method="get" role="search" className="w-full lg:w-80">
+              {selectedCategory !== 'all' && <input type="hidden" name="category" value={selectedCategory} />}
+              {selectedArchive !== 'all' && <input type="hidden" name="archive" value={selectedArchive} />}
+              <label htmlFor="news-search" className="sr-only">Search news and announcements</label>
+              <div className="relative">
+                <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-primary-600" size={20} aria-hidden="true" />
+                <input
+                  id="news-search"
+                  name="query"
+                  type="search"
+                  defaultValue={searchQuery}
+                  placeholder="Search news and announcements"
+                  className="min-h-12 w-full rounded-full border-2 border-primary-300 bg-white py-3 pl-12 pr-5 text-sm text-gray-900 shadow-sm outline-none transition placeholder:text-gray-500 hover:border-primary-500 focus:border-primary-700 focus:ring-2 focus:ring-primary-200"
+                />
+              </div>
+            </form>
+
+            <form action="/news" method="get" className="flex gap-2">
+              {selectedCategory !== 'all' && <input type="hidden" name="category" value={selectedCategory} />}
+              {searchQuery && <input type="hidden" name="query" value={searchQuery} />}
+              <label htmlFor="news-archive" className="sr-only">News Archive</label>
+              <select
+                id="news-archive"
+                name="archive"
+                defaultValue={selectedArchive}
+                className="min-h-12 min-w-44 rounded-full border-2 border-primary-300 bg-white px-4 text-sm font-semibold text-primary-800 shadow-sm outline-none transition hover:border-primary-500 focus:border-primary-700 focus:ring-2 focus:ring-primary-200"
+              >
+                <option value="all">News Archive</option>
+                {archiveOptions.map(value => {
+                  const [year, month] = value.split('-').map(Number)
+                  const label = new Intl.DateTimeFormat('en-PH', { month: 'long', year: 'numeric' }).format(new Date(year, month - 1, 1))
+                  return <option key={value} value={value}>{label}</option>
+                })}
+              </select>
+              <button type="submit" className="min-h-12 rounded-full bg-primary-700 px-4 text-sm font-semibold text-white transition-colors hover:bg-primary-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2">
+                View
+              </button>
+            </form>
+          </div>
         </div>
 
         <div id="news-articles" className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3">
