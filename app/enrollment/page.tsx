@@ -1,6 +1,8 @@
 import Hero from '@/components/Hero'
 import { getPageContent, imageUrlFor } from '@/lib/sanity'
+import Link from 'next/link'
 import {
+  ArrowRight,
   BadgeCheck,
   CheckCircle2,
   ClipboardCheck,
@@ -291,6 +293,29 @@ export default async function EnrollmentPage() {
             </div>
           </form>
           </div>
+          </div>
+        </section>
+
+        <section className="bg-primary-700 text-white">
+          <div className="page-wrapper py-16 text-center md:py-20">
+            <span className="text-xs font-semibold uppercase tracking-[0.22em] text-gold-300">Take the next step</span>
+            <h2 className="mx-auto mt-3 max-w-3xl font-diocesan text-4xl font-bold md:text-5xl">
+              Ready to find the right school?
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl leading-7 text-primary-100">
+              Explore our member schools or contact the Diocese of Baguio Schools office for enrollment guidance.
+            </p>
+            <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <Link href="/schools" className="btn-accent w-full sm:w-auto">
+                Browse Our Schools <ArrowRight size={18} aria-hidden="true" />
+              </Link>
+              <Link
+                href="/contact"
+                className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg border border-white/70 px-5 py-2.5 font-semibold text-white transition-all hover:border-white hover:bg-white hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-300 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-700 sm:w-auto"
+              >
+                Contact the DOBS Office <ArrowRight size={18} aria-hidden="true" />
+              </Link>
+            </div>
           </div>
         </section>
 
