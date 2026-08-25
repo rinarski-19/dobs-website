@@ -143,16 +143,16 @@ export default function ProgramsPageClient({ content }: { content: ProgramsPageC
                 backgroundPosition: i % 2 === 0 ? '65% center' : '35% center',
               }}
             >
-              <div className="absolute inset-0 bg-primary-950/65" />
-              <div className={`absolute inset-0 ${i % 2 === 0 ? 'bg-gradient-to-r from-primary-950 via-primary-950/85 to-primary-900/35' : 'bg-gradient-to-l from-primary-950 via-primary-950/85 to-primary-900/35'}`} />
+              <div className="absolute inset-0 bg-primary-950/80" />
+              <div className={`absolute inset-0 ${i % 2 === 0 ? 'bg-gradient-to-r from-black/80 via-primary-950/70 to-primary-950/45' : 'bg-gradient-to-l from-black/80 via-primary-950/70 to-primary-950/45'}`} />
               <span className={`absolute bottom-4 text-[18rem] font-black text-white/5 leading-none select-none pointer-events-none ${i % 2 === 0 ? 'right-12' : 'left-12'}`}>
                 {String(i + 1).padStart(2, '0')}
               </span>
 
-              <div className={`relative z-10 w-[calc(100%_-_2rem)] max-w-6xl rounded-3xl border border-white/15 bg-primary-950/55 p-6 text-white shadow-2xl backdrop-blur-sm md:p-8 lg:p-10 ${i % 2 === 0 ? 'mr-auto lg:ml-12' : 'ml-auto lg:mr-12'}`}>
+              <div className={`relative z-10 w-[calc(100%_-_2rem)] max-w-6xl rounded-3xl border border-white/25 bg-primary-950/80 p-6 text-white shadow-2xl backdrop-blur-sm md:p-8 lg:p-10 ${i % 2 === 0 ? 'mr-auto lg:ml-12' : 'ml-auto lg:mr-12'}`}>
                 {(program.grades || program.ages) && (
-                  <span className="inline-block text-xs font-semibold uppercase tracking-widest mb-6 px-3 py-1.5 rounded-full bg-white/10 text-white/90">
-                    <BookOpen size={11} className="inline mr-1.5" />
+                  <span className="mb-6 inline-block rounded-full border border-white/25 bg-primary-950 px-3 py-1.5 text-xs font-semibold uppercase tracking-widest text-white shadow-md">
+                    <BookOpen size={12} className="mr-1.5 inline text-gold-300" />
                     {[program.grades, program.ages].filter(Boolean).join(' · ')}
                   </span>
                 )}
@@ -169,9 +169,11 @@ export default function ProgramsPageClient({ content }: { content: ProgramsPageC
                   ].map(detail => {
                     const Icon = detail.icon
                     return (
-                      <div key={detail.label} className="rounded-xl border border-white/25 bg-primary-950/85 p-3.5 shadow-lg backdrop-blur-md">
-                        <Icon className="mb-2 text-gold-300" size={18} aria-hidden="true" />
-                        <p className="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-gold-200">{detail.label}</p>
+                      <div key={detail.label} className="rounded-xl border border-white/30 bg-black/65 p-3.5 shadow-lg backdrop-blur-md">
+                        <span className="mb-2 inline-flex h-8 w-8 items-center justify-center rounded-lg bg-gold-400 text-primary-950 shadow-sm">
+                          <Icon size={18} strokeWidth={2.5} aria-hidden="true" />
+                        </span>
+                        <p className="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-gold-300">{detail.label}</p>
                         <p className="mt-1 text-xs font-semibold leading-5 text-white md:text-sm">{detail.value}</p>
                       </div>
                     )
