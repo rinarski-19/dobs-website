@@ -328,6 +328,29 @@ export default async function SchoolsPage({
 
         </div>
       </section>
+
+      <section className="bg-primary-800 text-white">
+        <div className="page-wrapper py-16 text-center md:py-20">
+          <span className="eyebrow mb-4 text-gold-300">Take the Next Step</span>
+          <h2 className="mx-auto max-w-3xl font-diocesan text-4xl font-semibold leading-tight md:text-5xl">
+            Find the right school for your child
+          </h2>
+          <span className="mx-auto my-6 block h-0.5 w-12 rounded-full bg-gold-500" />
+          <p className="mx-auto max-w-2xl leading-7 text-primary-100">
+            Review the enrollment process or speak with the Diocese of Baguio Schools office for guidance in choosing a member school.
+          </p>
+          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Link href="/enrollment" className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-white px-6 py-3 font-semibold text-primary-800 shadow-sm transition-all hover:bg-primary-50 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800 sm:w-auto">
+              View Enrollment Guide
+              <ArrowRight className="transition-transform group-hover:translate-x-1" size={18} aria-hidden="true" />
+            </Link>
+            <Link href="/contact" className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg border-2 border-white px-6 py-3 font-semibold text-white transition-all hover:border-gold-400 hover:bg-gold-400 hover:text-primary-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800 sm:w-auto">
+              Contact the DOBS Office
+              <ArrowRight className="transition-transform group-hover:translate-x-1" size={18} aria-hidden="true" />
+            </Link>
+          </div>
+        </div>
+      </section>
     </>
   )
 }
