@@ -31,18 +31,45 @@ type NewsPost = {
   school: string
   image?: string
   isDemo?: boolean
+  externalUrl?: string
 }
 
-const demoNewsPosts: NewsPost[] = Array.from({ length: 13 }, (_, index) => ({
-  id: `demo-news-${index + 1}`,
-  title: `News Post Title ${index + 1}`,
-  slug: '',
-  category: ['Announcements', 'Achievements', 'Campus Life', 'Pastoral Activities', 'Enrollment'][index % 5],
-  excerpt: 'Add a short two- or three-line summary explaining the announcement, school story, achievement, or important update.',
-  publishedAt: `2026-${String(8 - (index % 6)).padStart(2, '0')}-01T08:00:00+08:00`,
-  school: index % 2 === 0 ? 'Diocese of Baguio Schools' : '[ Publishing School Name ]',
-  isDemo: true,
-}))
+const demoNewsPosts: NewsPost[] = [
+  {
+    id: 'sample-ceap-car-leadership-academy',
+    title: 'CEAP-CAR School Heads Convene for 2026 Leadership Academy',
+    slug: '',
+    category: 'Pastoral Activities',
+    excerpt: 'Catholic school leaders, including participants from the Diocese of Baguio, gathered for formation focused on resilient, competent, and servant leadership.',
+    publishedAt: '2026-05-04',
+    school: 'CEAP-CAR · Diocese of Baguio participants',
+    image: '/images/news.png',
+    externalUrl: 'https://www.slu.edu.ph/2026/05/04/ceap-car-school-heads-convene-for-2026-leadership-academy/',
+    isDemo: true,
+  },
+  {
+    id: 'sample-enrollment-announcement',
+    title: 'Sample: Enrollment Information for School Year 2026–2027',
+    slug: '',
+    category: 'Enrollment',
+    excerpt: 'This sample shows how a school can share application schedules, required documents, available levels, and admissions contact information.',
+    publishedAt: '2026-08-20',
+    school: 'Sample Member School',
+    image: '/images/enrollment.png',
+    isDemo: true,
+  },
+  {
+    id: 'sample-campus-life-story',
+    title: 'Sample: Students Put Faith into Action through Community Service',
+    slug: '',
+    category: 'Campus Life',
+    excerpt: 'This sample demonstrates how schools can feature student formation, outreach activities, achievements, and service to local communities.',
+    publishedAt: '2026-08-18',
+    school: 'Sample Member School',
+    image: '/images/classroom-discussion-1280x720.png',
+    isDemo: true,
+  },
+]
 
 async function getNewsPosts(): Promise<NewsPost[]> {
   try {
@@ -159,7 +186,9 @@ export default async function NewsPage({
 
           {featuredPost && (
             <Link
-              href={featuredPost.slug ? `/news/${featuredPost.slug}` : '#latest-stories'}
+              href={featuredPost.externalUrl || (featuredPost.slug ? `/news/${featuredPost.slug}` : '#latest-stories')}
+              target={featuredPost.externalUrl ? '_blank' : undefined}
+              rel={featuredPost.externalUrl ? 'noopener noreferrer' : undefined}
               aria-label={featuredPost.isDemo ? `Sample layout for ${featuredPost.title}` : `Read ${featuredPost.title}`}
               className="group grid overflow-hidden rounded-3xl border border-parchment-300 bg-white shadow-card transition-all hover:-translate-y-1 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 lg:grid-cols-[1.15fr_1fr]"
             >

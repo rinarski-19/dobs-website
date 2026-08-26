@@ -25,22 +25,18 @@ const fallbackPageContent = {
 }
 
 const upcomingEvent = {
-  title: '[ Featured Event Title from Sanity ]',
-  category: 'School Event',
-  description: '[ Event description from Sanity. A brief summary of what the event is about, who it is for, and what attendees can expect. ]',
-  date: new Date('2026-09-15T08:00:00'),
+  title: 'Sample: DOBS Community Mass and Fellowship',
+  category: 'Sample Event',
+  description: 'Sample event for layout preview only. Replace this with a confirmed Diocese of Baguio Schools activity published through Sanity.',
+  date: new Date('2026-09-15T09:00:00+08:00'),
   registerHref: '#',
 }
 
-const events = Array.from({ length: 6 }, (_, i) => ({
-  id: i + 1,
-  title: `Event Title ${i + 1}`,
-  category: i % 2 === 0 ? 'Free' : 'School Event',
-  description: '[ Short event description from Sanity. ]',
-  date: { day: '01', month: 'Sep', year: '2026' },
-  school: '[ School Name ]',
-  location: '[ Event Location ]',
-}))
+const events = [
+  { id: 1, title: 'DOBS Community Mass and Fellowship', category: 'Sample Event', description: 'Sample event for layout preview only. Replace this with a confirmed activity published through Sanity.', date: { day: '15', month: 'Sep', year: '2026' }, school: 'Diocese of Baguio Schools', location: 'DOBS Office, Baguio City' },
+  { id: 2, title: 'Parent and Learner Orientation', category: 'Sample Event', description: 'A sample orientation entry showing how schedules, venues, and participating schools appear on the Events page.', date: { day: '22', month: 'Sep', year: '2026' }, school: 'Sample Member School', location: 'Member School Auditorium' },
+  { id: 3, title: 'Catholic Schools Faith Formation Day', category: 'Sample Event', description: 'A sample network activity demonstrating the card layout for an upcoming faith-formation gathering.', date: { day: '03', month: 'Oct', year: '2026' }, school: 'Diocese of Baguio Schools', location: 'Baguio City, Benguet' },
+]
 
 export default async function EventsPage() {
   const content = await getPageContent<EventsPageContent>('eventsPage')
@@ -184,7 +180,7 @@ export default async function EventsPage() {
 
           {/* Pagination */}
           <div className="mt-12 flex flex-col items-center justify-between gap-5 border-t border-gray-100 pt-8 sm:flex-row">
-            <p className="text-sm font-medium text-gray-600">Showing 1–6 of 18 events</p>
+            <p className="text-sm font-medium text-gray-600">Showing 1–3 of 3 sample events</p>
 
             <nav className="flex items-center gap-3" aria-label="Events pagination">
               <button
