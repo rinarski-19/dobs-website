@@ -99,7 +99,7 @@ async function getHomeNews(): Promise<HomeNewsItem[]> {
 async function getHomeEvents(): Promise<HomeEventItem[]> {
   try {
     return await client.fetch<HomeEventItem[]>(`\
-      *[_type == "event" && defined(startDate) && startDate >= now()] | order(startDate asc)[0...4] {
+      *[_type == "event" && defined(startDate) && startDate >= now()] | order(startDate asc)[0...3] {
         _id,
         title,
         startDate,
@@ -136,6 +136,7 @@ export default async function HomePage() {
         imagePlaceholder="School Campus Photo"
         cta={{ label: 'Enroll Now', href: '/enrollment' }}
         ctaSecondary={{ label: 'Our Schools', href: '/schools' }}
+        homeHero
       />
 
       {/* Why our schools — parchment */}
@@ -146,7 +147,7 @@ export default async function HomePage() {
       />
 
       {/* Community at a glance — navy band */}
-      <StatsCounter stats={content?.stats?.length ? content.stats : undefined} />
+      <StatsCounter stats={[{ value: schools.length, label: 'Published Member Schools' }]} />
 
       {/* Birthday celebrants — white */}
       <div className="bg-white">

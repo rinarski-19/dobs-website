@@ -68,6 +68,7 @@ export default defineType({
           defineField({ name: 'name', title: 'Celebrant Name', type: 'string', validation: Rule => Rule.required() }),
           defineField({ name: 'role', title: 'Role / Position', type: 'string' }),
           defineField({ name: 'school', title: 'School', type: 'string' }),
+          defineField({ name: 'birthday', title: 'Birthday', type: 'date' }),
           defineField({ name: 'photo', title: 'Photo', type: 'image', options: { hotspot: true } }),
           defineField({ name: 'greeting', title: 'Personal Greeting', type: 'text', rows: 3 }),
         ],

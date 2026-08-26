@@ -19,6 +19,7 @@ type HeroProps = {
   viewport?: boolean
   parallax?: boolean
   compactText?: boolean
+  homeHero?: boolean
 }
 
 export default function Hero({
@@ -32,6 +33,7 @@ export default function Hero({
   viewport = false,
   parallax = false,
   compactText = false,
+  homeHero = false,
 }: HeroProps) {
   // Parallax pages keep the CSS fixed-background technique (next/image can't do
   // background-attachment: fixed); every other hero uses an optimized next/image.
@@ -39,7 +41,7 @@ export default function Hero({
 
   return (
     <section
-      className={`relative w-full ${viewport ? 'h-[calc(100svh-4rem)] min-h-[28rem]' : 'h-[70vh] min-h-[26rem]'} ${parallax ? 'hero-parallax' : ''} flex items-center justify-center overflow-hidden`}
+      className={`relative w-full ${homeHero ? 'h-[80svh] min-h-[30rem]' : viewport ? 'h-[calc(100svh-4rem)] min-h-[28rem]' : 'h-[70vh] min-h-[26rem]'} ${parallax ? 'hero-parallax' : ''} flex items-center justify-center overflow-hidden`}
       style={
         useCssBackground
           ? { backgroundImage: `url(${image})`, backgroundSize: 'cover', backgroundPosition: 'center' }
@@ -90,13 +92,13 @@ export default function Hero({
       />
 
       {/* Content */}
-      <div className={`relative z-10 max-w-[1400px] mx-auto px-6 w-full text-white ${compactText ? '-translate-y-8 md:-translate-y-12' : ''}`}>
+      <div className={`relative z-10 max-w-[1400px] mx-auto px-6 w-full text-white ${compactText || homeHero ? '-translate-y-8 md:-translate-y-12' : ''}`}>
         {subtitle && (
           <span className="eyebrow mb-4 px-3 py-1 rounded-full bg-gold-500 text-primary-900">
             {subtitle}
           </span>
         )}
-        <h1 className={`font-diocesan text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4 mt-4 ${compactText ? 'max-w-2xl' : 'max-w-3xl'}`}>
+        <h1 className={`font-diocesan text-4xl font-bold leading-tight mb-4 mt-4 ${homeHero ? 'max-w-4xl md:text-6xl lg:text-7xl' : `md:text-5xl lg:text-6xl ${compactText ? 'max-w-2xl' : 'max-w-3xl'}`}`}>
           {title}
         </h1>
         {description && (
