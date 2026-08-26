@@ -93,15 +93,21 @@ async function getHomeNews(): Promise<HomeNewsItem[]> {
 }
 
 async function getHomeEvents(): Promise<HomeEventItem[]> {
-  return await fetchSanity<HomeEventItem[]>(`\
+  const eventItems = await fetchSanity<(Omit<HomeEventItem, 'imageUrl'> & { featuredImage?: any })[]>(`\
       *[_type == "event" && defined(startDate) && startDate >= now()] | order(startDate asc)[0...3] {
         _id,
         title,
         startDate,
         location,
-        "schoolName": school->name
+        "schoolName": school->name,
+        featuredImage
       }
     `) ?? []
+
+  return eventItems.map(({ featuredImage, ...event }) => ({
+    ...event,
+    imageUrl: featuredImage ? imageUrlFor(featuredImage, 900, 675) : undefined,
+  }))
 }
 
 export default async function HomePage() {
@@ -154,6 +160,7 @@ export default async function HomePage() {
       location: 'Diocese of Baguio Schools Office, Baguio City',
       schoolName: 'Diocese of Baguio Schools',
       description: 'Sample event for layout preview only. Replace this with a confirmed activity published through Sanity.',
+      imageUrl: '/images/events.png',
     },
     {
       _id: 'sample-parent-orientation',
@@ -162,6 +169,7 @@ export default async function HomePage() {
       location: 'Member School Auditorium',
       schoolName: 'Sample Member School',
       description: 'A sample orientation entry showing how schedules, venues, and participating schools appear on the homepage.',
+      imageUrl: '/images/classroom-discussion-1280x720.png',
     },
     {
       _id: 'sample-faith-formation-day',
@@ -170,6 +178,7 @@ export default async function HomePage() {
       location: 'Baguio City, Benguet',
       schoolName: 'Diocese of Baguio Schools',
       description: 'A sample network activity for demonstrating the three-card upcoming-events layout.',
+      imageUrl: '/images/enrollment.png',
     },
   ]
 

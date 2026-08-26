@@ -22,6 +22,7 @@ export type HomeEventItem = {
   location?: string
   schoolName?: string
   description?: string
+  imageUrl?: string
 }
 
 export type Testimonial = {
@@ -136,14 +137,25 @@ export function UpcomingEventsSection({ items, heading }: { items: HomeEventItem
         <div className="grid gap-5 md:grid-cols-3">
           {items.map(item => (
             <article key={item._id} className="group flex h-full flex-col overflow-hidden rounded-2xl border border-primary-100 bg-white shadow-card transition-all hover:-translate-y-1 hover:border-gold-400 hover:shadow-lg">
-              <div className="relative flex min-h-32 items-center justify-between overflow-hidden bg-gradient-to-br from-primary-900 via-primary-800 to-primary-600 p-5 text-white">
-                <CalendarDays className="absolute -bottom-5 -right-3 text-white/10" size={112} strokeWidth={1.2} aria-hidden="true" />
+              <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-primary-900 via-primary-800 to-primary-600 p-5 text-white">
+                {item.imageUrl ? (
+                  <Image
+                    src={item.imageUrl}
+                    alt={item.title.replace(/^Sample:\s*/, '')}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                ) : (
+                  <CalendarDays className="absolute -bottom-5 -right-3 text-white/10" size={112} strokeWidth={1.2} aria-hidden="true" />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-primary-950/70 via-primary-900/20 to-transparent" />
                 <div className="relative z-10 flex h-24 w-24 shrink-0 flex-col items-center justify-center rounded-2xl border border-white/20 bg-white/10 shadow-inner backdrop-blur-sm">
                   <span className="text-xs font-bold uppercase tracking-[0.16em] text-gold-300">{formatDate(item.startDate, { month: 'short' })}</span>
                   <span className="font-diocesan text-4xl font-bold leading-none">{formatDate(item.startDate, { day: 'numeric' })}</span>
                   <span className="mt-1 text-xs text-white/70">{formatDate(item.startDate, { year: 'numeric' })}</span>
                 </div>
-                <span className="relative z-10 rounded-full border border-gold-300/40 bg-gold-400 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary-950">
+                <span className="absolute right-5 top-5 z-10 rounded-full border border-gold-300/40 bg-gold-400 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary-950">
                   {item.title.startsWith('Sample:') ? 'Sample Event' : 'Upcoming'}
                 </span>
               </div>

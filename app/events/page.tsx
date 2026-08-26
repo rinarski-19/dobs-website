@@ -3,6 +3,7 @@ import FeaturedEvent from '@/components/FeaturedEvent'
 import EventViewSwitcher from '@/components/EventViewSwitcher'
 import { getPageContent, imageUrlFor } from '@/lib/sanity'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight, Building2, CalendarDays, ChevronLeft, ChevronRight, MapPin, RotateCcw, Search, School, Tag } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
@@ -29,13 +30,14 @@ const upcomingEvent = {
   category: 'Sample Event',
   description: 'Sample event for layout preview only. Replace this with a confirmed Diocese of Baguio Schools activity published through Sanity.',
   date: new Date('2026-09-15T09:00:00+08:00'),
+  image: '/images/events.png',
   registerHref: '#',
 }
 
 const events = [
-  { id: 1, title: 'DOBS Community Mass and Fellowship', category: 'Sample Event', description: 'Sample event for layout preview only. Replace this with a confirmed activity published through Sanity.', date: { day: '15', month: 'Sep', year: '2026' }, school: 'Diocese of Baguio Schools', location: 'DOBS Office, Baguio City' },
-  { id: 2, title: 'Parent and Learner Orientation', category: 'Sample Event', description: 'A sample orientation entry showing how schedules, venues, and participating schools appear on the Events page.', date: { day: '22', month: 'Sep', year: '2026' }, school: 'Sample Member School', location: 'Member School Auditorium' },
-  { id: 3, title: 'Catholic Schools Faith Formation Day', category: 'Sample Event', description: 'A sample network activity demonstrating the card layout for an upcoming faith-formation gathering.', date: { day: '03', month: 'Oct', year: '2026' }, school: 'Diocese of Baguio Schools', location: 'Baguio City, Benguet' },
+  { id: 1, title: 'DOBS Community Mass and Fellowship', category: 'Sample Event', description: 'Sample event for layout preview only. Replace this with a confirmed activity published through Sanity.', date: { day: '15', month: 'Sep', year: '2026' }, school: 'Diocese of Baguio Schools', location: 'DOBS Office, Baguio City', image: '/images/events.png' },
+  { id: 2, title: 'Parent and Learner Orientation', category: 'Sample Event', description: 'A sample orientation entry showing how schedules, venues, and participating schools appear on the Events page.', date: { day: '22', month: 'Sep', year: '2026' }, school: 'Sample Member School', location: 'Member School Auditorium', image: '/images/classroom-discussion-1280x720.png' },
+  { id: 3, title: 'Catholic Schools Faith Formation Day', category: 'Sample Event', description: 'A sample network activity demonstrating the card layout for an upcoming faith-formation gathering.', date: { day: '03', month: 'Oct', year: '2026' }, school: 'Diocese of Baguio Schools', location: 'Baguio City, Benguet', image: '/images/enrollment.png' },
 ]
 
 export default async function EventsPage() {
@@ -136,12 +138,20 @@ export default async function EventsPage() {
 
           <EventViewSwitcher events={events}>
           <div className="grid grid-cols-1 gap-7 lg:grid-cols-3">
-            {events.map(({ id, title, category, description, date, school, location }) => (
+            {events.map(({ id, title, category, description, date, school, location, image }) => (
               <article
                 key={id}
                 className="group flex h-full flex-col overflow-hidden rounded-2xl border border-primary-100 bg-white shadow-card transition-all hover:-translate-y-1 hover:border-primary-200 hover:shadow-lg"
               >
                 <div className="relative aspect-[4/3] overflow-hidden border-b border-primary-100 bg-primary-50">
+                  <Image
+                    src={image}
+                    alt={title}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 33vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary-950/45 via-primary-900/10 to-transparent" />
                   <div className="absolute left-4 top-4 min-w-20 rounded-xl border border-white/30 bg-primary-700 px-4 py-3 text-center text-white shadow-lg">
                     <div className="text-3xl font-bold leading-none">{date.day}</div>
                     <div className="mt-1.5 text-sm font-bold uppercase tracking-[0.14em]">{date.month}</div>
