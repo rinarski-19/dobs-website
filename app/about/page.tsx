@@ -80,6 +80,7 @@ async function getAboutPage(): Promise<AboutPageContent> {
 export default async function AboutPage() {
   const content = await getAboutPage()
   const mission = content.mission?.length ? content.mission : fallback.mission
+  const cleanMissionItem = (item: string) => item.replace(/^\s*\d+\s*[.)\-:]\s*/, '').trim()
   const coreValues = content.coreValues?.length ? content.coreValues : fallback.coreValues
   const history = content.history?.length ? content.history : fallback.history
   const leadership = content.leadership?.length ? content.leadership : fallback.leadership
@@ -93,6 +94,7 @@ export default async function AboutPage() {
         description={content.heroDescription || fallback.heroDescription}
         image={imageUrlFor(content.heroImage) || '/images/about.jpeg'}
         imagePlaceholder="Administration Building Photo"
+        compactText
       />
 
       <div className="bg-[#F7F3EA]">
@@ -110,11 +112,11 @@ export default async function AboutPage() {
                 <Church className="text-[#C7A24B]" size={24} strokeWidth={1.7} />
                 <h3 className="font-diocesan text-3xl font-bold text-[#16324F]">Our Mission</h3>
               </div>
-              <ol className="space-y-4 text-slate-600 leading-relaxed">
+              <ol className="space-y-5 text-base leading-7 text-slate-600">
                 {mission.map((item, index) => (
-                  <li key={item} className="flex gap-4">
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#155896] text-xs font-semibold text-white">{index + 1}</span>
-                    <span>{item}</span>
+                  <li key={`${index}-${item}`} className="flex gap-4">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#155896] text-sm font-semibold text-white">{index + 1}</span>
+                    <span>{cleanMissionItem(item)}</span>
                   </li>
                 ))}
               </ol>
@@ -136,7 +138,7 @@ export default async function AboutPage() {
               <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#8F3A3A]">What shapes us</span>
               <h2 className="font-diocesan text-4xl md:text-5xl font-bold text-[#16324F] mt-2">Core Values</h2>
             </div>
-            <p className="max-w-lg text-sm leading-relaxed text-slate-600">The values that guide learning, leadership, service, and community life throughout the Diocese of Baguio Schools.</p>
+            <p className="max-w-lg text-base leading-7 text-slate-600">The values that guide learning, leadership, service, and community life throughout the Diocese of Baguio Schools.</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {coreValues.map((value, index) => {
@@ -147,7 +149,7 @@ export default async function AboutPage() {
                     <Icon size={23} strokeWidth={1.7} />
                   </div>
                   <h3 className="font-diocesan text-2xl font-bold text-[#16324F] mb-2">{value.name}</h3>
-                  {value.description && <p className="text-sm leading-relaxed text-slate-600">{value.description}</p>}
+                  {value.description && <p className="text-base leading-7 text-slate-600">{value.description}</p>}
                 </article>
               )
             })}
@@ -159,11 +161,11 @@ export default async function AboutPage() {
             <div className="bg-[#155896] p-8 md:p-10 text-white">
               <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#F4D98C]">Our journey</span>
               <h2 className="font-diocesan text-4xl md:text-5xl font-bold mt-3">A Heritage of Faith and Mission</h2>
-              <p className="mt-5 text-sm leading-relaxed text-white/75">Rooted in the Cordillera and formed through generations of Catholic evangelization and education.</p>
+              <p className="mt-5 text-base leading-7 text-white/80">Rooted in the Cordillera and formed through generations of Catholic evangelization and education.</p>
               <div className="mt-8 h-px w-20 bg-[#F4D98C]" />
             </div>
             <div className="p-8 md:p-10">
-              <div className="space-y-6 text-slate-600 leading-relaxed border-l border-[#C7A24B] pl-7">
+              <div className="space-y-6 border-l border-[#C7A24B] pl-7 text-base leading-7 text-slate-600">
             {history.map((block, index) => {
               const text = block.children?.map(child => child.text ?? '').join('')
               if (!text) return null
@@ -194,7 +196,7 @@ export default async function AboutPage() {
                 )}
                 <div>
                   <h3 className="font-diocesan text-2xl font-bold text-[#16324F] mb-1">{person.name}</h3>
-                  <p className="text-sm font-medium leading-relaxed text-[#155896]">{person.role}</p>
+                  <p className="text-base font-medium leading-7 text-[#155896]">{person.role}</p>
                 </div>
               </article>
             ))}

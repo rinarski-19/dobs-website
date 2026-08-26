@@ -18,6 +18,7 @@ type HeroProps = {
   }
   viewport?: boolean
   parallax?: boolean
+  compactText?: boolean
 }
 
 export default function Hero({
@@ -30,6 +31,7 @@ export default function Hero({
   ctaSecondary,
   viewport = false,
   parallax = false,
+  compactText = false,
 }: HeroProps) {
   // Parallax pages keep the CSS fixed-background technique (next/image can't do
   // background-attachment: fixed); every other hero uses an optimized next/image.
@@ -64,7 +66,9 @@ export default function Hero({
           className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(90deg, rgba(12,28,46,0.82) 0%, rgba(12,28,46,0.55) 45%, rgba(12,28,46,0.25) 100%)',
+              compactText
+                ? 'linear-gradient(90deg, rgba(12,28,46,0.92) 0%, rgba(12,28,46,0.76) 34%, rgba(12,28,46,0.32) 66%, rgba(12,28,46,0.12) 100%)'
+                : 'linear-gradient(90deg, rgba(12,28,46,0.82) 0%, rgba(12,28,46,0.55) 45%, rgba(12,28,46,0.25) 100%)',
           }}
         />
       )}
@@ -86,17 +90,17 @@ export default function Hero({
       />
 
       {/* Content */}
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 w-full text-white">
+      <div className={`relative z-10 max-w-[1400px] mx-auto px-6 w-full text-white ${compactText ? '-translate-y-8 md:-translate-y-12' : ''}`}>
         {subtitle && (
           <span className="eyebrow mb-4 px-3 py-1 rounded-full bg-gold-500 text-primary-900">
             {subtitle}
           </span>
         )}
-        <h1 className="font-diocesan text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4 mt-4 max-w-3xl">
+        <h1 className={`font-diocesan text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4 mt-4 ${compactText ? 'max-w-2xl' : 'max-w-3xl'}`}>
           {title}
         </h1>
         {description && (
-          <p className="text-lg md:text-xl leading-relaxed mb-8 max-w-2xl text-white/90">
+          <p className={`text-lg md:text-xl leading-relaxed mb-8 text-white/90 ${compactText ? 'max-w-xl' : 'max-w-2xl'}`}>
             {description}
           </p>
         )}
