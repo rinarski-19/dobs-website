@@ -65,6 +65,12 @@ export default async function AboutPage() {
   const history = content.history?.length ? content.history : fallback.history
   const leadership = content.leadership?.length ? content.leadership : fallback.leadership
   const valueIcons = [ShieldCheck, Award, HeartHandshake, Sprout]
+  const leadershipPhoto = (person: (typeof leadership)[number]) => {
+    if (person.photo) return imageUrlFor(person.photo, 800, 1000)
+    if (/rafael/i.test(person.name)) return '/images/Rev. Rafael.png'
+    if (/marlon/i.test(person.name)) return '/images/Fr. Marlon.png'
+    return undefined
+  }
   const communities = Array.from(new Set(schools.map(school => school.city).filter(Boolean)))
   const educationLevels = Array.from(new Set(schools.flatMap(school => school.levels || [])))
   const networkStats = [
@@ -230,8 +236,8 @@ export default async function AboutPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {leadership.map(person => (
               <article key={person._key ?? person.name} className="rounded-2xl border border-[#D8CEB8] bg-[#FFFDF7] p-7 shadow-sm flex items-center gap-5">
-                {person.photo ? (
-                  <img src={imageUrlFor(person.photo, 200, 200)} alt={person.name} className="h-20 w-20 rounded-full object-cover shrink-0 ring-2 ring-[#C7A24B] ring-offset-4 ring-offset-[#FFFDF7]" />
+                {leadershipPhoto(person) ? (
+                  <img src={leadershipPhoto(person)} alt={person.name} className="h-20 w-20 rounded-full object-cover object-top shrink-0 ring-2 ring-[#C7A24B] ring-offset-4 ring-offset-[#FFFDF7]" />
                 ) : (
                   <div className="font-diocesan h-20 w-20 rounded-full bg-[#16324F] text-[#F4D98C] ring-2 ring-[#C7A24B] ring-offset-4 ring-offset-[#FFFDF7] flex items-center justify-center text-2xl font-bold shrink-0" aria-hidden="true">
                     {person.name.split(' ').filter(word => /^[A-Z]/.test(word)).slice(0, 2).map(word => word[0]).join('')}
