@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowRight, ArrowUpRight, CakeSlice, CalendarDays, Gift, MapPin, Newspaper, Quote, Sparkles } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, Building2, CakeSlice, CalendarDays, Clock3, Gift, MapPin, Newspaper, Quote, Sparkles } from 'lucide-react'
 
 export type HomeNewsItem = {
   _id: string
@@ -135,22 +135,31 @@ export function UpcomingEventsSection({ items, heading }: { items: HomeEventItem
       ) : (
         <div className="grid gap-5 md:grid-cols-3">
           {items.map(item => (
-            <div key={item._id} className="flex h-full flex-col gap-5 rounded-2xl border border-parchment-200 bg-white p-5 shadow-card transition-shadow hover:shadow-md">
-              <div className="flex h-20 w-20 shrink-0 flex-col items-center justify-center rounded-xl bg-primary-700 text-white">
-                <span className="text-xs font-bold uppercase text-gold-300">{formatDate(item.startDate, { month: 'short' })}</span>
-                <span className="text-3xl font-bold leading-none">{formatDate(item.startDate, { day: 'numeric' })}</span>
-              </div>
-              <div className="min-w-0 flex-1">
-                <h3 className="font-sans text-lg font-bold text-gray-900">{item.title}</h3>
-                <div className="mt-2 flex flex-col gap-1.5 text-sm text-gray-500">
-                  <span className="inline-flex items-center gap-1"><CalendarDays size={14} /> {formatDate(item.startDate, { weekday: 'short', month: 'long', day: 'numeric', year: 'numeric' })}</span>
-                  <span className="inline-flex items-center gap-1"><CalendarDays size={14} /> {formatDate(item.startDate, { hour: 'numeric', minute: '2-digit' })}</span>
-                  {item.location && <span className="inline-flex items-center gap-1"><MapPin size={14} /> {item.location}</span>}
-                  {item.schoolName && <span>{item.schoolName}</span>}
+            <article key={item._id} className="group flex h-full flex-col overflow-hidden rounded-2xl border border-primary-100 bg-white shadow-card transition-all hover:-translate-y-1 hover:border-gold-400 hover:shadow-lg">
+              <div className="relative flex min-h-32 items-center justify-between overflow-hidden bg-gradient-to-br from-primary-900 via-primary-800 to-primary-600 p-5 text-white">
+                <CalendarDays className="absolute -bottom-5 -right-3 text-white/10" size={112} strokeWidth={1.2} aria-hidden="true" />
+                <div className="relative z-10 flex h-24 w-24 shrink-0 flex-col items-center justify-center rounded-2xl border border-white/20 bg-white/10 shadow-inner backdrop-blur-sm">
+                  <span className="text-xs font-bold uppercase tracking-[0.16em] text-gold-300">{formatDate(item.startDate, { month: 'short' })}</span>
+                  <span className="font-diocesan text-4xl font-bold leading-none">{formatDate(item.startDate, { day: 'numeric' })}</span>
+                  <span className="mt-1 text-xs text-white/70">{formatDate(item.startDate, { year: 'numeric' })}</span>
                 </div>
-                {item.description && <p className="mt-2 line-clamp-2 text-sm text-gray-500">{item.description}</p>}
+                <span className="relative z-10 rounded-full border border-gold-300/40 bg-gold-400 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary-950">
+                  {item.title.startsWith('Sample:') ? 'Sample Event' : 'Upcoming'}
+                </span>
               </div>
-            </div>
+              <div className="flex flex-1 flex-col p-6">
+                <h3 className="font-diocesan text-2xl font-bold leading-tight text-primary-950 transition-colors group-hover:text-primary-700">{item.title.replace(/^Sample:\s*/, '')}</h3>
+                <div className="mt-4 flex flex-col gap-2 text-sm leading-5 text-gray-500">
+                  <span className="inline-flex items-start gap-2"><Clock3 className="mt-0.5 shrink-0 text-primary-600" size={15} /> {formatDate(item.startDate, { weekday: 'long', hour: 'numeric', minute: '2-digit' })}</span>
+                  {item.schoolName && <span className="inline-flex items-start gap-2"><Building2 className="mt-0.5 shrink-0 text-primary-600" size={15} /> {item.schoolName}</span>}
+                  {item.location && <span className="inline-flex items-start gap-2"><MapPin className="mt-0.5 shrink-0 text-primary-600" size={15} /> {item.location}</span>}
+                </div>
+                {item.description && <p className="mt-4 line-clamp-3 text-sm leading-6 text-gray-600">{item.description}</p>}
+                <Link href="/events" className="mt-auto inline-flex items-center gap-2 border-t border-gray-100 pt-5 text-sm font-semibold text-primary-700">
+                  View Event <ArrowRight className="transition-transform group-hover:translate-x-1" size={15} aria-hidden="true" />
+                </Link>
+              </div>
+            </article>
           ))}
         </div>
       )}
