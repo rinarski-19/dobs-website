@@ -21,7 +21,7 @@ type AboutPageContent = {
     style?: string
     children?: Array<{ _key?: string; text?: string }>
   }>
-  leadership?: Array<{ _key?: string; name: string; role: string; photo?: any }>
+  leadership?: Array<{ _key?: string; name: string; role: string; photo?: any; biography?: string }>
 }
 
 const fallback: Required<Omit<AboutPageContent, 'heroImage'>> = {
@@ -62,7 +62,6 @@ export default async function AboutPage() {
   const mission = content.mission?.length ? content.mission : fallback.mission
   const cleanMissionItem = (item: string) => item.replace(/^\s*\d+\s*[.)\-:]\s*/, '').trim()
   const coreValues = content.coreValues?.length ? content.coreValues : fallback.coreValues
-  const history = content.history?.length ? content.history : fallback.history
   const leadership = content.leadership?.length ? content.leadership : fallback.leadership
   const valueIcons = [ShieldCheck, Award, HeartHandshake, Sprout]
   const leadershipPhoto = (person: (typeof leadership)[number]) => {
@@ -78,6 +77,13 @@ export default async function AboutPage() {
     { value: schools.length.toString(), label: 'Member schools' },
     { value: communities.length.toString(), label: 'Communities served' },
     { value: educationLevels.length.toString(), label: 'Educational levels' },
+  ]
+  const historyMilestones = [
+    { year: '1907', text: 'CICM missionaries arrived and began establishing mission centers, schools, hospitals, and parishes throughout the Cordillera.' },
+    { year: '1932', text: 'The Apostolic Prefecture of the Mountain Provinces was established.' },
+    { year: '1948', text: 'The ecclesiastical territory was elevated to the Apostolic Vicariate of the Mountain Provinces.' },
+    { year: '1992', text: 'It was renamed the Apostolic Vicariate of Baguio.' },
+    { year: '2004', text: 'The Diocese of Baguio was formally established, serving Baguio City and the Province of Benguet.' },
   ]
 
   return (
@@ -130,8 +136,8 @@ export default async function AboutPage() {
             <div className="mx-auto mt-4 h-px w-20 bg-[#C7A24B]" />
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-5 overflow-hidden rounded-3xl border border-[#D8CEB8] bg-white shadow-sm">
-            <div className="lg:col-span-3 p-8 md:p-10">
+          <div className="grid grid-cols-1 overflow-hidden rounded-3xl border border-[#D8CEB8] bg-white shadow-sm lg:grid-cols-2">
+            <div className="p-8 md:p-10">
               <div className="flex items-center gap-3 mb-6">
                 <Church className="text-[#C7A24B]" size={24} strokeWidth={1.7} />
                 <h3 className="font-diocesan text-3xl font-bold text-[#16324F]">Our Mission</h3>
@@ -146,7 +152,7 @@ export default async function AboutPage() {
               </ol>
             </div>
 
-            <div className="relative lg:col-span-2 bg-[#16324F] p-8 md:p-10 text-white flex flex-col justify-center">
+            <div className="relative flex flex-col justify-center border-t-2 border-[#C7A24B] bg-[#16324F] p-8 text-white md:p-10 lg:border-l-2 lg:border-t-0">
               <Quote className="absolute right-8 top-8 text-[#C7A24B]/30" size={72} strokeWidth={1.2} />
               <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#D9BC72] mb-4">Our Vision</span>
               <p className="font-diocesan text-3xl md:text-4xl font-semibold leading-tight text-[#FFFDF7] relative z-10">
@@ -156,7 +162,8 @@ export default async function AboutPage() {
           </div>
         </section>
 
-        <section className="py-16 border-t border-[#DED5C4]">
+        <section className="relative left-1/2 w-screen -translate-x-1/2 border-t border-[#DED5C4] bg-white">
+          <div className="page-wrapper py-16">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-9">
             <div>
               <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#8F3A3A]">What shapes us</span>
@@ -164,13 +171,13 @@ export default async function AboutPage() {
             </div>
             <p className="max-w-lg text-base leading-7 text-slate-600">The values that guide learning, leadership, service, and community life throughout the Diocese of Baguio Schools.</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
             {coreValues.map((value, index) => {
               const Icon = valueIcons[index % valueIcons.length]
               return (
-                <article key={value._key ?? value.name} className="group rounded-2xl border border-[#D8CEB8] bg-[#FFFDF7] p-7 transition-all hover:-translate-y-1 hover:shadow-md">
-                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-[#155896] text-[#F4D98C]">
-                    <Icon size={23} strokeWidth={1.7} />
+                <article key={value._key ?? value.name} className="group h-full rounded-2xl border border-[#D8CEB8] bg-[#FFFDF7] p-7 transition-all hover:-translate-y-1 hover:border-[#C7A24B] hover:shadow-md focus-within:border-[#C7A24B]">
+                  <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#155896] text-[#F4D98C]">
+                    <Icon size={28} strokeWidth={1.7} />
                   </div>
                   <h3 className="font-diocesan text-2xl font-bold text-[#16324F] mb-2">{value.name}</h3>
                   {value.description && <p className="text-base leading-7 text-slate-600">{value.description}</p>}
@@ -178,27 +185,33 @@ export default async function AboutPage() {
               )
             })}
           </div>
+          </div>
         </section>
 
-        <section className="py-16 border-t border-[#DED5C4]">
-          <div className="grid grid-cols-1 lg:grid-cols-[0.75fr_1.6fr] overflow-hidden rounded-3xl border border-[#D8CEB8] bg-white shadow-sm">
-            <div className="bg-[#155896] p-8 md:p-10 text-white">
+        <section className="relative left-1/2 w-screen -translate-x-1/2 border-t border-[#C9DCEB] bg-[#EEF5FA]">
+          <div className="page-wrapper py-16">
+          <div className="grid grid-cols-1 overflow-hidden rounded-3xl border border-[#B9D0E2] bg-white shadow-sm lg:grid-cols-[0.85fr_1.5fr]">
+            <div className="relative min-h-[26rem] overflow-hidden bg-[#155896] text-white">
+              <Image src="/images/about.jpeg" alt="Archival view of Diocese of Baguio clergy and leadership" fill sizes="(min-width: 1024px) 38vw, 100vw" className="object-cover object-center opacity-60" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#16324F] via-[#16324F]/65 to-[#16324F]/25" />
+              <div className="relative z-10 flex h-full flex-col justify-end p-8 md:p-10">
               <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#F4D98C]">Our journey</span>
               <h2 className="font-diocesan text-4xl md:text-5xl font-bold mt-3">A Heritage of Faith and Mission</h2>
               <p className="mt-5 text-base leading-7 text-white/80">Rooted in the Cordillera and formed through generations of Catholic evangelization and education.</p>
               <div className="mt-8 h-px w-20 bg-[#F4D98C]" />
-            </div>
-            <div className="p-8 md:p-10">
-              <div className="space-y-6 border-l border-[#C7A24B] pl-7 text-base leading-7 text-slate-600">
-            {history.map((block, index) => {
-              const text = block.children?.map(child => child.text ?? '').join('')
-              if (!text) return null
-              if (block.style === 'h2') return <h2 key={block._key ?? index} className="font-diocesan text-3xl font-bold text-[#16324F]">{text}</h2>
-              if (block.style === 'h3') return <h3 key={block._key ?? index} className="font-diocesan text-2xl font-bold text-[#16324F]">{text}</h3>
-              return <p key={block._key ?? index} className="relative before:absolute before:-left-[2.08rem] before:top-2 before:h-3 before:w-3 before:rounded-full before:border-2 before:border-[#C7A24B] before:bg-white">{text}</p>
-            })}
               </div>
             </div>
+            <div className="p-8 md:p-10">
+              <div className="space-y-7 border-l-2 border-[#C7A24B] pl-8 text-base leading-7 text-slate-600">
+                {historyMilestones.map(milestone => (
+                  <div key={milestone.year} className="relative before:absolute before:-left-[2.72rem] before:top-1 before:h-5 before:w-5 before:rounded-full before:border-[3px] before:border-[#C7A24B] before:bg-white">
+                    <strong className="font-diocesan text-2xl font-bold text-[#155896]">{milestone.year}</strong>
+                    <p className="mt-1">{milestone.text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
           </div>
         </section>
 
@@ -233,19 +246,20 @@ export default async function AboutPage() {
             <h2 className="font-diocesan text-4xl md:text-5xl font-bold text-[#16324F] mt-2">Leadership &amp; Administration</h2>
             <div className="mx-auto mt-4 h-px w-20 bg-[#C7A24B]" />
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <div className="mx-auto grid max-w-5xl grid-cols-1 gap-7 md:grid-cols-2">
             {leadership.map(person => (
-              <article key={person._key ?? person.name} className="rounded-2xl border border-[#D8CEB8] bg-[#FFFDF7] p-7 shadow-sm flex items-center gap-5">
+              <article key={person._key ?? person.name} className="flex h-full flex-col items-center rounded-3xl border border-[#D8CEB8] bg-[#FFFDF7] p-8 text-center shadow-sm transition-all hover:border-[#C7A24B] hover:shadow-md sm:flex-row sm:text-left">
                 {leadershipPhoto(person) ? (
-                  <img src={leadershipPhoto(person)} alt={person.name} className="h-20 w-20 rounded-full object-cover object-top shrink-0 ring-2 ring-[#C7A24B] ring-offset-4 ring-offset-[#FFFDF7]" />
+                  <img src={leadershipPhoto(person)} alt={person.name} className="h-40 w-32 shrink-0 rounded-2xl object-cover object-top ring-2 ring-[#C7A24B] ring-offset-4 ring-offset-[#FFFDF7]" />
                 ) : (
-                  <div className="font-diocesan h-20 w-20 rounded-full bg-[#16324F] text-[#F4D98C] ring-2 ring-[#C7A24B] ring-offset-4 ring-offset-[#FFFDF7] flex items-center justify-center text-2xl font-bold shrink-0" aria-hidden="true">
+                  <div className="font-diocesan flex h-40 w-32 shrink-0 items-center justify-center rounded-2xl bg-[#16324F] text-3xl font-bold text-[#F4D98C] ring-2 ring-[#C7A24B] ring-offset-4 ring-offset-[#FFFDF7]" aria-hidden="true">
                     {person.name.split(' ').filter(word => /^[A-Z]/.test(word)).slice(0, 2).map(word => word[0]).join('')}
                   </div>
                 )}
-                <div>
-                  <h3 className="font-diocesan text-2xl font-bold text-[#16324F] mb-1">{person.name}</h3>
-                  <p className="text-base font-medium leading-7 text-[#155896]">{person.role}</p>
+                <div className="mt-7 sm:ml-8 sm:mt-0">
+                  <h3 className="mb-2 font-diocesan text-3xl font-bold leading-tight text-[#16324F]">{person.name}</h3>
+                  <p className="text-base font-semibold leading-7 text-[#155896]">{person.role}</p>
+                  {person.biography && <p className="mt-3 text-base leading-7 text-slate-600">{person.biography}</p>}
                 </div>
               </article>
             ))}
