@@ -199,7 +199,7 @@ export default async function HomePage() {
         title={content?.heroTitle || fallbackContent.heroTitle}
         subtitle={content?.heroSubtitle || fallbackContent.heroSubtitle}
         description={content?.heroDescription || fallbackContent.heroDescription}
-        image={imageUrlFor(content?.heroImage)}
+        image={imageUrlFor(content?.heroImage) || '/images/home.png'}
         imagePlaceholder="School Campus Photo"
         cta={{ label: 'Enroll Now', href: '/enrollment' }}
         ctaSecondary={{ label: 'Our Schools', href: '/schools' }}
