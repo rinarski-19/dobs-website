@@ -111,25 +111,67 @@ export default async function HomePage() {
   const schools = await getHomeSchools()
   const news = await getHomeNews()
   const events = await getHomeEvents()
-  const displayedNews: HomeNewsItem[] = news.length ? news : [{
-    _id: 'sample-ceap-car-leadership-academy',
-    title: 'CEAP-CAR School Heads Convene for 2026 Leadership Academy',
-    slug: 'sample-ceap-car-leadership-academy',
-    category: 'Catholic Education',
-    excerpt: 'Catholic school leaders, including participants from the Diocese of Baguio, gathered in Baguio City for formation focused on resilient, competent, and servant leadership.',
-    publishedAt: '2026-05-04',
-    schoolName: 'CEAP-CAR · Diocese of Baguio participants',
-    imageUrl: '/images/news.png',
-    externalUrl: 'https://www.slu.edu.ph/2026/05/04/ceap-car-school-heads-convene-for-2026-leadership-academy/',
-  }]
-  const displayedEvents: HomeEventItem[] = events.length ? events : [{
-    _id: 'sample-dobs-community-event',
-    title: 'Sample: DOBS Community Mass and Fellowship',
-    startDate: '2026-09-15T09:00:00+08:00',
-    location: 'Diocese of Baguio Schools Office, Baguio City',
-    schoolName: 'Diocese of Baguio Schools',
-    description: 'Sample event for layout preview only. Replace this with a confirmed activity published through Sanity.',
-  }]
+  const displayedNews: HomeNewsItem[] = news.length ? news : [
+    {
+      _id: 'sample-ceap-car-leadership-academy',
+      title: 'CEAP-CAR School Heads Convene for 2026 Leadership Academy',
+      slug: 'sample-ceap-car-leadership-academy',
+      category: 'Catholic Education',
+      excerpt: 'Catholic school leaders, including participants from the Diocese of Baguio, gathered in Baguio City for formation focused on resilient, competent, and servant leadership.',
+      publishedAt: '2026-05-04',
+      schoolName: 'CEAP-CAR · Diocese of Baguio participants',
+      imageUrl: '/images/news.png',
+      externalUrl: 'https://www.slu.edu.ph/2026/05/04/ceap-car-school-heads-convene-for-2026-leadership-academy/',
+    },
+    {
+      _id: 'sample-enrollment-announcement',
+      title: 'Sample: Enrollment Information for School Year 2026–2027',
+      slug: 'sample-enrollment-announcement',
+      category: 'Enrollment',
+      excerpt: 'This sample shows how a member school can share application schedules, required documents, available levels, and admissions contact information.',
+      publishedAt: '2026-08-20',
+      schoolName: 'Sample Member School',
+      imageUrl: '/images/enrollment.png',
+      sample: true,
+    },
+    {
+      _id: 'sample-campus-life-story',
+      title: 'Sample: Students Put Faith into Action through Community Service',
+      slug: 'sample-campus-life-story',
+      category: 'Campus Life',
+      excerpt: 'This sample story demonstrates how schools can feature student formation, outreach activities, achievements, and service to local communities.',
+      publishedAt: '2026-08-18',
+      schoolName: 'Sample Member School',
+      imageUrl: '/images/classroom-discussion-1280x720.png',
+      sample: true,
+    },
+  ]
+  const displayedEvents: HomeEventItem[] = events.length ? events : [
+    {
+      _id: 'sample-dobs-community-event',
+      title: 'Sample: DOBS Community Mass and Fellowship',
+      startDate: '2026-09-15T09:00:00+08:00',
+      location: 'Diocese of Baguio Schools Office, Baguio City',
+      schoolName: 'Diocese of Baguio Schools',
+      description: 'Sample event for layout preview only. Replace this with a confirmed activity published through Sanity.',
+    },
+    {
+      _id: 'sample-parent-orientation',
+      title: 'Sample: Parent and Learner Orientation',
+      startDate: '2026-09-22T13:30:00+08:00',
+      location: 'Member School Auditorium',
+      schoolName: 'Sample Member School',
+      description: 'A sample orientation entry showing how schedules, venues, and participating schools appear on the homepage.',
+    },
+    {
+      _id: 'sample-faith-formation-day',
+      title: 'Sample: Catholic Schools Faith Formation Day',
+      startDate: '2026-10-03T08:00:00+08:00',
+      location: 'Baguio City, Benguet',
+      schoolName: 'Diocese of Baguio Schools',
+      description: 'A sample network activity for demonstrating the three-card upcoming-events layout.',
+    },
+  ]
 
   const birthdayCelebrants = content?.birthdayCelebrants?.map(({ photo, ...celebrant }) => ({
     ...celebrant,

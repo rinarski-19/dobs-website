@@ -12,6 +12,7 @@ export type HomeNewsItem = {
   imageUrl?: string
   schoolName?: string
   externalUrl?: string
+  sample?: boolean
 }
 
 export type HomeEventItem = {
@@ -84,7 +85,7 @@ export function LatestNewsSection({ items, heading }: { items: HomeNewsItem[]; h
       ) : (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {items.map(item => (
-            <Link key={item._id} href={item.externalUrl || `/news/${item.slug}`} target={item.externalUrl ? '_blank' : undefined} rel={item.externalUrl ? 'noopener noreferrer' : undefined} className="card group overflow-hidden p-0 transition-all hover:-translate-y-1 hover:shadow-md">
+            <Link key={item._id} href={item.externalUrl || (item.sample ? '/news' : `/news/${item.slug}`)} target={item.externalUrl ? '_blank' : undefined} rel={item.externalUrl ? 'noopener noreferrer' : undefined} className="card group overflow-hidden p-0 transition-all hover:-translate-y-1 hover:shadow-md">
               <div className="relative h-44 w-full overflow-hidden">
                 {item.imageUrl ? (
                   <Image src={item.imageUrl} alt={item.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
