@@ -99,7 +99,7 @@ export default async function AboutPage() {
 
       <div className="bg-[#F7F3EA]">
         <div className="page-wrapper">
-        <section className="py-16 md:py-20">
+        <section className="pb-6 pt-16 md:pb-8 md:pt-20">
           <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
             <div>
               <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#8F3A3A]">Who We Are</span>
@@ -129,7 +129,7 @@ export default async function AboutPage() {
           <p className="mt-3 text-center text-xs leading-5 text-slate-500">Network counts are generated from currently published member-school records.</p>
         </section>
 
-        <section className="py-16">
+        <section className="pb-16 pt-6 md:pt-8">
           <div className="text-center max-w-2xl mx-auto mb-10">
             <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#8F3A3A]">Faith in action</span>
             <h2 className="font-diocesan text-4xl md:text-5xl font-bold text-[#16324F] mt-3">Our Guiding Purpose</h2>
