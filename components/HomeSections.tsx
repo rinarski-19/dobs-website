@@ -45,8 +45,6 @@ function formatDate(value: string, options: Intl.DateTimeFormatOptions) {
 }
 
 export function LatestNewsSection({ items, heading }: { items: HomeNewsItem[]; heading: string }) {
-  if (items.length === 0) return null
-
   return (
     <section className="section">
       <div className="mb-6 flex items-end justify-between gap-4">
