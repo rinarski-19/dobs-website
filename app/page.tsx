@@ -2,7 +2,8 @@ import Hero from '@/components/Hero'
 import Features from '@/components/Features'
 import StatsCounter from '@/components/StatsCounter'
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
+import Image from 'next/image'
+import { ArrowRight, Blocks, BookOpen, GraduationCap, MapPin, School } from 'lucide-react'
 import { Feature } from '@/components/Features'
 import { Stat } from '@/components/StatsCounter'
 import SchoolCarousel, { HomeSchool } from '@/components/SchoolCarousel'
@@ -17,7 +18,7 @@ import {
   TestimonialsSection,
   UpcomingEventsSection,
 } from '@/components/HomeSections'
-import { client, getPageContent, imageUrlFor } from '@/lib/sanity'
+import { fetchSanity, getPageContent, imageUrlFor } from '@/lib/sanity'
 import { getSchools } from '@/lib/schools'
 
 // News and events are time-sensitive and intentionally fetched without cache.
@@ -71,8 +72,7 @@ async function getHomeSchools(): Promise<HomeSchool[]> {
 }
 
 async function getHomeNews(): Promise<HomeNewsItem[]> {
-  try {
-    const posts = await client.fetch<(Omit<HomeNewsItem, 'slug' | 'imageUrl'> & { slug: { current: string }; featuredImage?: any })[]>(`\
+  const posts = await fetchSanity<(Omit<HomeNewsItem, 'slug' | 'imageUrl'> & { slug: { current: string }; featuredImage?: any })[]>(`\
       *[_type == "newsPost" && defined(publishedAt) && publishedAt <= now()] | order(publishedAt desc)[0...3] {
         _id,
         title,
@@ -83,22 +83,17 @@ async function getHomeNews(): Promise<HomeNewsItem[]> {
         "schoolName": school->name,
         featuredImage
       }
-    `, {}, { cache: 'no-store' })
+    `) ?? []
 
-    return posts.map(({ slug, featuredImage, ...post }) => ({
-      ...post,
-      slug: slug.current,
-      imageUrl: featuredImage ? imageUrlFor(featuredImage, 1000, 560) : undefined,
-    }))
-  } catch (error) {
-    console.error('Unable to load homepage news from Sanity:', error)
-    return []
-  }
+  return posts.map(({ slug, featuredImage, ...post }) => ({
+    ...post,
+    slug: slug.current,
+    imageUrl: featuredImage ? imageUrlFor(featuredImage, 1000, 560) : undefined,
+  }))
 }
 
 async function getHomeEvents(): Promise<HomeEventItem[]> {
-  try {
-    return await client.fetch<HomeEventItem[]>(`\
+  return await fetchSanity<HomeEventItem[]>(`\
       *[_type == "event" && defined(startDate) && startDate >= now()] | order(startDate asc)[0...3] {
         _id,
         title,
@@ -106,11 +101,7 @@ async function getHomeEvents(): Promise<HomeEventItem[]> {
         location,
         "schoolName": school->name
       }
-    `, {}, { cache: 'no-store' })
-  } catch (error) {
-    console.error('Unable to load homepage events from Sanity:', error)
-    return []
-  }
+    `) ?? []
 }
 
 export default async function HomePage() {
@@ -125,6 +116,13 @@ export default async function HomePage() {
     ...celebrant,
     imageUrl: photo ? imageUrlFor(photo, 240, 240) : undefined,
   })) ?? []
+  const featuredSchool = schools[0]
+  const programPreviews = [
+    { name: 'Pre-School', icon: Blocks, description: 'Early learning through play, discovery, faith, and care.' },
+    { name: 'Grade School', icon: BookOpen, description: 'Strong foundations in literacy, numeracy, character, and faith.' },
+    { name: 'Junior High School', icon: School, description: 'Deeper academic learning, formation, and responsible service.' },
+    { name: 'Senior High School', icon: GraduationCap, description: 'College, career, and vocation preparation rooted in Gospel values.' },
+  ]
 
   return (
     <>
@@ -138,6 +136,24 @@ export default async function HomePage() {
         ctaSecondary={{ label: 'Our Schools', href: '/schools' }}
         homeHero
       />
+
+      {/* Welcome — a gentle transition from the hero */}
+      <section className="bg-parchment-100">
+        <div className="page-wrapper grid items-center gap-10 py-16 lg:grid-cols-2 lg:gap-14 md:py-20">
+          <div>
+            <span className="eyebrow mb-3 text-gold-700">Welcome to DOBS</span>
+            <h2 className="font-diocesan text-4xl font-semibold leading-tight text-primary-900 md:text-5xl">Forming minds, hearts, and communities</h2>
+            <span className="gold-rule mt-5" />
+            <p className="mt-5 max-w-xl text-base leading-7 text-gray-600 md:text-lg md:leading-8">
+              The Diocese of Baguio Schools brings together Catholic educational communities across Baguio City and Benguet. Our schools unite academic formation, Gospel values, cultural respect, and service to help every learner grow with purpose.
+            </p>
+            <Link href="/about" className="btn-primary mt-7">Learn About Us <ArrowRight size={17} aria-hidden="true" /></Link>
+          </div>
+          <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-parchment-300 bg-white shadow-card">
+            <Image src="/images/classroom-discussion-1280x720.png" alt="Students learning together in a Diocese of Baguio school classroom" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
+          </div>
+        </div>
+      </section>
 
       {/* Why our schools — parchment */}
       <Features
@@ -167,6 +183,31 @@ export default async function HomePage() {
         </div>
       </div>
 
+      {/* Academic Programs preview */}
+      <section className="bg-white">
+        <div className="page-wrapper py-16 md:py-20">
+          <div className="mb-9 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div>
+              <span className="eyebrow mb-2">Learning Pathways</span>
+              <h2 className="section-heading mb-0">Academic Programs</h2>
+              <span className="gold-rule" />
+              <p className="mt-4 max-w-2xl text-base leading-7 text-gray-600">Explore a continuous Catholic educational journey from early childhood through Senior High School.</p>
+            </div>
+            <Link href="/programs" className="btn-secondary shrink-0">View Programs <ArrowRight size={16} aria-hidden="true" /></Link>
+          </div>
+          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+            {programPreviews.map(({ name, icon: Icon, description }) => (
+              <Link key={name} href="/programs" className="group h-full rounded-2xl border border-primary-100 bg-primary-50/50 p-6 transition-all hover:-translate-y-1 hover:border-gold-500 hover:bg-white hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500">
+                <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-700 text-gold-300"><Icon size={24} aria-hidden="true" /></span>
+                <h3 className="mt-5 font-diocesan text-2xl font-bold text-primary-900">{name}</h3>
+                <p className="mt-2 text-sm leading-6 text-gray-600">{description}</p>
+                <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary-700">Explore Program <ArrowRight className="transition-transform group-hover:translate-x-1" size={15} aria-hidden="true" /></span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Featured Schools — parchment */}
       <div className="bg-parchment-100">
         <div className="mx-auto max-w-[1400px] px-6 md:px-10">
@@ -174,6 +215,27 @@ export default async function HomePage() {
             <span className="eyebrow mb-2">Our Network</span>
             <h2 className="section-heading mb-0">{content?.schoolsHeading || fallbackContent.schoolsHeading}</h2>
             <span className="gold-rule mb-6" />
+            {featuredSchool && (
+              <article className="mb-9 grid overflow-hidden rounded-3xl border border-primary-100 bg-white shadow-card lg:grid-cols-[1.25fr_1fr]">
+                <div className="relative min-h-72 bg-primary-800 lg:min-h-80">
+                  {featuredSchool.imageUrl ? (
+                    <Image src={featuredSchool.imageUrl} alt={`${featuredSchool.name} campus`} fill sizes="(min-width: 1024px) 55vw, 100vw" className="object-cover" />
+                  ) : (
+                    <div className="flex h-full min-h-72 items-center justify-center text-white/70">Featured school campus photo</div>
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-primary-950/20" />
+                </div>
+                <div className="flex flex-col justify-center p-8 md:p-10">
+                  <span className="eyebrow mb-3 text-gold-700">Featured Member School</span>
+                  <h3 className="font-diocesan text-3xl font-bold leading-tight text-primary-900 md:text-4xl">{featuredSchool.name}</h3>
+                  {featuredSchool.city && <p className="mt-4 flex items-center gap-2 text-base text-gray-600"><MapPin size={17} className="text-primary-600" aria-hidden="true" /> {featuredSchool.city}</p>}
+                  {featuredSchool.levels?.length ? (
+                    <div className="mt-5 flex flex-wrap gap-2">{featuredSchool.levels.map(level => <span key={level} className="badge">{level}</span>)}</div>
+                  ) : null}
+                  <Link href={`/schools/${featuredSchool.slug}`} className="btn-primary mt-7 w-fit">View School <ArrowRight size={17} aria-hidden="true" /></Link>
+                </div>
+              </article>
+            )}
             <SchoolCarousel schools={schools} />
             <div className="mt-6">
               <Link href="/schools" className="btn-secondary">View All Schools <ArrowRight size={16} /></Link>
@@ -181,6 +243,21 @@ export default async function HomePage() {
           </section>
         </div>
       </div>
+
+      {/* Early enrollment callout */}
+      <section className="bg-primary-800 text-white">
+        <div className="page-wrapper flex flex-col items-start justify-between gap-7 py-12 md:flex-row md:items-center md:py-14">
+          <div>
+            <span className="eyebrow mb-2 text-gold-300">Admissions</span>
+            <h2 className="font-diocesan text-3xl font-semibold md:text-4xl">Enrollment is now open</h2>
+            <p className="mt-3 max-w-2xl text-base leading-7 text-primary-100">Explore member schools and contact the admissions team for school-specific schedules, requirements, and available levels.</p>
+          </div>
+          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+            <Link href="/schools" className="btn-accent w-full sm:w-auto">Explore Member Schools <ArrowRight size={16} aria-hidden="true" /></Link>
+            <Link href="/enrollment" className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border-2 border-white px-5 py-2.5 font-semibold text-white transition-colors hover:border-gold-400 hover:bg-gold-400 hover:text-primary-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800 sm:w-auto">Send an Enrollment Inquiry <ArrowRight size={16} aria-hidden="true" /></Link>
+          </div>
+        </div>
+      </section>
 
       {/* Latest News — white */}
       <div className="bg-white">
