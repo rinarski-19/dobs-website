@@ -11,6 +11,7 @@ export type HomeNewsItem = {
   publishedAt?: string
   imageUrl?: string
   schoolName?: string
+  externalUrl?: string
 }
 
 export type HomeEventItem = {
@@ -83,7 +84,7 @@ export function LatestNewsSection({ items, heading }: { items: HomeNewsItem[]; h
       ) : (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {items.map(item => (
-            <Link key={item._id} href={`/news/${item.slug}`} className="card group overflow-hidden p-0 transition-all hover:-translate-y-1 hover:shadow-md">
+            <Link key={item._id} href={item.externalUrl || `/news/${item.slug}`} target={item.externalUrl ? '_blank' : undefined} rel={item.externalUrl ? 'noopener noreferrer' : undefined} className="card group overflow-hidden p-0 transition-all hover:-translate-y-1 hover:shadow-md">
               <div className="relative h-44 w-full overflow-hidden">
                 {item.imageUrl ? (
                   <Image src={item.imageUrl} alt={item.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
@@ -95,6 +96,7 @@ export function LatestNewsSection({ items, heading }: { items: HomeNewsItem[]; h
                 {item.category && <span className="badge mb-3">{item.category}</span>}
                 <h3 className="card-title transition-colors group-hover:text-primary-700">{item.title}</h3>
                 {item.excerpt && <p className="card-body mt-2 line-clamp-3">{item.excerpt}</p>}
+                {item.schoolName && <p className="mt-3 text-sm font-medium text-primary-700">{item.schoolName}</p>}
                 {item.publishedAt && <p className="mt-4 text-xs text-gray-400">{formatDate(item.publishedAt, { month: 'long', day: 'numeric', year: 'numeric' })}</p>}
               </div>
             </Link>

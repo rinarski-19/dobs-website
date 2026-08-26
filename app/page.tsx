@@ -111,6 +111,25 @@ export default async function HomePage() {
   const schools = await getHomeSchools()
   const news = await getHomeNews()
   const events = await getHomeEvents()
+  const displayedNews: HomeNewsItem[] = news.length ? news : [{
+    _id: 'sample-ceap-car-leadership-academy',
+    title: 'CEAP-CAR School Heads Convene for 2026 Leadership Academy',
+    slug: 'sample-ceap-car-leadership-academy',
+    category: 'Catholic Education',
+    excerpt: 'Catholic school leaders, including participants from the Diocese of Baguio, gathered in Baguio City for formation focused on resilient, competent, and servant leadership.',
+    publishedAt: '2026-05-04',
+    schoolName: 'CEAP-CAR · Diocese of Baguio participants',
+    imageUrl: '/images/news.png',
+    externalUrl: 'https://www.slu.edu.ph/2026/05/04/ceap-car-school-heads-convene-for-2026-leadership-academy/',
+  }]
+  const displayedEvents: HomeEventItem[] = events.length ? events : [{
+    _id: 'sample-dobs-community-event',
+    title: 'Sample: DOBS Community Mass and Fellowship',
+    startDate: '2026-09-15T09:00:00+08:00',
+    location: 'Diocese of Baguio Schools Office, Baguio City',
+    schoolName: 'Diocese of Baguio Schools',
+    description: 'Sample event for layout preview only. Replace this with a confirmed activity published through Sanity.',
+  }]
 
   const birthdayCelebrants = content?.birthdayCelebrants?.map(({ photo, ...celebrant }) => ({
     ...celebrant,
@@ -271,7 +290,7 @@ export default async function HomePage() {
       <div className="bg-white">
         <div className="mx-auto max-w-[1400px] px-6 md:px-10">
           <LatestNewsSection
-            items={news}
+            items={displayedNews}
             heading={content?.newsHeading || fallbackContent.newsHeading}
           />
         </div>
@@ -281,7 +300,7 @@ export default async function HomePage() {
       <div className="bg-parchment-100">
         <div className="mx-auto max-w-[1400px] px-6 md:px-10">
           <UpcomingEventsSection
-            items={events}
+            items={displayedEvents}
             heading={content?.eventsHeading || 'Upcoming Events'}
           />
         </div>
