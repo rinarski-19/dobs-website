@@ -120,6 +120,8 @@ export default async function HomePage() {
   const schools = await getHomeSchools()
   const news = await getHomeNews()
   const events = await getHomeEvents()
+  const communitiesServed = new Set(schools.map(school => school.city).filter(Boolean)).size
+  const educationalLevels = new Set(schools.flatMap(school => school.levels || [])).size
 
   const birthdayCelebrants = content?.birthdayCelebrants?.map(({ photo, ...celebrant }) => ({
     ...celebrant,
@@ -147,7 +149,14 @@ export default async function HomePage() {
       />
 
       {/* Community at a glance — navy band */}
-      <StatsCounter stats={[{ value: schools.length, label: 'Published Member Schools' }]} />
+      <StatsCounter
+        stats={[
+          { value: schools.length, label: 'Member Schools' },
+          { value: communitiesServed, label: 'Communities Served' },
+          { value: educationalLevels, label: 'Educational Levels' },
+          { value: 2004, label: 'Diocese Established' },
+        ]}
+      />
 
       {/* Birthday celebrants — white */}
       <div className="bg-white">
