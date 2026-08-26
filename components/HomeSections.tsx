@@ -45,6 +45,8 @@ function formatDate(value: string, options: Intl.DateTimeFormatOptions) {
 }
 
 export function LatestNewsSection({ items, heading }: { items: HomeNewsItem[]; heading: string }) {
+  if (items.length === 0) return null
+
   return (
     <section className="section">
       <div className="mb-6 flex items-end justify-between gap-4">
@@ -108,6 +110,8 @@ export function LatestNewsSection({ items, heading }: { items: HomeNewsItem[]; h
 }
 
 export function UpcomingEventsSection({ items, heading }: { items: HomeEventItem[]; heading: string }) {
+  if (items.length === 0) return null
+
   return (
     <section className="section">
       <div className="mb-6 flex items-end justify-between gap-4">
@@ -249,11 +253,23 @@ export function SchoolLocationsSection({ schools, heading }: { schools: Location
         <Link href="/schools" className="hidden items-center gap-1 text-sm font-semibold text-primary-700 hover:text-gold-600 transition-colors sm:inline-flex">Browse schools <ArrowRight size={15} /></Link>
       </div>
 
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {locations.map(([city, citySchools]) => (
+      <div className="mb-6 flex flex-wrap gap-2" aria-label="Filter schools by municipality">
+        {locations.slice(0, 6).map(([city, citySchools]) => (
+          <Link key={city} href={`/schools?location=${encodeURIComponent(city)}`} className="rounded-full border-2 border-primary-300 bg-white px-4 py-2 text-sm font-semibold text-primary-700 transition-colors hover:border-primary-700 hover:bg-primary-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500">
+            {city} ({citySchools.length})
+          </Link>
+        ))}
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr]">
+        <div className="min-h-80 overflow-hidden rounded-2xl border border-primary-200 bg-primary-50 shadow-card">
+          <iframe title="Map of Diocese of Baguio school communities" src="https://www.google.com/maps?q=Catholic%20schools%20Baguio%20City%20Benguet&output=embed" className="h-full min-h-80 w-full border-0" loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen />
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+        {locations.slice(0, 4).map(([city, citySchools]) => (
           <div
             key={city}
-            className="flex flex-col rounded-2xl border border-parchment-200 bg-white p-5 shadow-card transition-shadow hover:shadow-md"
+            className="flex flex-col rounded-2xl border border-parchment-200 bg-white p-5 shadow-card transition-all hover:border-primary-300 hover:shadow-md"
           >
             <div className="mb-3 flex items-start justify-between gap-3">
               <div className="flex items-center gap-3">
@@ -276,26 +292,12 @@ export function SchoolLocationsSection({ schools, heading }: { schools: Location
               </a>
             </div>
 
-            <ul className="space-y-1 border-t border-parchment-200 pt-3">
-              {citySchools.map(school => (
-                <li key={school._id}>
-                  {school.slug ? (
-                    <Link
-                      href={`/schools/${school.slug}`}
-                      className="group flex items-center justify-between gap-2 rounded px-1 py-1 text-sm text-gray-600 transition-colors hover:bg-primary-50 hover:text-primary-700"
-                    >
-                      <span className="truncate">{school.name}</span>
-                      <ArrowRight size={13} className="shrink-0 -translate-x-1 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100" />
-                    </Link>
-                  ) : (
-                    <span className="block px-1 py-1 text-sm text-gray-600">{school.name}</span>
-                  )}
-                </li>
-              ))}
-            </ul>
+            <Link href={`/schools?location=${encodeURIComponent(city)}`} className="mt-auto inline-flex items-center gap-2 border-t border-parchment-200 pt-4 text-sm font-semibold text-primary-700 hover:text-primary-900">View Schools in This Area <ArrowRight size={14} /></Link>
           </div>
         ))}
+        </div>
       </div>
+      {locations.length > 4 && <div className="mt-6 text-center"><Link href="/schools" className="btn-secondary">View All Locations <ArrowRight size={16} /></Link></div>}
     </section>
   )
 }

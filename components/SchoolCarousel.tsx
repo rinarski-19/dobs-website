@@ -32,6 +32,8 @@ export default function SchoolCarousel({ schools }: { schools: HomeSchool[] }) {
   useEffect(() => {
     const track = trackRef.current
     if (!track) return
+    track.scrollLeft = 0
+    setActiveIndex(0)
 
     const updateActiveIndex = () => {
       const cards = Array.from(track.children) as HTMLElement[]
@@ -87,7 +89,7 @@ export default function SchoolCarousel({ schools }: { schools: HomeSchool[] }) {
           <Link
             key={school._id}
             href={`/schools/${school.slug}`}
-            className="group relative basis-[86%] shrink-0 snap-start overflow-hidden rounded-2xl border border-parchment-200 bg-white shadow-card transition-all hover:-translate-y-1 hover:shadow-lg sm:basis-[48%] lg:basis-[31.5%]"
+            className="group relative flex h-auto basis-[86%] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-parchment-200 bg-white shadow-card transition-all hover:-translate-y-1 hover:shadow-lg sm:basis-[48%] lg:basis-[31.5%]"
           >
             <div className="relative h-44 w-full overflow-hidden">
               {school.imageUrl ? (
@@ -105,7 +107,7 @@ export default function SchoolCarousel({ schools }: { schools: HomeSchool[] }) {
               )}
             </div>
 
-            <div className="p-5">
+            <div className="flex flex-1 flex-col p-5">
               <h3 className="font-sans mb-2 text-lg font-semibold text-gray-900 transition-colors group-hover:text-primary-700">
                 {school.name}
               </h3>
@@ -127,7 +129,7 @@ export default function SchoolCarousel({ schools }: { schools: HomeSchool[] }) {
                 )}
               </div>
 
-              <span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-primary-700">
+              <span className="mt-auto inline-flex items-center gap-1 pt-5 text-sm font-semibold text-primary-700">
                 View school <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
               </span>
             </div>
@@ -137,25 +139,25 @@ export default function SchoolCarousel({ schools }: { schools: HomeSchool[] }) {
 
       {schools.length > 1 && (
         <div className="mt-4 flex items-center justify-between gap-4">
-          <p className="text-sm text-gray-500" aria-live="polite">
-            {activeIndex + 1} / {schools.length}
+          <p className="rounded-full bg-primary-50 px-4 py-2 text-base font-bold text-primary-800" aria-live="polite">
+            {activeIndex + 1} of {schools.length}
           </p>
           <div className="flex gap-2">
             <button
               type="button"
               onClick={() => scrollToSchool((activeIndex - 1 + schools.length) % schools.length)}
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-gray-300 text-gray-700 transition-colors hover:border-primary-700 hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500"
+              className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-primary-200 text-primary-700 transition-colors hover:border-primary-700 hover:bg-primary-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500"
               aria-label="Previous school"
             >
-              <ChevronLeft size={18} />
+              <ChevronLeft size={24} />
             </button>
             <button
               type="button"
               onClick={() => scrollToSchool((activeIndex + 1) % schools.length)}
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-gray-300 text-gray-700 transition-colors hover:border-primary-700 hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500"
+              className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-primary-200 text-primary-700 transition-colors hover:border-primary-700 hover:bg-primary-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500"
               aria-label="Next school"
             >
-              <ChevronRight size={18} />
+              <ChevronRight size={24} />
             </button>
           </div>
         </div>

@@ -50,13 +50,13 @@ export default function Features({
           <span className="gold-rule mx-auto" />
           {description && <p className="section-body mt-4">{description}</p>}
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
           {features.map(({ icon = 'graduation-cap', title, description }, index) => {
             const Icon = icons[icon as keyof typeof icons] ?? Object.values(icons)[index % Object.values(icons).length]
             return (
               <div
                 key={title + index}
-                className="group rounded-2xl border border-parchment-200 bg-white p-8 text-center shadow-card flex flex-col items-center transition-all hover:-translate-y-1 hover:shadow-md"
+                className="group flex h-full flex-col items-center rounded-2xl border border-parchment-200 bg-white p-8 text-center shadow-card transition-all hover:-translate-y-1 hover:border-gold-400 hover:shadow-md"
               >
                 {/* Navy icon tile with gold accent ring */}
                 <div className="w-16 h-16 rounded-2xl bg-primary-700 ring-4 ring-gold-500/15 flex items-center justify-center mb-6 shadow-md transition-colors group-hover:bg-primary-800">
@@ -64,7 +64,7 @@ export default function Features({
                 </div>
 
                 <h3 className="font-sans text-lg font-bold text-primary-800 mb-3">{title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{description}</p>
+                <p className="text-base leading-7 text-gray-500">{description}</p>
               </div>
             )
           })}

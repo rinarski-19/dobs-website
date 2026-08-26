@@ -52,7 +52,7 @@ const fallbackContent = {
   heroDescription: 'Forming young minds in faith, excellence, and service — serving Baguio City and the province of Benguet.',
   schoolsHeading: 'Our Schools',
   newsHeading: 'Latest News & Announcements',
-  enrollmentHeading: 'Join Our Community',
+  enrollmentHeading: 'Begin Your Journey With Us',
   enrollmentDescription: 'Every Diocese of Baguio school welcomes families seeking an education rooted in faith, character, and academic excellence. Find the school nearest you and begin.',
 }
 
@@ -60,10 +60,10 @@ async function getHomeSchools(): Promise<HomeSchool[]> {
   try {
     const schools = await getSchools()
 
-    return schools.map(({ slug, coverPhoto, ...school }) => ({
+    return schools.map(({ slug, coverPhoto, logo, ...school }) => ({
       ...school,
       slug: slug.current,
-      imageUrl: coverPhoto ? imageUrlFor(coverPhoto, 1000, 560) : undefined,
+      imageUrl: coverPhoto ? imageUrlFor(coverPhoto, 1000, 560) : logo ? imageUrlFor(logo, 800, 800) : '/images/schools.png',
     }))
   } catch (error) {
     console.error('Unable to load homepage schools from Sanity:', error)
@@ -116,6 +116,14 @@ export default async function HomePage() {
     ...celebrant,
     imageUrl: photo ? imageUrlFor(photo, 240, 240) : undefined,
   })) ?? []
+  const displayedCelebrants = birthdayCelebrants.length ? birthdayCelebrants : [{
+    _key: 'sample-jane-doe',
+    name: 'Jane Doe',
+    school: 'DOBS School Community',
+    birthday: '2026-08-26',
+    greeting: 'Sample celebrant — replace this entry with current birthday information in Sanity.',
+    imageUrl: '/images/enrollment.png',
+  }]
   const featuredSchool = schools[0]
   const programPreviews = [
     { name: 'Pre-School', icon: Blocks, description: 'Early learning through play, discovery, faith, and care.' },
@@ -165,10 +173,10 @@ export default async function HomePage() {
       {/* Community at a glance — navy band */}
       <StatsCounter
         stats={[
-          { value: schools.length, label: 'Member Schools' },
-          { value: 5000, suffix: '+', label: 'Students Enrolled' },
-          { value: 400, suffix: '+', label: 'Faculty & Staff' },
-          { value: 50, suffix: '+', label: 'Years of Service' },
+          { value: schools.length, label: 'Member Schools', icon: 'schools' },
+          { value: new Set(schools.map(school => school.city).filter(Boolean)).size, label: 'Communities Served', icon: 'communities' },
+          { value: new Set(schools.flatMap(school => school.levels || [])).size, label: 'Educational Levels', icon: 'levels' },
+          { value: 2004, label: 'Diocese Established', icon: 'established' },
         ]}
       />
 
@@ -178,7 +186,7 @@ export default async function HomePage() {
           <BirthdaySection
             title={content?.birthdayTitle || 'Celebrating Our Birthday Celebrants'}
             message={content?.birthdayMessage}
-            celebrants={birthdayCelebrants}
+            celebrants={displayedCelebrants}
           />
         </div>
       </div>
@@ -304,7 +312,9 @@ export default async function HomePage() {
         className="relative overflow-hidden"
         style={{ background: 'linear-gradient(120deg, #0c1c2e 0%, #16324F 60%, #294f72 100%)' }}
       >
-        <div className="mx-auto max-w-3xl px-6 py-20 text-center text-white">
+        <Image src="/images/enrollment.png" alt="" fill sizes="100vw" className="object-cover opacity-20" />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary-950/95 via-primary-800/90 to-primary-900/80" />
+        <div className="relative z-10 mx-auto max-w-3xl px-6 py-20 text-center text-white">
           <span className="eyebrow mb-3 text-gold-300">Come and See</span>
           <h2 className="font-diocesan text-3xl md:text-4xl font-semibold mb-4">
             {content?.enrollmentHeading || fallbackContent.enrollmentHeading}
@@ -313,7 +323,10 @@ export default async function HomePage() {
           <p className="mx-auto mb-8 max-w-xl leading-relaxed text-white/80">
             {content?.enrollmentDescription || fallbackContent.enrollmentDescription}
           </p>
-          <Link href="/enrollment" className="btn-accent">Begin Enrollment <ArrowRight size={16} /></Link>
+          <div className="flex flex-col justify-center gap-3 sm:flex-row">
+            <Link href="/enrollment" className="btn-accent">Begin Enrollment <ArrowRight size={16} /></Link>
+            <Link href="/contact" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border-2 border-white px-5 py-2.5 font-semibold text-white transition-colors hover:border-gold-400 hover:bg-gold-400 hover:text-primary-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800">Contact the DOBS Office <ArrowRight size={16} /></Link>
+          </div>
         </div>
       </section>
     </>
