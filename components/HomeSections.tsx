@@ -212,7 +212,7 @@ export function BirthdaySection({ title, message, celebrants }: { title: string;
 
   return (
     <section className="section">
-      <div className="relative overflow-hidden rounded-3xl border border-primary-500/20 bg-gradient-to-br from-primary-950 via-primary-800 to-primary-700 p-6 text-white shadow-card sm:p-8 md:p-10">
+      <div className="relative overflow-hidden rounded-3xl border border-primary-500/20 bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 p-6 text-white shadow-card sm:p-8 md:p-10">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,rgba(218,181,77,0.18),transparent_28%),radial-gradient(circle_at_18%_88%,rgba(255,255,255,0.1),transparent_30%)]" />
         <Sparkles className="absolute right-8 top-7 text-gold-300/35" size={38} aria-hidden="true" />
         <Gift className="absolute bottom-8 right-20 rotate-12 text-gold-300/25" size={32} aria-hidden="true" />
@@ -225,7 +225,7 @@ export function BirthdaySection({ title, message, celebrants }: { title: string;
           </div>
 
           {celebrants.length > 0 && (
-            <div className="inline-flex w-fit items-center gap-2 rounded-full border border-gold-300/40 bg-primary-950/35 px-4 py-2 text-sm font-semibold text-gold-200 backdrop-blur-sm">
+            <div className="inline-flex w-fit items-center gap-2 rounded-full border border-gold-300/40 bg-primary-900/60 px-4 py-2 text-sm font-semibold text-gold-200 backdrop-blur-sm">
               <CakeSlice size={16} aria-hidden="true" />
               {celebrants.length} {celebrants.length === 1 ? 'celebrant' : 'celebrants'}
             </div>
@@ -233,13 +233,13 @@ export function BirthdaySection({ title, message, celebrants }: { title: string;
         </div>
 
         {celebrants.length === 0 ? (
-          <div className="relative z-10 rounded-2xl border border-primary-300/20 bg-primary-950/30 p-6 text-center text-primary-50/75 backdrop-blur-sm">
+          <div className="relative z-10 rounded-2xl border border-primary-300/20 bg-primary-900/55 p-6 text-center text-primary-50/75 backdrop-blur-sm">
             No birthday celebrants are listed this week. Please check again soon.
           </div>
         ) : (
           <div className={`relative z-10 grid grid-cols-1 gap-4 sm:grid-cols-2 ${hasManyCelebrants ? 'max-h-[34rem] overflow-y-auto pr-1 xl:grid-cols-3' : 'lg:grid-cols-2'}`}>
             {celebrants.map((celebrant, index) => (
-              <div key={celebrant._key ?? `${celebrant.name}-${index}`} className="flex h-full flex-col gap-4 rounded-2xl border border-primary-200/15 bg-primary-950/35 p-4 backdrop-blur-sm transition-colors hover:border-gold-300/45 sm:flex-row sm:items-center sm:p-5">
+              <div key={celebrant._key ?? `${celebrant.name}-${index}`} className="flex h-full flex-col gap-4 rounded-2xl border border-primary-200/15 bg-primary-900/55 p-4 backdrop-blur-sm transition-colors hover:border-gold-300/45 sm:flex-row sm:items-center sm:p-5">
                 {celebrant.imageUrl ? (
                   <Image src={celebrant.imageUrl} alt={celebrant.name} width={88} height={88} className="h-20 w-20 shrink-0 rounded-full object-cover ring-2 ring-gold-300/50 sm:h-[5.5rem] sm:w-[5.5rem]" />
                 ) : (
