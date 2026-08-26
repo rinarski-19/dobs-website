@@ -1,12 +1,14 @@
+import { Building2, History, UserRoundCheck, UsersRound } from 'lucide-react'
+
 export type Stat = {
   _key?: string
   value: number
   suffix?: string
   label: string
-  icon?: 'schools' | 'communities' | 'levels' | 'established'
+  icon?: 'schools' | 'students' | 'faculty' | 'years'
 }
 
-const statIcons = { schools: Building2, communities: MapPinned, levels: GraduationCap, established: CalendarCheck }
+const statIcons = { schools: Building2, students: UsersRound, faculty: UserRoundCheck, years: History }
 
 export default function StatsCounter({ stats = [] }: { stats?: Stat[] }) {
   if (stats.length === 0) return null
@@ -34,4 +36,3 @@ export default function StatsCounter({ stats = [] }: { stats?: Stat[] }) {
     </section>
   )
 }
-import { Building2, CalendarCheck, GraduationCap, MapPinned } from 'lucide-react'

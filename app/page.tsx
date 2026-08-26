@@ -234,10 +234,10 @@ export default async function HomePage() {
       {/* Community at a glance — navy band */}
       <StatsCounter
         stats={[
-          { value: schools.length, label: 'Member Schools', icon: 'schools' },
-          { value: new Set(schools.map(school => school.city).filter(Boolean)).size, label: 'Communities Served', icon: 'communities' },
-          { value: new Set(schools.flatMap(school => school.levels || [])).size, label: 'Educational Levels', icon: 'levels' },
-          { value: 2004, label: 'Diocese Established', icon: 'established' },
+          { value: 20, label: 'Member Schools', icon: 'schools' },
+          { value: 5000, suffix: '+', label: 'Students Enrolled', icon: 'students' },
+          { value: 400, suffix: '+', label: 'Faculty & Staff', icon: 'faculty' },
+          { value: 50, suffix: '+', label: 'Years of Service', icon: 'years' },
         ]}
       />
 
