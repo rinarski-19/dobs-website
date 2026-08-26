@@ -17,17 +17,29 @@ export function urlFor(source: any) {
   return builder.image(source).format('webp').quality(WEBP_QUALITY)
 }
 
-export async function getPageContent<T>(pageType: string): Promise<T | null> {
-  try {
-    return await client.fetch<T | null>(
-      `*[_type == $pageType] | order(_updatedAt desc)[0]`,
-      { pageType },
-      { cache: 'no-store' },
-    )
-  } catch (error) {
-    console.warn(`Unable to load ${pageType} content from Sanity:`, error)
-    return null
+export async function fetchSanity<T>(
+  query: string,
+  params: Record<string, string | number | boolean> = {},
+): Promise<T | null> {
+  let lastError: unknown
+
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      return await client.fetch<T>(query, params, { cache: 'no-store' })
+    } catch (error) {
+      lastError = error
+    }
   }
+
+  console.warn('Unable to load content from Sanity after retrying:', lastError)
+  return null
+}
+
+export async function getPageContent<T>(pageType: string): Promise<T | null> {
+  return fetchSanity<T>(
+    `*[_type == $pageType] | order(_updatedAt desc)[0]`,
+    { pageType },
+  )
 }
 
 export function imageUrlFor(source: any, width = 1800, height = 900): string | undefined {
