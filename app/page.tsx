@@ -20,8 +20,8 @@ import {
 import { client, getPageContent, imageUrlFor } from '@/lib/sanity'
 import { getSchools } from '@/lib/schools'
 
-// Rebuild the homepage at most every 5 minutes (ISR) instead of on every request.
-export const revalidate = 300
+// News and events are time-sensitive and intentionally fetched without cache.
+export const dynamic = 'force-dynamic'
 
 type HomePageContent = {
   heroTitle?: string
@@ -83,7 +83,7 @@ async function getHomeNews(): Promise<HomeNewsItem[]> {
         "schoolName": school->name,
         featuredImage
       }
-    `, {}, { next: { revalidate: 300 } })
+    `, {}, { cache: 'no-store' })
 
     return posts.map(({ slug, featuredImage, ...post }) => ({
       ...post,
@@ -106,7 +106,7 @@ async function getHomeEvents(): Promise<HomeEventItem[]> {
         location,
         "schoolName": school->name
       }
-    `, {}, { next: { revalidate: 300 } })
+    `, {}, { cache: 'no-store' })
   } catch (error) {
     console.error('Unable to load homepage events from Sanity:', error)
     return []
@@ -114,12 +114,12 @@ async function getHomeEvents(): Promise<HomeEventItem[]> {
 }
 
 export default async function HomePage() {
-  const [content, schools, news, events] = await Promise.all([
-    getPageContent<HomePageContent>('homePage'),
-    getHomeSchools(),
-    getHomeNews(),
-    getHomeEvents(),
-  ])
+  // Keep Sanity reads sequential. Concurrent SDK requests can cross response
+  // streams in the Next.js development runtime and surface invalid JSON.
+  const content = await getPageContent<HomePageContent>('homePage')
+  const schools = await getHomeSchools()
+  const news = await getHomeNews()
+  const events = await getHomeEvents()
 
   const birthdayCelebrants = content?.birthdayCelebrants?.map(({ photo, ...celebrant }) => ({
     ...celebrant,
