@@ -120,8 +120,6 @@ export default async function HomePage() {
   const schools = await getHomeSchools()
   const news = await getHomeNews()
   const events = await getHomeEvents()
-  const communitiesServed = new Set(schools.map(school => school.city).filter(Boolean)).size
-  const educationalLevels = new Set(schools.flatMap(school => school.levels || [])).size
 
   const birthdayCelebrants = content?.birthdayCelebrants?.map(({ photo, ...celebrant }) => ({
     ...celebrant,
@@ -152,9 +150,9 @@ export default async function HomePage() {
       <StatsCounter
         stats={[
           { value: schools.length, label: 'Member Schools' },
-          { value: communitiesServed, label: 'Communities Served' },
-          { value: educationalLevels, label: 'Educational Levels' },
-          { value: 2004, label: 'Diocese Established' },
+          { value: 5000, suffix: '+', label: 'Students Enrolled' },
+          { value: 400, suffix: '+', label: 'Faculty & Staff' },
+          { value: 50, suffix: '+', label: 'Years of Service' },
         ]}
       />
 
