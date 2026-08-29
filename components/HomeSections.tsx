@@ -218,7 +218,12 @@ export function BirthdaySection({ title, message, celebrants }: { title: string;
       : 'sm:grid-cols-2'
 
   return (
-    <section className="section">
+    // Not `.section` (py-12): the Academic Programs section that follows is also
+    // white, so its py-20 top padding stacks with a bottom padding here into one
+    // oversized gap, while the navy stats band above contributes none. Matching
+    // the top padding to the next section's and dropping the bottom leaves equal
+    // white space on both sides of the card.
+    <section className="pt-16 pb-0 md:pt-20">
       <div className="relative overflow-hidden rounded-3xl border border-morning-breeze/75 bg-gradient-to-br from-cloud-puff via-white to-morning-breeze/45 p-6 text-primary-900 shadow-card sm:p-8 md:p-10 xl:px-20">
         {/* Radiant blobs — outer wrapper wanders, inner blob pulses its glow.
             The static opacity on each blob is the reduced-motion resting state. */}
