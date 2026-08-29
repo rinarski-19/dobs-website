@@ -8,7 +8,7 @@ export default function Footer() {
         <div>
           <h3 className="font-diocesan font-bold text-white mb-3 text-xl">Diocese of Baguio Schools</h3>
           <p className="text-sm text-white/70 leading-relaxed">
-            A network of Catholic schools serving Baguio City and the province of Benguet.
+            The Catholic schools of the Diocese of Baguio, serving Baguio City and the province of Benguet.
           </p>
         </div>
 

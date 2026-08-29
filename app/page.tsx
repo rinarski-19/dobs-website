@@ -48,7 +48,7 @@ type HomePageContent = {
 
 const fallbackContent = {
   heroTitle: 'Diocese of Baguio Schools',
-  heroSubtitle: 'Catholic Education Network',
+  heroSubtitle: 'Catholic Schools of the Diocese',
   heroDescription: 'Forming young minds in faith, excellence, and service — serving Baguio City and the province of Benguet.',
   schoolsHeading: 'Our Schools',
   newsHeading: 'Latest News & Announcements',
@@ -134,9 +134,9 @@ export default async function HomePage() {
       title: 'Sample: Enrollment Information for School Year 2026–2027',
       slug: 'sample-enrollment-announcement',
       category: 'Enrollment',
-      excerpt: 'This sample shows how a member school can share application schedules, required documents, available levels, and admissions contact information.',
+      excerpt: 'This sample shows how a school can share application schedules, required documents, available levels, and admissions contact information.',
       publishedAt: '2026-08-20',
-      schoolName: 'Sample Member School',
+      schoolName: 'Sample School',
       imageUrl: '/images/enrollment.png',
       sample: true,
     },
@@ -147,7 +147,7 @@ export default async function HomePage() {
       category: 'Campus Life',
       excerpt: 'This sample story demonstrates how schools can feature student formation, outreach activities, achievements, and service to local communities.',
       publishedAt: '2026-08-18',
-      schoolName: 'Sample Member School',
+      schoolName: 'Sample School',
       imageUrl: '/images/classroom-discussion-1280x720.png',
       sample: true,
     },
@@ -166,8 +166,8 @@ export default async function HomePage() {
       _id: 'sample-parent-orientation',
       title: 'Sample: Parent and Learner Orientation',
       startDate: '2026-09-22T13:30:00+08:00',
-      location: 'Member School Auditorium',
-      schoolName: 'Sample Member School',
+      location: 'School Auditorium',
+      schoolName: 'Sample School',
       description: 'A sample orientation entry showing how schedules, venues, and participating schools appear on the homepage.',
       imageUrl: '/images/classroom-discussion-1280x720.png',
     },
@@ -177,7 +177,7 @@ export default async function HomePage() {
       startDate: '2026-10-03T08:00:00+08:00',
       location: 'Baguio City, Benguet',
       schoolName: 'Diocese of Baguio Schools',
-      description: 'A sample network activity for demonstrating the three-card upcoming-events layout.',
+      description: 'A sample activity for demonstrating the three-card upcoming-events layout.',
       imageUrl: '/images/enrollment.png',
     },
   ]
@@ -243,7 +243,7 @@ export default async function HomePage() {
       {/* Community at a glance — navy band */}
       <StatsCounter
         stats={[
-          { value: 20, label: 'Member Schools', icon: 'schools' },
+          { value: 20, label: 'Diocesan Schools', icon: 'schools' },
           { value: 5000, suffix: '+', label: 'Students Enrolled', icon: 'students' },
           { value: 400, suffix: '+', label: 'Faculty & Staff', icon: 'faculty' },
           { value: 50, suffix: '+', label: 'Years of Service', icon: 'years' },
@@ -290,7 +290,7 @@ export default async function HomePage() {
       <div className="bg-parchment-100">
         <div className="mx-auto max-w-[1400px] px-6 md:px-10">
           <section className="section">
-            <span className="eyebrow mb-2">Our Network</span>
+            <span className="eyebrow mb-2">Our Schools</span>
             <h2 className="section-heading mb-0">{content?.schoolsHeading || fallbackContent.schoolsHeading}</h2>
             <span className="gold-rule mb-6" />
             {featuredSchool && (
@@ -304,7 +304,7 @@ export default async function HomePage() {
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent to-primary-950/20" />
                 </div>
                 <div className="flex flex-col justify-center p-8 md:p-10">
-                  <span className="eyebrow mb-3 text-gold-700">Featured Member School</span>
+                  <span className="eyebrow mb-3 text-gold-700">Featured Diocesan School</span>
                   <h3 className="font-diocesan text-3xl font-bold leading-tight text-primary-900 md:text-4xl">{featuredSchool.name}</h3>
                   {featuredSchool.city && <p className="mt-4 flex items-center gap-2 text-base text-gray-600"><MapPin size={17} className="text-primary-600" aria-hidden="true" /> {featuredSchool.city}</p>}
                   {featuredSchool.levels?.length ? (
@@ -328,10 +328,10 @@ export default async function HomePage() {
           <div>
             <span className="eyebrow mb-2 text-gold-300">Admissions</span>
             <h2 className="font-diocesan text-3xl font-semibold md:text-4xl">Enrollment is now open</h2>
-            <p className="mt-3 max-w-2xl text-base leading-7 text-primary-100">Explore member schools and contact the admissions team for school-specific schedules, requirements, and available levels.</p>
+            <p className="mt-3 max-w-2xl text-base leading-7 text-primary-100">Browse the schools and contact the admissions team for school-specific schedules, requirements, and available levels.</p>
           </div>
           <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
-            <Link href="/schools" className="btn-accent w-full sm:w-auto">Explore Member Schools <ArrowRight size={16} aria-hidden="true" /></Link>
+            <Link href="/schools" className="btn-accent w-full sm:w-auto">Browse Schools <ArrowRight size={16} aria-hidden="true" /></Link>
             <Link href="/enrollment" className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border-2 border-white px-5 py-2.5 font-semibold text-white transition-colors hover:border-gold-400 hover:bg-gold-400 hover:text-primary-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800 sm:w-auto">Send an Enrollment Inquiry <ArrowRight size={16} aria-hidden="true" /></Link>
           </div>
         </div>

@@ -31,7 +31,7 @@ type EnrollmentPageContent = {
 }
 
 const steps = [
-  { step: 1, title: 'Choose a School', desc: 'Browse our member schools and find one near you.' },
+  { step: 1, title: 'Choose a School', desc: 'Browse the schools and find one near you.' },
   { step: 2, title: 'Check Requirements', desc: 'Review the enrollment requirements for the grade level you are applying for.' },
   { step: 3, title: 'Submit an Inquiry', desc: 'Fill out the inquiry form below and we will get back to you.' },
   { step: 4, title: 'Visit the School', desc: 'Come in for an interview or assessment if required.' },
@@ -81,7 +81,7 @@ export default async function EnrollmentPage() {
             </h2>
             <span className="gold-rule" />
             <p className="mt-5 leading-7 text-gray-600">
-              Follow these steps to complete the enrollment process with your chosen member school.
+              Follow these steps to complete the enrollment process with your chosen school.
             </p>
           </div>
 
@@ -140,7 +140,7 @@ export default async function EnrollmentPage() {
             </h2>
             <span className="gold-rule" />
             <p className="mt-5 leading-7 text-gray-600">
-              Prepare these general documents before contacting your preferred member school.
+              Prepare these general documents before contacting the school you are applying to.
             </p>
           </div>
           {content?.requirements?.length ? (
@@ -176,7 +176,7 @@ export default async function EnrollmentPage() {
             <div>
               <h3 className="text-sm font-bold uppercase tracking-[0.12em] text-primary-800">Important Notice</h3>
               <p className="mt-1 text-sm leading-6 text-primary-800">
-                Requirements, schedules, assessments, and fees vary by member school. Contact the selected school before submitting an application.
+                Requirements, schedules, assessments, and fees vary by school. Contact the selected school before submitting an application.
               </p>
             </div>
           </aside>
@@ -201,7 +201,7 @@ export default async function EnrollmentPage() {
                 <span className="text-xs font-semibold uppercase tracking-[0.2em] text-gold-300">Before you submit</span>
                 <h3 className="mt-2 font-diocesan text-3xl font-bold md:text-4xl">Enrollment guidance</h3>
                 <p className="mt-3 text-sm leading-6 text-primary-100">
-                  An inquiry helps us direct you to the appropriate member school. Final admission requirements and schedules are confirmed by the selected school.
+                  An inquiry helps us direct you to the appropriate school. Final admission requirements and schedules are confirmed by the selected school.
                 </p>
               </div>
 
@@ -212,7 +212,7 @@ export default async function EnrollmentPage() {
                   </span>
                   <div>
                     <p className="font-semibold">Choose a preferred school</p>
-                    <p className="mt-1 text-sm leading-6 text-primary-100">Review the member-school directory before completing the form.</p>
+                    <p className="mt-1 text-sm leading-6 text-primary-100">Review the school directory before completing the form.</p>
                   </div>
                 </div>
                 <div className="flex gap-4 py-5">
@@ -303,7 +303,7 @@ export default async function EnrollmentPage() {
               Ready to find the right school?
             </h2>
             <p className="mx-auto mt-4 max-w-2xl leading-7 text-primary-100">
-              Explore our member schools or contact the Diocese of Baguio Schools office for enrollment guidance.
+              Browse the schools or contact the Diocese of Baguio Schools office for enrollment guidance.
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link href="/schools" className="btn-accent w-full sm:w-auto">

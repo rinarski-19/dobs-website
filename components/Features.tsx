@@ -8,8 +8,8 @@ const fallbackFeatures = [
   },
   {
     icon: 'globe',
-    title: 'Network of Schools',
-    description: 'A united network of schools across Baguio City and the province of Benguet, serving diverse communities.',
+    title: 'Diocesan Schools',
+    description: 'Catholic schools across Baguio City and the province of Benguet, serving diverse communities.',
   },
   {
     icon: 'heart',

@@ -67,7 +67,7 @@ export function LatestNewsSection({ items, heading }: { items: HomeNewsItem[]; h
             <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-primary-700 shadow-sm">
               <Newspaper size={30} aria-hidden="true" />
             </span>
-            <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-primary-900">New stories and announcements from our member schools are coming soon.</p>
+            <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-primary-900">New stories and announcements from the schools are coming soon.</p>
           </div>
           <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3" aria-hidden="true">
             {[1, 2, 3].map(item => (

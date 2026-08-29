@@ -17,7 +17,7 @@ type NewsPageContent = {
 const fallbackPageContent = {
   heroTitle: 'News & Announcements',
   heroSubtitle: 'Latest Updates',
-  heroDescription: 'Stay updated with news, announcements, and stories from across the Diocese of Baguio Schools network.',
+  heroDescription: 'Stay updated with news, announcements, and stories from across the schools of the Diocese of Baguio.',
   emptyStateText: 'No news articles are currently available.',
 }
 
@@ -54,7 +54,7 @@ const demoNewsPosts: NewsPost[] = [
     category: 'Enrollment',
     excerpt: 'This sample shows how a school can share application schedules, required documents, available levels, and admissions contact information.',
     publishedAt: '2026-08-20',
-    school: 'Sample Member School',
+    school: 'Sample School',
     image: '/images/enrollment.png',
     isDemo: true,
   },
@@ -65,7 +65,7 @@ const demoNewsPosts: NewsPost[] = [
     category: 'Campus Life',
     excerpt: 'This sample demonstrates how schools can feature student formation, outreach activities, achievements, and service to local communities.',
     publishedAt: '2026-08-18',
-    school: 'Sample Member School',
+    school: 'Sample School',
     image: '/images/classroom-discussion-1280x720.png',
     isDemo: true,
   },

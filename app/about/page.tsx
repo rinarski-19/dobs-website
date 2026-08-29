@@ -27,7 +27,7 @@ type AboutPageContent = {
 const fallback: Required<Omit<AboutPageContent, 'heroImage'>> = {
   heroTitle: 'About DOBS',
   heroSubtitle: 'Our Story',
-  heroDescription: 'Learn about the mission, vision, core values, and history of the Diocese of Baguio Schools network.',
+  heroDescription: 'Learn about the mission, vision, core values, and history of the schools of the Diocese of Baguio.',
   vision: 'We envision ourselves as caring Catholic school communities transforming lives and forming committed disciples of Jesus Christ.',
   mission: [
     'Set the schools as avenues for creative faith formation.',
@@ -45,7 +45,7 @@ const fallback: Required<Omit<AboutPageContent, 'heroImage'>> = {
   history: [
     { _type: 'block', children: [{ text: 'The roots of Catholic education in Baguio and Benguet can be traced to the arrival of the Congregation of the Immaculate Heart of Mary, or CICM missionaries, in 1907. Alongside their work of evangelization, the missionaries established mission centers, schools, hospitals, and parishes throughout the Cordillera.' }] },
     { _type: 'block', children: [{ text: 'The Apostolic Prefecture of the Mountain Provinces was established on July 15, 1932. It was elevated to the Apostolic Vicariate of the Mountain Provinces in 1948 and renamed the Apostolic Vicariate of Baguio in 1992.' }] },
-    { _type: 'block', children: [{ text: 'On June 24, 2004, it was formally elevated as the Diocese of Baguio, serving Baguio City and the Province of Benguet. The Diocese of Baguio Schools continues this Catholic educational mission through a network of schools committed to faith formation, academic excellence, cultural respect, servant leadership, and responsible stewardship.' }] },
+    { _type: 'block', children: [{ text: 'On June 24, 2004, it was formally elevated as the Diocese of Baguio, serving Baguio City and the Province of Benguet. The Diocese of Baguio Schools continues this Catholic educational mission through schools committed to faith formation, academic excellence, cultural respect, servant leadership, and responsible stewardship.' }] },
   ],
   leadership: [
     { name: 'Most Rev. Rafael T. Cruz, D.D.', role: 'Bishop of the Diocese of Baguio' },
@@ -74,7 +74,7 @@ export default async function AboutPage() {
   const educationLevels = Array.from(new Set(schools.flatMap(school => school.levels || [])))
   const networkStats = [
     { value: '2004', label: 'Diocese established' },
-    { value: schools.length.toString(), label: 'Member schools' },
+    { value: schools.length.toString(), label: 'Diocesan schools' },
     { value: communities.length.toString(), label: 'Communities served' },
     { value: educationLevels.length.toString(), label: 'Educational levels' },
   ]
@@ -106,7 +106,7 @@ export default async function AboutPage() {
               <h2 className="mt-3 font-diocesan text-4xl font-bold leading-tight text-[#16324F] md:text-5xl">One Catholic school community</h2>
               <div className="mt-5 h-px w-20 bg-[#C7A24B]" />
               <p className="mt-6 text-base leading-7 text-slate-600 md:text-lg md:leading-8">
-                The Diocese of Baguio Schools is a network of Catholic educational communities serving families across Baguio City and the Province of Benguet. Guided by the Diocese and united in faith, its member schools provide formation and learning from early childhood through secondary education.
+                The Diocese of Baguio Schools is the system of Catholic schools under the administration of the Diocese, serving families across Baguio City and the Province of Benguet. Its schools provide formation and learning from early childhood through secondary education.
               </p>
               <p className="mt-4 text-base leading-7 text-slate-600">
                 Each school responds to the needs of its local community while sharing a commitment to Gospel values, academic excellence, service, cultural respect, and responsible stewardship.
@@ -126,7 +126,7 @@ export default async function AboutPage() {
               </div>
             ))}
           </div>
-          <p className="mt-3 text-center text-xs leading-5 text-slate-500">Network counts are generated from currently published member-school records.</p>
+          <p className="mt-3 text-center text-xs leading-5 text-slate-500">Counts are generated from currently published school records.</p>
         </section>
 
         <section className="pb-16 pt-6 md:pt-8">
@@ -220,13 +220,13 @@ export default async function AboutPage() {
             <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#8F3A3A]">How We Are Organized</span>
             <h2 className="mt-2 font-diocesan text-4xl font-bold text-[#16324F] md:text-5xl">Our Institutional Structure</h2>
             <div className="mx-auto mt-4 h-px w-20 bg-[#C7A24B]" />
-            <p className="mt-5 text-base leading-7 text-slate-600">The Diocese provides pastoral direction, while the schools office supports coordination and each member school serves its own educational community.</p>
+            <p className="mt-5 text-base leading-7 text-slate-600">The Diocese provides pastoral direction, while the schools office supports coordination and each school serves its own educational community.</p>
           </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {[
-              { icon: Church, title: 'Diocese of Baguio', text: 'Provides the Catholic identity, pastoral mission, and overall ecclesial direction of the school network.' },
-              { icon: Network, title: 'DOBS Office', text: 'Coordinates the network and supports shared formation, standards, communication, and school development.' },
-              { icon: Building2, title: 'Member Schools', text: 'Deliver Catholic education in their communities while responding to local learners and families.' },
+              { icon: Church, title: 'Diocese of Baguio', text: 'Provides the Catholic identity, pastoral mission, and overall ecclesial direction of the diocesan schools.' },
+              { icon: Network, title: 'DOBS Office', text: 'Coordinates the schools and supports shared formation, standards, communication, and school development.' },
+              { icon: Building2, title: 'Diocesan Schools', text: 'Deliver Catholic education in their communities while responding to local learners and families.' },
               { icon: Users, title: 'Leadership', text: 'The Bishop provides diocesan oversight, supported by the superintendent in the educational mission.' },
             ].map(({ icon: Icon, title, text }, index) => (
               <article key={title} className="relative rounded-2xl border border-[#D8CEB8] bg-[#FFFDF7] p-6 text-center shadow-sm">
@@ -270,10 +270,10 @@ export default async function AboutPage() {
 
       <section className="bg-primary-800 text-white">
         <div className="page-wrapper py-16 text-center md:py-20">
-          <span className="eyebrow mb-4 text-gold-300">Explore Our Network</span>
+          <span className="eyebrow mb-4 text-gold-300">Our Schools</span>
           <h2 className="mx-auto max-w-3xl font-diocesan text-4xl font-semibold leading-tight md:text-5xl">Discover our Catholic school community</h2>
           <span className="mx-auto my-6 block h-0.5 w-12 rounded-full bg-gold-500" />
-          <p className="mx-auto max-w-2xl text-base leading-7 text-primary-100">Find a member school for your family or contact the Diocese of Baguio Schools office for assistance.</p>
+          <p className="mx-auto max-w-2xl text-base leading-7 text-primary-100">Find a school for your family or contact the Diocese of Baguio Schools office for assistance.</p>
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link href="/schools" className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-white px-6 py-3 font-semibold text-primary-800 shadow-sm transition-all hover:bg-primary-50 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800 sm:w-auto">
               Browse Our Schools <ArrowRight className="transition-transform group-hover:translate-x-1" size={18} aria-hidden="true" />

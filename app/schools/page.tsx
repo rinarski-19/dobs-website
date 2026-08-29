@@ -17,8 +17,8 @@ type SchoolsPageContent = {
 
 const fallbackPageContent = {
   heroTitle: 'Our Schools',
-  heroSubtitle: 'Member Schools',
-  heroDescription: 'Browse all member schools under the Diocese of Baguio Schools network across Baguio City and Benguet.',
+  heroSubtitle: 'Diocesan Schools',
+  heroDescription: 'A directory of the schools of the Diocese of Baguio across Baguio City and Benguet.',
   emptyStateText: 'No schools added yet. Add schools in the Sanity Studio.',
 }
 
@@ -76,15 +76,15 @@ export default async function SchoolsPage({
         subtitle={content?.heroSubtitle || fallbackPageContent.heroSubtitle}
         description={content?.heroDescription || fallbackPageContent.heroDescription}
         image={imageUrlFor(content?.heroImage)}
-        imagePlaceholder="Schools Network Photo"
+        imagePlaceholder="Diocesan Schools Photo"
       />
 
       <section className="bg-parchment-100">
         <div className="page-wrapper">
 
         <div className="mb-10 max-w-3xl">
-          <span className="eyebrow mb-3 text-gold-700">Our Network</span>
-          <h2 className="font-diocesan text-4xl font-semibold leading-tight text-primary-900 md:text-5xl">Find a Member School</h2>
+          <span className="eyebrow mb-3 text-gold-700">Our Schools</span>
+          <h2 className="font-diocesan text-4xl font-semibold leading-tight text-primary-900 md:text-5xl">Find a Diocesan School</h2>
           <span className="gold-rule mt-5" />
           <p className="mt-5 max-w-2xl text-base leading-7 text-gray-600 md:text-lg">
             Explore Catholic schools serving families across Baguio City and Benguet, and find the community, location, and educational level that best support your child.
@@ -96,7 +96,7 @@ export default async function SchoolsPage({
             <div className="mb-9 rounded-2xl border border-primary-100 bg-primary-50/60 p-5 md:p-6">
               <div className="mb-5 flex items-center gap-2 text-primary-900">
                 <SlidersHorizontal size={20} aria-hidden="true" />
-                <h3 className="font-sans text-base font-bold">Filter Member Schools</h3>
+                <h3 className="font-sans text-base font-bold">Filter Schools</h3>
               </div>
 
               <nav aria-label="Filter schools by location" className="mb-5 flex flex-wrap gap-2.5">
@@ -272,7 +272,7 @@ export default async function SchoolsPage({
                 <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
                   <div className="min-h-[30rem] overflow-hidden rounded-2xl border border-primary-200 bg-primary-50 shadow-card">
                     <iframe
-                      title="Map of Diocese of Baguio member school area"
+                      title="Map of Diocese of Baguio school area"
                       src="https://www.google.com/maps?q=Catholic%20schools%20Baguio%20City%20Benguet&output=embed"
                       className="h-full min-h-[30rem] w-full border-0"
                       loading="lazy"
@@ -316,9 +316,9 @@ export default async function SchoolsPage({
                 <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-primary-700 shadow-sm">
                   <SearchX size={30} aria-hidden="true" />
                 </span>
-                <h3 className="mt-5 font-diocesan text-3xl font-semibold">No member schools found</h3>
+                <h3 className="mt-5 font-diocesan text-3xl font-semibold">No schools found</h3>
                 <p className="mx-auto mt-3 max-w-xl leading-7 text-gray-600">
-                  No member schools match your search or selected filters. Try another school name, location, education level, or enrollment status.
+                  No schools match your search or selected filters. Try another school name, location, education level, or enrollment status.
                 </p>
                 <Link href="/schools" className="btn-primary mt-6">Clear Filters</Link>
               </div>
@@ -337,7 +337,7 @@ export default async function SchoolsPage({
           </h2>
           <span className="mx-auto my-6 block h-0.5 w-12 rounded-full bg-gold-500" />
           <p className="mx-auto max-w-2xl leading-7 text-primary-100">
-            Review the enrollment process or speak with the Diocese of Baguio Schools office for guidance in choosing a member school.
+            Review the enrollment process or speak with the Diocese of Baguio Schools office for guidance in choosing a school.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link href="/enrollment" className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-white px-6 py-3 font-semibold text-primary-800 shadow-sm transition-all hover:bg-primary-50 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800 sm:w-auto">

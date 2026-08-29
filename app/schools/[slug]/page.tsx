@@ -51,7 +51,7 @@ export default async function SchoolDetailPage({ params }: { params: Promise<{ s
     <>
       <Hero
         title={school.name}
-        subtitle="Member School"
+        subtitle="Diocesan School"
         description={school.city ? `${school.address ?? ''} ${school.city}`.trim() : undefined}
         image={coverUrl}
         imagePlaceholder="School Cover Photo"

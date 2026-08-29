@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     default: 'Diocese of Baguio Schools',
     template: '%s · Diocese of Baguio Schools',
   },
-  description: 'A network of Catholic schools serving Baguio City and the province of Benguet — forming young minds in faith, excellence, and service.',
+  description: 'The Catholic schools of the Diocese of Baguio, serving Baguio City and the province of Benguet — forming young minds in faith, excellence, and service.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

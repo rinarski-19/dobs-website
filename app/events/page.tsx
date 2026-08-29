@@ -20,7 +20,7 @@ type EventsPageContent = {
 const fallbackPageContent = {
   heroTitle: 'Events',
   heroSubtitle: 'School Calendar',
-  heroDescription: 'Upcoming events, activities, and important dates across the Diocese of Baguio Schools network.',
+  heroDescription: 'Upcoming events, activities, and important dates across the schools of the Diocese of Baguio.',
   latestEventHeading: 'Latest Event',
   allEventsHeading: 'All Events',
 }
@@ -36,8 +36,8 @@ const upcomingEvent = {
 
 const events = [
   { id: 1, title: 'DOBS Community Mass and Fellowship', category: 'Sample Event', description: 'Sample event for layout preview only. Replace this with a confirmed activity published through Sanity.', date: { day: '15', month: 'Sep', year: '2026' }, school: 'Diocese of Baguio Schools', location: 'DOBS Office, Baguio City', image: '/images/events.png' },
-  { id: 2, title: 'Parent and Learner Orientation', category: 'Sample Event', description: 'A sample orientation entry showing how schedules, venues, and participating schools appear on the Events page.', date: { day: '22', month: 'Sep', year: '2026' }, school: 'Sample Member School', location: 'Member School Auditorium', image: '/images/classroom-discussion-1280x720.png' },
-  { id: 3, title: 'Catholic Schools Faith Formation Day', category: 'Sample Event', description: 'A sample network activity demonstrating the card layout for an upcoming faith-formation gathering.', date: { day: '03', month: 'Oct', year: '2026' }, school: 'Diocese of Baguio Schools', location: 'Baguio City, Benguet', image: '/images/enrollment.png' },
+  { id: 2, title: 'Parent and Learner Orientation', category: 'Sample Event', description: 'A sample orientation entry showing how schedules, venues, and participating schools appear on the Events page.', date: { day: '22', month: 'Sep', year: '2026' }, school: 'Sample School', location: 'School Auditorium', image: '/images/classroom-discussion-1280x720.png' },
+  { id: 3, title: 'Catholic Schools Faith Formation Day', category: 'Sample Event', description: 'A sample activity demonstrating the card layout for an upcoming faith-formation gathering.', date: { day: '03', month: 'Oct', year: '2026' }, school: 'Diocese of Baguio Schools', location: 'Baguio City, Benguet', image: '/images/enrollment.png' },
 ]
 
 export default async function EventsPage() {
@@ -79,7 +79,7 @@ export default async function EventsPage() {
             </h2>
             <span className="gold-rule" />
             <p className="mt-5 leading-7 text-gray-600">
-              Explore upcoming activities, celebrations, academic programs, and important dates across the Diocese of Baguio Schools network.
+              Explore upcoming activities, celebrations, academic programs, and important dates across the schools of the Diocese of Baguio.
             </p>
           </div>
           <form className="mb-8 rounded-2xl border border-primary-100 bg-primary-50 p-5 shadow-card md:p-6">
@@ -120,10 +120,10 @@ export default async function EventsPage() {
               </label>
 
               <label className="relative block">
-                <span className="form-label">Member school</span>
+                <span className="form-label">School</span>
                 <Building2 className="pointer-events-none absolute bottom-3 left-3.5 text-primary-500" size={18} aria-hidden="true" />
                 <select name="school" className="form-input bg-white pl-11">
-                  <option value="">All member schools</option>
+                  <option value="">All schools</option>
                   <option value="school-name">[ School Name ]</option>
                 </select>
               </label>
