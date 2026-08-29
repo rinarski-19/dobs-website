@@ -209,6 +209,13 @@ export function TestimonialsSection({ items, heading }: { items: Testimonial[]; 
 
 export function BirthdaySection({ title, message, celebrants }: { title: string; message?: string; celebrants: BirthdayCelebrant[] }) {
   const hasManyCelebrants = celebrants.length > 4
+  // A lone celebrant in a two-column grid leaves a conspicuous empty cell, so
+  // constrain it to the heading's width instead of stranding it mid-container.
+  const celebrantLayout = celebrants.length === 1
+    ? 'max-w-2xl'
+    : hasManyCelebrants
+      ? 'max-h-[34rem] overflow-y-auto pr-1 sm:grid-cols-2 xl:grid-cols-3'
+      : 'sm:grid-cols-2'
 
   return (
     <section className="section">
@@ -230,40 +237,40 @@ export function BirthdaySection({ title, message, celebrants }: { title: string;
           </div>
         </div>
 
-        {/* Decorative iconography. Two constraints drive the placement:
-            the pastels are only legible on a navy disc, and nothing may sit
-            over text. The heading column is capped at max-w-2xl, so the band
-            to its right is free from lg up; the xl:px-20 gutters on the
-            container give the left side matching room. Everything is hidden
-            below lg, where the heading wraps full-width and no space exists. */}
+        {/* Decorative iconography. The pastels are only legible on a navy
+            disc, and nothing may sit over text or over the celebrant-count
+            badge — so apart from one corner piece everything lives in the
+            xl:px-20 gutters, spread evenly down both edges so a short section
+            (one or two celebrants) does not bunch them together.
+            Hidden below lg, where the heading wraps full-width. */}
 
-        {/* Right band — beside the heading, clear of it from lg up */}
+        {/* Top-right corner — the only piece inside the header band */}
         <span className="pointer-events-none absolute right-7 top-6 hidden h-12 w-12 items-center justify-center rounded-full bg-primary-700 text-buttercup-sky shadow-card motion-safe:animate-twinkle lg:flex" aria-hidden="true">
           <Sparkles size={22} />
         </span>
-        <span className="pointer-events-none absolute right-24 top-20 hidden h-10 w-10 items-center justify-center rounded-full bg-primary-600 text-sunwashed shadow-card motion-safe:animate-float lg:flex" aria-hidden="true">
-          <PartyPopper size={18} />
+
+        {/* Left gutter */}
+        <span className="pointer-events-none absolute left-4 top-[18%] hidden h-10 w-10 items-center justify-center rounded-full bg-primary-700 text-sunwashed shadow-card motion-safe:animate-twinkle [animation-delay:1.4s] xl:flex" aria-hidden="true">
+          <Star size={17} />
         </span>
-        <span className="pointer-events-none absolute right-36 top-4 hidden h-9 w-9 items-center justify-center rounded-full bg-primary-600 text-buttercup-sky shadow-card motion-safe:animate-twinkle [animation-delay:2.6s] lg:flex" aria-hidden="true">
+        <span className="pointer-events-none absolute left-4 top-[40%] hidden h-11 w-11 items-center justify-center rounded-full bg-primary-700 text-cloud-puff shadow-card motion-safe:animate-float [animation-delay:2s] xl:flex" aria-hidden="true">
+          <Cake size={19} />
+        </span>
+        <span className="pointer-events-none absolute left-4 top-[62%] hidden h-9 w-9 items-center justify-center rounded-full bg-primary-600 text-sunwashed shadow-card motion-safe:animate-drift [animation-delay:4.2s] xl:flex" aria-hidden="true">
+          <Sun size={16} />
+        </span>
+        <span className="pointer-events-none absolute left-4 top-[84%] hidden h-9 w-9 items-center justify-center rounded-full bg-primary-600 text-buttercup-sky shadow-card motion-safe:animate-twinkle [animation-delay:2.6s] xl:flex" aria-hidden="true">
           <Balloon size={16} />
         </span>
 
-        {/* Left gutter — lives in the xl:px-20 margin, outside the text column */}
-        <span className="pointer-events-none absolute left-4 top-24 hidden h-10 w-10 items-center justify-center rounded-full bg-primary-700 text-sunwashed shadow-card motion-safe:animate-twinkle [animation-delay:1.4s] xl:flex" aria-hidden="true">
-          <Star size={17} />
+        {/* Right gutter — starts below the badge so the two never crowd */}
+        <span className="pointer-events-none absolute right-4 top-[38%] hidden h-10 w-10 items-center justify-center rounded-full bg-primary-600 text-sunwashed shadow-card motion-safe:animate-float xl:flex" aria-hidden="true">
+          <PartyPopper size={18} />
         </span>
-        <span className="pointer-events-none absolute left-4 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-primary-700 text-cloud-puff shadow-card motion-safe:animate-float [animation-delay:2s] xl:flex" aria-hidden="true">
-          <Cake size={19} />
-        </span>
-        <span className="pointer-events-none absolute bottom-24 left-4 hidden h-9 w-9 items-center justify-center rounded-full bg-primary-600 text-sunwashed shadow-card motion-safe:animate-drift [animation-delay:4.2s] xl:flex" aria-hidden="true">
-          <Sun size={16} />
-        </span>
-
-        {/* Right gutter — balances the left column further down the section */}
-        <span className="pointer-events-none absolute right-4 top-1/2 hidden h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-primary-600 text-buttercup-sky shadow-card motion-safe:animate-twinkle [animation-delay:3.4s] xl:flex" aria-hidden="true">
+        <span className="pointer-events-none absolute right-4 top-[60%] hidden h-8 w-8 items-center justify-center rounded-full bg-primary-600 text-buttercup-sky shadow-card motion-safe:animate-twinkle [animation-delay:3.4s] xl:flex" aria-hidden="true">
           <Sparkle size={14} />
         </span>
-        <span className="pointer-events-none absolute bottom-24 right-4 hidden h-11 w-11 rotate-12 items-center justify-center rounded-full bg-primary-700 text-cloud-puff shadow-card motion-safe:animate-drift xl:flex" aria-hidden="true">
+        <span className="pointer-events-none absolute right-4 top-[82%] hidden h-11 w-11 rotate-12 items-center justify-center rounded-full bg-primary-700 text-cloud-puff shadow-card motion-safe:animate-drift xl:flex" aria-hidden="true">
           <Gift size={19} />
         </span>
 
@@ -291,7 +298,7 @@ export function BirthdaySection({ title, message, celebrants }: { title: string;
             No birthday celebrants are listed this week. Please check again soon.
           </div>
         ) : (
-          <div className={`relative z-10 grid grid-cols-1 gap-4 sm:grid-cols-2 ${hasManyCelebrants ? 'max-h-[34rem] overflow-y-auto pr-1 xl:grid-cols-3' : 'lg:grid-cols-2'}`}>
+          <div className={`relative z-10 grid grid-cols-1 gap-4 ${celebrantLayout}`}>
             {celebrants.map((celebrant, index) => (
               <div
                 key={celebrant._key ?? `${celebrant.name}-${index}`}
