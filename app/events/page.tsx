@@ -9,6 +9,9 @@ import { ArrowRight, Building2, CalendarDays, ChevronLeft, ChevronRight, MapPin,
 export const dynamic = 'force-dynamic'
 
 type EventsPageContent = {
+  listIntro?: string
+  ctaHeading?: string
+  ctaText?: string
   heroTitle?: string
   heroSubtitle?: string
   heroDescription?: string
@@ -20,6 +23,9 @@ type EventsPageContent = {
 }
 
 const fallbackPageContent = {
+  listIntro: 'Explore upcoming activities, celebrations, academic programs, and important dates across the schools of the Diocese of Baguio.',
+  ctaHeading: 'Have an event to share?',
+  ctaText: 'Contact the Diocese of Baguio Schools office to share information about an upcoming school activity or community event.',
   heroTitle: 'Events',
   heroSubtitle: 'School Calendar',
   heroDescription: 'Upcoming events, activities, and important dates across the schools of the Diocese of Baguio.',
@@ -183,7 +189,7 @@ export default async function EventsPage() {
             </h2>
             <span className="gold-rule" />
             <p className="mt-5 leading-7 text-gray-600">
-              Explore upcoming activities, celebrations, academic programs, and important dates across the schools of the Diocese of Baguio.
+              {content?.listIntro || fallbackPageContent.listIntro}
             </p>
           </div>
           <form className="mb-8 rounded-2xl border border-primary-100 bg-primary-50 p-5 shadow-card md:p-6">
@@ -349,10 +355,10 @@ export default async function EventsPage() {
           <div className="page-wrapper py-16 text-center md:py-20">
             <span className="text-xs font-semibold uppercase tracking-[0.22em] text-gold-300">Community calendar</span>
             <h2 className="mx-auto mt-3 max-w-3xl font-diocesan text-4xl font-bold md:text-5xl">
-              Have an event to share?
+              {content?.ctaHeading || fallbackPageContent.ctaHeading}
             </h2>
             <p className="mx-auto mt-4 max-w-2xl leading-7 text-primary-100">
-              Contact the Diocese of Baguio Schools office to share information about an upcoming school activity or community event.
+              {content?.ctaText || fallbackPageContent.ctaText}
             </p>
             <div className="mt-8 flex items-center justify-center">
               <Link href="/contact" className="btn-accent w-full sm:w-auto">

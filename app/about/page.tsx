@@ -8,6 +8,15 @@ import { ArrowRight, Award, Building2, Church, HeartHandshake, Network, Quote, S
 export const dynamic = 'force-dynamic'
 
 type AboutPageContent = {
+  overviewHeading?: string
+  overviewNote?: string
+  valuesIntro?: string
+  historyHeading?: string
+  historyIntro?: string
+  structureHeading?: string
+  structureIntro?: string
+  ctaHeading?: string
+  ctaText?: string
   heroTitle?: string
   heroSubtitle?: string
   heroDescription?: string
@@ -26,6 +35,15 @@ type AboutPageContent = {
 }
 
 const fallback: Required<Omit<AboutPageContent, 'heroImage' | 'heroImageAlt'>> = {
+  overviewHeading: 'One Catholic school community',
+  overviewNote: 'Counts are generated from currently published school records.',
+  valuesIntro: 'The values that guide learning, leadership, service, and community life throughout the Diocese of Baguio Schools.',
+  historyHeading: 'A Heritage of Faith and Mission',
+  historyIntro: 'Rooted in the Cordillera and formed through generations of Catholic evangelization and education.',
+  structureHeading: 'Our Institutional Structure',
+  structureIntro: 'The Diocese provides pastoral direction, while the schools office supports coordination and each school serves its own educational community.',
+  ctaHeading: 'Discover our Catholic school community',
+  ctaText: 'Find a school for your family or contact the Diocese of Baguio Schools office for assistance.',
   heroTitle: 'About DOBS',
   heroSubtitle: 'Our Story',
   heroDescription: 'Learn about the mission, vision, core values, and history of the schools of the Diocese of Baguio.',
@@ -122,7 +140,7 @@ export default async function AboutPage() {
           <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
             <div>
               <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#8F3A3A]">Who We Are</span>
-              <h2 className="mt-3 font-diocesan text-4xl font-bold leading-tight text-[#16324F] md:text-5xl">One Catholic school community</h2>
+              <h2 className="mt-3 font-diocesan text-4xl font-bold leading-tight text-[#16324F] md:text-5xl">{content.overviewHeading || fallback.overviewHeading}</h2>
               <div className="mt-5 h-px w-20 bg-[#C7A24B]" />
               <p className="mt-6 text-base leading-7 text-slate-600 md:text-lg md:leading-8">
                 The Diocese of Baguio Schools is the system of Catholic schools under the administration of the Diocese, serving families across Baguio City and the Province of Benguet. Its schools provide formation and learning from early childhood through secondary education.
@@ -145,7 +163,7 @@ export default async function AboutPage() {
               </div>
             ))}
           </div>
-          <p className="mt-3 text-center text-xs leading-5 text-slate-500">Counts are generated from currently published school records.</p>
+          <p className="mt-3 text-center text-xs leading-5 text-slate-500">{content.overviewNote || fallback.overviewNote}</p>
         </section>
 
         <section className="pb-16 pt-6 md:pt-8">
@@ -188,7 +206,7 @@ export default async function AboutPage() {
               <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#8F3A3A]">What shapes us</span>
               <h2 className="font-diocesan text-4xl md:text-5xl font-bold text-[#16324F] mt-2">Core Values</h2>
             </div>
-            <p className="max-w-lg text-base leading-7 text-slate-600">The values that guide learning, leadership, service, and community life throughout the Diocese of Baguio Schools.</p>
+            <p className="max-w-lg text-base leading-7 text-slate-600">{content.valuesIntro || fallback.valuesIntro}</p>
           </div>
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
             {coreValues.map((value, index) => {
@@ -215,8 +233,8 @@ export default async function AboutPage() {
               <div className="absolute inset-0 bg-gradient-to-t from-[#16324F] via-[#16324F]/65 to-[#16324F]/25" />
               <div className="relative z-10 flex h-full flex-col justify-end p-8 md:p-10">
               <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#F4D98C]">Our journey</span>
-              <h2 className="font-diocesan text-4xl md:text-5xl font-bold mt-3">A Heritage of Faith and Mission</h2>
-              <p className="mt-5 text-base leading-7 text-white/80">Rooted in the Cordillera and formed through generations of Catholic evangelization and education.</p>
+              <h2 className="font-diocesan text-4xl md:text-5xl font-bold mt-3">{content.historyHeading || fallback.historyHeading}</h2>
+              <p className="mt-5 text-base leading-7 text-white/80">{content.historyIntro || fallback.historyIntro}</p>
               <div className="mt-8 h-px w-20 bg-[#F4D98C]" />
               </div>
             </div>
@@ -237,9 +255,9 @@ export default async function AboutPage() {
         <section className="border-t border-[#DED5C4] py-16">
           <div className="mx-auto mb-10 max-w-2xl text-center">
             <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#8F3A3A]">How We Are Organized</span>
-            <h2 className="mt-2 font-diocesan text-4xl font-bold text-[#16324F] md:text-5xl">Our Institutional Structure</h2>
+            <h2 className="mt-2 font-diocesan text-4xl font-bold text-[#16324F] md:text-5xl">{content.structureHeading || fallback.structureHeading}</h2>
             <div className="mx-auto mt-4 h-px w-20 bg-[#C7A24B]" />
-            <p className="mt-5 text-base leading-7 text-slate-600">The Diocese provides pastoral direction, while the schools office supports coordination and each school serves its own educational community.</p>
+            <p className="mt-5 text-base leading-7 text-slate-600">{content.structureIntro || fallback.structureIntro}</p>
           </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {[
@@ -290,9 +308,9 @@ export default async function AboutPage() {
       <section className="bg-primary-800 text-white">
         <div className="page-wrapper py-16 text-center md:py-20">
           <span className="eyebrow mb-4 text-gold-300">Our Schools</span>
-          <h2 className="mx-auto max-w-3xl font-diocesan text-4xl font-semibold leading-tight md:text-5xl">Discover our Catholic school community</h2>
+          <h2 className="mx-auto max-w-3xl font-diocesan text-4xl font-semibold leading-tight md:text-5xl">{content.ctaHeading || fallback.ctaHeading}</h2>
           <span className="mx-auto my-6 block h-0.5 w-12 rounded-full bg-gold-500" />
-          <p className="mx-auto max-w-2xl text-base leading-7 text-primary-100">Find a school for your family or contact the Diocese of Baguio Schools office for assistance.</p>
+          <p className="mx-auto max-w-2xl text-base leading-7 text-primary-100">{content.ctaText || fallback.ctaText}</p>
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link href="/schools" className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-white px-6 py-3 font-semibold text-primary-800 shadow-sm transition-all hover:bg-primary-50 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800 sm:w-auto">
               Browse Our Schools <ArrowRight className="transition-transform group-hover:translate-x-1" size={18} aria-hidden="true" />

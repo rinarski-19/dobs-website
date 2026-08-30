@@ -19,6 +19,22 @@ import {
 export const dynamic = 'force-dynamic'
 
 type EnrollmentPageContent = {
+  processEyebrow?: string
+  processIntro?: string
+  requirementsEyebrow?: string
+  requirementsIntro?: string
+  checklistHeading?: string
+  noticeHeading?: string
+  noticeText?: string
+  inquiryIntro?: string
+  guidanceEyebrow?: string
+  guidanceHeading?: string
+  guidanceIntro?: string
+  formHeading?: string
+  formIntro?: string
+  ctaEyebrow?: string
+  ctaHeading?: string
+  ctaText?: string
   heroTitle?: string
   heroSubtitle?: string
   heroDescription?: string
@@ -40,6 +56,22 @@ const steps = [
 ]
 
 const fallbackPageContent = {
+  processEyebrow: 'Step-by-step guide',
+  processIntro: 'Follow these steps to complete the enrollment process with your chosen school.',
+  requirementsEyebrow: 'What to prepare',
+  requirementsIntro: 'Prepare these general documents before contacting the school you are applying to.',
+  checklistHeading: 'General document checklist',
+  noticeHeading: 'Important Notice',
+  noticeText: 'Requirements, schedules, assessments, and fees vary by school. Contact the selected school before submitting an application.',
+  inquiryIntro: 'Tell us about the learner and your preferred school so we can guide you toward the next step.',
+  guidanceEyebrow: 'Before you submit',
+  guidanceHeading: 'Enrollment guidance',
+  guidanceIntro: 'An inquiry helps us direct you to the appropriate school. Final admission requirements and schedules are confirmed by the selected school.',
+  formHeading: 'Complete the inquiry form',
+  formIntro: 'Provide your contact details and enrollment preferences below.',
+  ctaEyebrow: 'Take the next step',
+  ctaHeading: 'Ready to find the right school?',
+  ctaText: 'Browse the schools or contact the Diocese of Baguio Schools office for enrollment guidance.',
   heroTitle: 'Enrollment',
   heroSubtitle: 'Now Enrolling',
   heroDescription: "Join the Diocese of Baguio Schools community. Here's everything you need to know to get started.",
@@ -77,13 +109,13 @@ export default async function EnrollmentPage() {
         <section className="bg-white">
           <div className="page-wrapper py-16 md:py-20">
           <div className="mb-10 max-w-2xl">
-            <span className="eyebrow">Step-by-step guide</span>
+            <span className="eyebrow">{content?.processEyebrow || fallbackPageContent.processEyebrow}</span>
             <h2 className="mt-3 font-diocesan text-4xl font-bold text-primary-700 md:text-5xl">
               {content?.processHeading || fallbackPageContent.processHeading}
             </h2>
             <span className="gold-rule" />
             <p className="mt-5 leading-7 text-gray-600">
-              Follow these steps to complete the enrollment process with your chosen school.
+              {content?.processIntro || fallbackPageContent.processIntro}
             </p>
           </div>
 
@@ -136,13 +168,13 @@ export default async function EnrollmentPage() {
         <section className="bg-parchment-100">
           <div className="page-wrapper py-16 md:py-20">
           <div className="mb-10 max-w-2xl">
-            <span className="eyebrow">What to prepare</span>
+            <span className="eyebrow">{content?.requirementsEyebrow || fallbackPageContent.requirementsEyebrow}</span>
             <h2 className="mt-3 font-diocesan text-4xl font-bold text-primary-700 md:text-5xl">
               {content?.requirementsHeading || fallbackPageContent.requirementsHeading}
             </h2>
             <span className="gold-rule" />
             <p className="mt-5 leading-7 text-gray-600">
-              Prepare these general documents before contacting the school you are applying to.
+              {content?.requirementsIntro || fallbackPageContent.requirementsIntro}
             </p>
           </div>
           {content?.requirements?.length ? (
@@ -152,7 +184,7 @@ export default async function EnrollmentPage() {
                   <FileText size={24} strokeWidth={1.8} aria-hidden="true" />
                 </span>
                 <div>
-                  <h3 className="font-diocesan text-2xl font-bold text-primary-700">General document checklist</h3>
+                  <h3 className="font-diocesan text-2xl font-bold text-primary-700">{content?.checklistHeading || fallbackPageContent.checklistHeading}</h3>
                   <p className="mt-1 text-sm leading-6 text-gray-600">
                     Gather the following documents in advance. Your selected school may request additional requirements.
                   </p>
@@ -176,9 +208,9 @@ export default async function EnrollmentPage() {
               <Info size={20} strokeWidth={2} aria-hidden="true" />
             </span>
             <div>
-              <h3 className="text-sm font-bold uppercase tracking-[0.12em] text-primary-800">Important Notice</h3>
+              <h3 className="text-sm font-bold uppercase tracking-[0.12em] text-primary-800">{content?.noticeHeading || fallbackPageContent.noticeHeading}</h3>
               <p className="mt-1 text-sm leading-6 text-primary-800">
-                Requirements, schedules, assessments, and fees vary by school. Contact the selected school before submitting an application.
+                {content?.noticeText || fallbackPageContent.noticeText}
               </p>
             </div>
           </aside>
@@ -194,16 +226,16 @@ export default async function EnrollmentPage() {
             </h2>
             <span className="gold-rule" />
             <p className="mt-5 leading-7 text-gray-600">
-              Tell us about the learner and your preferred school so we can guide you toward the next step.
+              {content?.inquiryIntro || fallbackPageContent.inquiryIntro}
             </p>
           </div>
           <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-12">
             <div className="overflow-hidden rounded-2xl border border-primary-100 bg-primary-700 text-white shadow-card">
               <div className="border-b border-white/10 px-6 py-7 md:px-8">
-                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-gold-300">Before you submit</span>
-                <h3 className="mt-2 font-diocesan text-3xl font-bold md:text-4xl">Enrollment guidance</h3>
+                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-gold-300">{content?.guidanceEyebrow || fallbackPageContent.guidanceEyebrow}</span>
+                <h3 className="mt-2 font-diocesan text-3xl font-bold md:text-4xl">{content?.guidanceHeading || fallbackPageContent.guidanceHeading}</h3>
                 <p className="mt-3 text-sm leading-6 text-primary-100">
-                  An inquiry helps us direct you to the appropriate school. Final admission requirements and schedules are confirmed by the selected school.
+                  {content?.guidanceIntro || fallbackPageContent.guidanceIntro}
                 </p>
               </div>
 
@@ -245,8 +277,8 @@ export default async function EnrollmentPage() {
           <form className="rounded-2xl border border-primary-100 bg-white p-6 shadow-card md:p-8 lg:p-10">
             <div className="mb-7">
               <span className="eyebrow">Enrollment Inquiry</span>
-              <h3 className="mt-2 font-diocesan text-3xl font-bold text-primary-700">Complete the inquiry form</h3>
-              <p className="mt-2 text-sm leading-6 text-gray-600">Provide your contact details and enrollment preferences below.</p>
+              <h3 className="mt-2 font-diocesan text-3xl font-bold text-primary-700">{content?.formHeading || fallbackPageContent.formHeading}</h3>
+              <p className="mt-2 text-sm leading-6 text-gray-600">{content?.formIntro || fallbackPageContent.formIntro}</p>
             </div>
             <div className="space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -300,12 +332,12 @@ export default async function EnrollmentPage() {
 
         <section className="bg-primary-700 text-white">
           <div className="page-wrapper py-16 text-center md:py-20">
-            <span className="text-xs font-semibold uppercase tracking-[0.22em] text-gold-300">Take the next step</span>
+            <span className="text-xs font-semibold uppercase tracking-[0.22em] text-gold-300">{content?.ctaEyebrow || fallbackPageContent.ctaEyebrow}</span>
             <h2 className="mx-auto mt-3 max-w-3xl font-diocesan text-4xl font-bold md:text-5xl">
-              Ready to find the right school?
+              {content?.ctaHeading || fallbackPageContent.ctaHeading}
             </h2>
             <p className="mx-auto mt-4 max-w-2xl leading-7 text-primary-100">
-              Browse the schools or contact the Diocese of Baguio Schools office for enrollment guidance.
+              {content?.ctaText || fallbackPageContent.ctaText}
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link href="/schools" className="btn-accent w-full sm:w-auto">

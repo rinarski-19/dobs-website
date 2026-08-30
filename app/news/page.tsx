@@ -7,6 +7,9 @@ import { ArrowRight, CalendarDays, ChevronLeft, ChevronRight, ExternalLink, Mail
 export const dynamic = 'force-dynamic'
 
 type NewsPageContent = {
+  listIntro?: string
+  followHeading?: string
+  followText?: string
   heroTitle?: string
   heroSubtitle?: string
   heroDescription?: string
@@ -16,6 +19,9 @@ type NewsPageContent = {
 }
 
 const fallbackPageContent = {
+  listIntro: 'Browse announcements, achievements, campus stories, pastoral activities, and enrollment updates from our school community.',
+  followHeading: 'Stay connected with our school community',
+  followText: 'Follow the Diocese of Baguio for community updates, pastoral announcements, and stories of faith and service.',
   heroTitle: 'News & Announcements',
   heroSubtitle: 'Latest Updates',
   heroDescription: 'Stay updated with news, announcements, and stories from across the schools of the Diocese of Baguio.',
@@ -234,7 +240,7 @@ export default async function NewsPage({
             <span className="eyebrow mb-3 text-gold-700">Latest Stories</span>
             <h2 className="font-diocesan text-4xl font-semibold leading-tight text-primary-900 md:text-5xl">News Archive</h2>
             <span className="gold-rule mt-5" />
-            <p className="mt-5 max-w-2xl leading-7 text-gray-600">Browse announcements, achievements, campus stories, pastoral activities, and enrollment updates from our school community.</p>
+            <p className="mt-5 max-w-2xl leading-7 text-gray-600">{content?.listIntro || fallbackPageContent.listIntro}</p>
           </div>
 
         <div className="mb-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
@@ -426,10 +432,10 @@ export default async function NewsPage({
         <div className="page-wrapper py-16 md:py-20">
           <div className="mx-auto max-w-4xl text-center">
             <span className="eyebrow mb-4 text-gold-300">Stay Informed</span>
-            <h2 className="font-diocesan text-4xl font-semibold leading-tight md:text-5xl">Stay connected with our school community</h2>
+            <h2 className="font-diocesan text-4xl font-semibold leading-tight md:text-5xl">{content?.followHeading || fallbackPageContent.followHeading}</h2>
             <span className="mx-auto my-6 block h-0.5 w-12 rounded-full bg-gold-500" />
             <p className="mx-auto max-w-2xl leading-7 text-primary-100">
-              Follow the Diocese of Baguio for community updates, pastoral announcements, and stories of faith and service.
+              {content?.followText || fallbackPageContent.followText}
             </p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
               <a

@@ -8,6 +8,9 @@ import { ArrowRight, BadgeCheck, ExternalLink, Grid3X3, Map, MapPin, Search, Sea
 export const dynamic = 'force-dynamic'
 
 type SchoolsPageContent = {
+  directoryIntro?: string
+  ctaHeading?: string
+  ctaText?: string
   heroTitle?: string
   heroSubtitle?: string
   heroDescription?: string
@@ -17,6 +20,9 @@ type SchoolsPageContent = {
 }
 
 const fallbackPageContent = {
+  directoryIntro: 'Explore Catholic schools serving families across Baguio City and Benguet, and find the community, location, and educational level that best support your child.',
+  ctaHeading: 'Find the right school for your child',
+  ctaText: 'Review the enrollment process or speak with the Diocese of Baguio Schools office for guidance in choosing a school.',
   heroTitle: 'Our Schools',
   heroSubtitle: 'Diocesan Schools',
   heroDescription: 'A directory of the schools of the Diocese of Baguio across Baguio City and Benguet.',
@@ -89,7 +95,7 @@ export default async function SchoolsPage({
           <h2 className="font-diocesan text-4xl font-semibold leading-tight text-primary-900 md:text-5xl">Find a Diocesan School</h2>
           <span className="gold-rule mt-5" />
           <p className="mt-5 max-w-2xl text-base leading-7 text-gray-600 md:text-lg">
-            Explore Catholic schools serving families across Baguio City and Benguet, and find the community, location, and educational level that best support your child.
+            {content?.directoryIntro || fallbackPageContent.directoryIntro}
           </p>
         </div>
 
@@ -335,11 +341,11 @@ export default async function SchoolsPage({
         <div className="page-wrapper py-16 text-center md:py-20">
           <span className="eyebrow mb-4 text-gold-300">Take the Next Step</span>
           <h2 className="mx-auto max-w-3xl font-diocesan text-4xl font-semibold leading-tight md:text-5xl">
-            Find the right school for your child
+            {content?.ctaHeading || fallbackPageContent.ctaHeading}
           </h2>
           <span className="mx-auto my-6 block h-0.5 w-12 rounded-full bg-gold-500" />
           <p className="mx-auto max-w-2xl leading-7 text-primary-100">
-            Review the enrollment process or speak with the Diocese of Baguio Schools office for guidance in choosing a school.
+            {content?.ctaText || fallbackPageContent.ctaText}
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link href="/enrollment" className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-white px-6 py-3 font-semibold text-primary-800 shadow-sm transition-all hover:bg-primary-50 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800 sm:w-auto">
