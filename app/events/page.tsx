@@ -1,7 +1,7 @@
 import Hero from '@/components/Hero'
 import FeaturedEvent from '@/components/FeaturedEvent'
 import EventViewSwitcher from '@/components/EventViewSwitcher'
-import { fetchSanity, getPageContent, imageUrlFor } from '@/lib/sanity'
+import { fetchSanity, getPageContent, imageUrlFor, getSiteSettings } from '@/lib/sanity'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, Building2, CalendarDays, ChevronLeft, ChevronRight, MapPin, RotateCcw, Search, School, Tag } from 'lucide-react'
@@ -133,6 +133,7 @@ export default async function EventsPage() {
     getPageContent<EventsPageContent>('eventsPage'),
     getEvents(),
   ])
+  const settings = await getSiteSettings()
 
   // Published events take over completely; the samples below are only a layout
   // preview for an empty dataset.
@@ -362,7 +363,7 @@ export default async function EventsPage() {
             </p>
             <div className="mt-8 flex items-center justify-center">
               <Link href="/contact" className="btn-accent w-full sm:w-auto">
-                Contact the DOBS Office <ArrowRight size={18} aria-hidden="true" />
+                {settings?.officeCtaLabel || 'Contact the DOBS Office'} <ArrowRight size={18} aria-hidden="true" />
               </Link>
             </div>
           </div>

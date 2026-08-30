@@ -18,6 +18,10 @@ const fallbackContent: ProgramsPageContent = {
   heroDescription: 'Programs offered across the schools of the Diocese of Baguio, from Pre-School through Senior High School.',
   heroImageUrl: undefined,
   heroImageAlt: undefined,
+  ctaHeading: 'Find the right program for your child',
+  ctaText: 'Browse the schools or contact the Diocese of Baguio Schools office for enrollment guidance.',
+  inquiryButtonLabel: 'Send an Enrollment Inquiry',
+  strandsNote: 'Strand offerings vary by school. Contact your preferred school to confirm availability.',
   programs: [
     { title: 'Pre-School', grades: 'Nursery & Kindergarten', ages: 'Ages 3–5', learningFocus: 'Play-based foundational learning', faithFormation: 'Prayer, kindness, and Christian values', availableSchools: 'Available at selected schools', description: 'A nurturing environment that develops foundational skills through play-based learning, creativity, and early childhood development principles.', imageUrl: '/images/programs-preschool.jpg' },
     { title: 'Elementary', grades: 'Grades 1–6', ages: 'Ages 6–12', learningFocus: 'Core literacy, numeracy, and discovery', faithFormation: 'Values Education and community worship', availableSchools: 'Available across member grade schools', description: 'A strong academic foundation in core subjects — Mathematics, Science, Filipino, English, and Values Education — guided by the K–12 curriculum.', imageUrl: '/images/programs-elementary.jpg' },
@@ -39,6 +43,10 @@ async function getProgramsPage(): Promise<ProgramsPageContent> {
         heroDescription,
         heroImage,
         heroImageAlt,
+        ctaHeading,
+        ctaText,
+        inquiryButtonLabel,
+        strandsNote,
         programs[] {
           _key,
           title,

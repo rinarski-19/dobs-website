@@ -1,5 +1,5 @@
 import Hero from '@/components/Hero'
-import { getPageContent, imageUrlFor } from '@/lib/sanity'
+import { getPageContent, imageUrlFor, getSiteSettings } from '@/lib/sanity'
 import Link from 'next/link'
 import {
   ArrowRight,
@@ -84,6 +84,7 @@ const stepIcons = [School, PhoneCall, FileText, ClipboardCheck, UserCheck, Badge
 
 export default async function EnrollmentPage() {
   const content = await getPageContent<EnrollmentPageContent>('enrollmentPage')
+  const settings = await getSiteSettings()
   const enrollmentSteps = content?.steps?.length
     ? content.steps.map((item, index) => ({ step: index + 1, title: item.title, desc: item.description }))
     : steps
@@ -347,7 +348,7 @@ export default async function EnrollmentPage() {
                 href="/contact"
                 className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg border border-white/70 px-5 py-2.5 font-semibold text-white transition-all hover:border-white hover:bg-white hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-300 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-700 sm:w-auto"
               >
-                Contact the DOBS Office <ArrowRight size={18} aria-hidden="true" />
+                {settings?.officeCtaLabel || 'Contact the DOBS Office'} <ArrowRight size={18} aria-hidden="true" />
               </Link>
             </div>
           </div>

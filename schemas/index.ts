@@ -9,6 +9,7 @@ import newsPage from './newsPage'
 import enrollmentPage from './enrollmentPage'
 import contactPage from './contactPage'
 import schoolsPage from './schoolsPage'
+import siteSettings from './siteSettings'
 
 export const schemaTypes = [
   school,
@@ -22,4 +23,5 @@ export const schemaTypes = [
   enrollmentPage,
   contactPage,
   schoolsPage,
+  siteSettings,
 ]

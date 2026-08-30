@@ -18,13 +18,25 @@ import {
   TestimonialsSection,
   UpcomingEventsSection,
 } from '@/components/HomeSections'
-import { fetchSanity, getPageContent, imageUrlFor } from '@/lib/sanity'
+import { fetchSanity, getPageContent, imageUrlFor, getSiteSettings } from '@/lib/sanity'
 import { getSchools } from '@/lib/schools'
 
 // News and events are time-sensitive and intentionally fetched without cache.
 export const dynamic = 'force-dynamic'
 
 type HomePageContent = {
+  welcomeEyebrow?: string
+  welcomeHeading?: string
+  welcomeText?: string
+  programsEyebrow?: string
+  programsHeading?: string
+  programsIntro?: string
+  featuredSchoolLabel?: string
+  admissionsEyebrow?: string
+  admissionsHeading?: string
+  admissionsText?: string
+  inquiryButtonLabel?: string
+  closingEyebrow?: string
   heroTitle?: string
   heroSubtitle?: string
   heroDescription?: string
@@ -58,6 +70,18 @@ const fallbackStats: Stat[] = [
 ]
 
 const fallbackContent = {
+  welcomeEyebrow: 'Welcome to DOBS',
+  welcomeHeading: 'Forming minds, hearts, and communities',
+  welcomeText: 'The Diocese of Baguio Schools brings together Catholic educational communities across Baguio City and Benguet. Our schools unite academic formation, Gospel values, cultural respect, and service to help every learner grow with purpose.',
+  programsEyebrow: 'Learning Pathways',
+  programsHeading: 'Academic Programs',
+  programsIntro: 'Explore a continuous Catholic educational journey from early childhood through Senior High School.',
+  featuredSchoolLabel: 'Featured Diocesan School',
+  admissionsEyebrow: 'Admissions',
+  admissionsHeading: 'Enrollment is now open',
+  admissionsText: 'Browse the schools and contact the admissions team for school-specific schedules, requirements, and available levels.',
+  inquiryButtonLabel: 'Send an Enrollment Inquiry',
+  closingEyebrow: 'Come and See',
   heroTitle: 'Diocese of Baguio Schools',
   heroSubtitle: 'Catholic Schools of the Diocese',
   heroDescription: 'Forming young minds in faith, excellence, and service — serving Baguio City and the province of Benguet.',
@@ -125,6 +149,7 @@ export default async function HomePage() {
   // Keep Sanity reads sequential. Concurrent SDK requests can cross response
   // streams in the Next.js development runtime and surface invalid JSON.
   const content = await getPageContent<HomePageContent>('homePage')
+  const settings = await getSiteSettings()
   const schools = await getHomeSchools()
   const news = await getHomeNews()
   const events = await getHomeEvents()
@@ -231,11 +256,11 @@ export default async function HomePage() {
       <section className="bg-parchment-100">
         <div className="page-wrapper grid items-center gap-10 py-16 lg:grid-cols-2 lg:gap-14 md:py-20">
           <div>
-            <span className="eyebrow mb-3 text-gold-700">Welcome to DOBS</span>
-            <h2 className="font-diocesan text-4xl font-semibold leading-tight text-primary-900 md:text-5xl">Forming minds, hearts, and communities</h2>
+            <span className="eyebrow mb-3 text-gold-700">{content?.welcomeEyebrow || fallbackContent.welcomeEyebrow}</span>
+            <h2 className="font-diocesan text-4xl font-semibold leading-tight text-primary-900 md:text-5xl">{content?.welcomeHeading || fallbackContent.welcomeHeading}</h2>
             <span className="gold-rule mt-5" />
             <p className="mt-5 max-w-xl text-base leading-7 text-gray-600 md:text-lg md:leading-8">
-              The Diocese of Baguio Schools brings together Catholic educational communities across Baguio City and Benguet. Our schools unite academic formation, Gospel values, cultural respect, and service to help every learner grow with purpose.
+              {content?.welcomeText || fallbackContent.welcomeText}
             </p>
             <Link href="/about" className="btn-primary mt-7">Learn About Us <ArrowRight size={17} aria-hidden="true" /></Link>
           </div>
@@ -271,10 +296,10 @@ export default async function HomePage() {
         <div className="page-wrapper py-16 md:py-20">
           <div className="mb-9 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
-              <span className="eyebrow mb-2">Learning Pathways</span>
-              <h2 className="section-heading mb-0">Academic Programs</h2>
+              <span className="eyebrow mb-2">{content?.programsEyebrow || fallbackContent.programsEyebrow}</span>
+              <h2 className="section-heading mb-0">{content?.programsHeading || fallbackContent.programsHeading}</h2>
               <span className="gold-rule" />
-              <p className="mt-4 max-w-2xl text-base leading-7 text-gray-600">Explore a continuous Catholic educational journey from early childhood through Senior High School.</p>
+              <p className="mt-4 max-w-2xl text-base leading-7 text-gray-600">{content?.programsIntro || fallbackContent.programsIntro}</p>
             </div>
             <Link href="/programs" className="btn-secondary shrink-0">View Programs <ArrowRight size={16} aria-hidden="true" /></Link>
           </div>
@@ -309,7 +334,7 @@ export default async function HomePage() {
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent to-primary-950/20" />
                 </div>
                 <div className="flex flex-col justify-center p-8 md:p-10">
-                  <span className="eyebrow mb-3 text-gold-700">Featured Diocesan School</span>
+                  <span className="eyebrow mb-3 text-gold-700">{content?.featuredSchoolLabel || fallbackContent.featuredSchoolLabel}</span>
                   <h3 className="font-diocesan text-3xl font-bold leading-tight text-primary-900 md:text-4xl">{featuredSchool.name}</h3>
                   {featuredSchool.city && <p className="mt-4 flex items-center gap-2 text-base text-gray-600"><MapPin size={17} className="text-primary-600" aria-hidden="true" /> {featuredSchool.city}</p>}
                   {featuredSchool.levels?.length ? (
@@ -331,13 +356,13 @@ export default async function HomePage() {
       <section className="bg-primary-800 text-white">
         <div className="page-wrapper flex flex-col items-start justify-between gap-7 py-12 md:flex-row md:items-center md:py-14">
           <div>
-            <span className="eyebrow mb-2 text-gold-300">Admissions</span>
-            <h2 className="font-diocesan text-3xl font-semibold md:text-4xl">Enrollment is now open</h2>
-            <p className="mt-3 max-w-2xl text-base leading-7 text-primary-100">Browse the schools and contact the admissions team for school-specific schedules, requirements, and available levels.</p>
+            <span className="eyebrow mb-2 text-gold-300">{content?.admissionsEyebrow || fallbackContent.admissionsEyebrow}</span>
+            <h2 className="font-diocesan text-3xl font-semibold md:text-4xl">{content?.admissionsHeading || fallbackContent.admissionsHeading}</h2>
+            <p className="mt-3 max-w-2xl text-base leading-7 text-primary-100">{content?.admissionsText || fallbackContent.admissionsText}</p>
           </div>
           <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
             <Link href="/schools" className="btn-accent w-full sm:w-auto">Browse Schools <ArrowRight size={16} aria-hidden="true" /></Link>
-            <Link href="/enrollment" className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border-2 border-white px-5 py-2.5 font-semibold text-white transition-colors hover:border-gold-400 hover:bg-gold-400 hover:text-primary-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800 sm:w-auto">Send an Enrollment Inquiry <ArrowRight size={16} aria-hidden="true" /></Link>
+            <Link href="/enrollment" className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border-2 border-white px-5 py-2.5 font-semibold text-white transition-colors hover:border-gold-400 hover:bg-gold-400 hover:text-primary-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800 sm:w-auto">{content?.inquiryButtonLabel || fallbackContent.inquiryButtonLabel} <ArrowRight size={16} aria-hidden="true" /></Link>
           </div>
         </div>
       </section>
@@ -390,7 +415,7 @@ export default async function HomePage() {
         <Image src="/images/enrollment.png" alt="" fill sizes="100vw" className="object-cover opacity-20" />
         <div className="absolute inset-0 bg-gradient-to-r from-primary-950/95 via-primary-800/90 to-primary-900/80" />
         <div className="relative z-10 mx-auto max-w-3xl px-6 py-20 text-center text-white">
-          <span className="eyebrow mb-3 text-gold-300">Come and See</span>
+          <span className="eyebrow mb-3 text-gold-300">{content?.closingEyebrow || fallbackContent.closingEyebrow}</span>
           <h2 className="font-diocesan text-3xl md:text-4xl font-semibold mb-4">
             {content?.enrollmentHeading || fallbackContent.enrollmentHeading}
           </h2>
@@ -400,7 +425,7 @@ export default async function HomePage() {
           </p>
           <div className="flex flex-col justify-center gap-3 sm:flex-row">
             <Link href="/enrollment" className="btn-accent">Begin Enrollment <ArrowRight size={16} /></Link>
-            <Link href="/contact" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border-2 border-white px-5 py-2.5 font-semibold text-white transition-colors hover:border-gold-400 hover:bg-gold-400 hover:text-primary-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800">Contact the DOBS Office <ArrowRight size={16} /></Link>
+            <Link href="/contact" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border-2 border-white px-5 py-2.5 font-semibold text-white transition-colors hover:border-gold-400 hover:bg-gold-400 hover:text-primary-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800">{settings?.officeCtaLabel || 'Contact the DOBS Office'} <ArrowRight size={16} /></Link>
           </div>
         </div>
       </section>

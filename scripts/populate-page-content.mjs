@@ -63,6 +63,18 @@ const TARGETS = [
       eventsHeading: 'Upcoming Events',
       testimonialsHeading: 'Stories from Our Community',
       locationsHeading: 'Find a School Near You',
+      welcomeEyebrow: 'Welcome to DOBS',
+      welcomeHeading: 'Forming minds, hearts, and communities',
+      welcomeText: 'The Diocese of Baguio Schools brings together Catholic educational communities across Baguio City and Benguet. Our schools unite academic formation, Gospel values, cultural respect, and service to help every learner grow with purpose.',
+      programsEyebrow: 'Learning Pathways',
+      programsHeading: 'Academic Programs',
+      programsIntro: 'Explore a continuous Catholic educational journey from early childhood through Senior High School.',
+      featuredSchoolLabel: 'Featured Diocesan School',
+      admissionsEyebrow: 'Admissions',
+      admissionsHeading: 'Enrollment is now open',
+      admissionsText: 'Browse the schools and contact the admissions team for school-specific schedules, requirements, and available levels.',
+      inquiryButtonLabel: 'Send an Enrollment Inquiry',
+      closingEyebrow: 'Come and See',
     },
   },
   {
@@ -147,6 +159,29 @@ const TARGETS = [
       ctaText: 'Review the enrollment process or speak with the Diocese of Baguio Schools office for guidance in choosing a school.',
     },
   },
+  {
+    id: '992c60bb-c640-4709-9412-2d70b8c21724',
+    type: 'programsPage',
+    label: 'Programs Page',
+    values: {
+      ctaHeading: 'Find the right program for your child',
+      ctaText: 'Browse the schools or contact the Diocese of Baguio Schools office for enrollment guidance.',
+      inquiryButtonLabel: 'Send an Enrollment Inquiry',
+      strandsNote: 'Strand offerings vary by school. Contact your preferred school to confirm availability.',
+    },
+  },
+  {
+    // Wording shared by several pages. The document is created if it does not exist.
+    id: 'siteSettings',
+    type: 'siteSettings',
+    label: 'Site Settings',
+    create: true,
+    values: {
+      officeCtaLabel: 'Contact the DOBS Office',
+      organisationName: 'Diocese of Baguio Schools',
+      footerTagline: 'The Catholic schools of the Diocese of Baguio, serving Baguio City and the province of Benguet.',
+    },
+  },
 ]
 
 const isEmpty = value =>
@@ -159,7 +194,14 @@ async function run() {
     const existing = await client.fetch('*[_id == $id][0]', { id: target.id })
 
     if (!existing) {
-      console.log(`${target.label}: document ${target.id} not found — skipped.`)
+      if (!target.create) {
+        console.log(`${target.label}: document ${target.id} not found — skipped.`)
+        continue
+      }
+      console.log(`${target.label}: creating document ${target.id}`)
+      if (!DRY_RUN) {
+        await client.createIfNotExists({ _id: target.id, _type: target.type, ...target.values })
+      }
       continue
     }
 

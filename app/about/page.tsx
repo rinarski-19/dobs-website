@@ -1,5 +1,5 @@
 import Hero from '@/components/Hero'
-import { getPageContent, imageUrlFor } from '@/lib/sanity'
+import { getPageContent, imageUrlFor, getSiteSettings } from '@/lib/sanity'
 import { getSchools } from '@/lib/schools'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -78,6 +78,7 @@ async function getAboutPage(): Promise<AboutPageContent> {
 
 export default async function AboutPage() {
   const [content, schools] = await Promise.all([getAboutPage(), getSchools()])
+  const settings = await getSiteSettings()
   const mission = content.mission?.length ? content.mission : fallback.mission
   const cleanMissionItem = (item: string) => item.replace(/^\s*\d+\s*[.)\-:]\s*/, '').trim()
   const coreValues = content.coreValues?.length ? content.coreValues : fallback.coreValues
@@ -316,7 +317,7 @@ export default async function AboutPage() {
               Browse Our Schools <ArrowRight className="transition-transform group-hover:translate-x-1" size={18} aria-hidden="true" />
             </Link>
             <Link href="/contact" className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg border-2 border-white px-6 py-3 font-semibold text-white transition-all hover:border-gold-400 hover:bg-gold-400 hover:text-primary-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800 sm:w-auto">
-              Contact the DOBS Office <ArrowRight className="transition-transform group-hover:translate-x-1" size={18} aria-hidden="true" />
+              {settings?.officeCtaLabel || 'Contact the DOBS Office'} <ArrowRight className="transition-transform group-hover:translate-x-1" size={18} aria-hidden="true" />
             </Link>
           </div>
         </div>

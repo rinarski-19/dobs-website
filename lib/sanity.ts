@@ -46,3 +46,28 @@ export function imageUrlFor(source: any, width = 1800, height = 900): string | u
   if (!source) return undefined
   return urlFor(source).width(width).height(height).fit('crop').url()
 }
+
+export type SiteSettings = {
+  officeCtaLabel?: string
+  organisationName?: string
+  footerTagline?: string
+}
+
+/**
+ * Wording shared across pages. Returns null on failure so callers keep their own
+ * defaults. Cached for a minute rather than fetched no-store: the footer renders
+ * on every route including the static 404, and a no-store fetch there forces the
+ * whole page to be dynamic.
+ */
+export async function getSiteSettings(): Promise<SiteSettings | null> {
+  try {
+    return await client.fetch<SiteSettings>(
+      `*[_id == "siteSettings"][0]{ officeCtaLabel, organisationName, footerTagline }`,
+      {},
+      { next: { revalidate: 60 } },
+    )
+  } catch (error) {
+    console.warn('Unable to load site settings from Sanity:', error)
+    return null
+  }
+}

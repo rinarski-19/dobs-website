@@ -25,6 +25,10 @@ export type ProgramsPageContent = {
   heroDescription?: string
   heroImageUrl?: string
   heroImageAlt?: string
+  ctaHeading?: string
+  ctaText?: string
+  inquiryButtonLabel?: string
+  strandsNote?: string
   programs: Program[]
   primaryButton?: { label?: string; href?: string }
   secondaryButton?: { label?: string; href?: string }
@@ -189,7 +193,7 @@ export default function ProgramsPageClient({ content }: { content: ProgramsPageC
                     <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                       <div>
                         <p className="text-xs font-bold uppercase tracking-[0.16em] text-gold-300">Senior High Pathways</p>
-                        <p className="mt-1 text-xs leading-5 text-white/80">Strand offerings vary by school. Contact your preferred school to confirm availability.</p>
+                        <p className="mt-1 text-xs leading-5 text-white/80">{content.strandsNote || 'Strand offerings vary by school. Contact your preferred school to confirm availability.'}</p>
                       </div>
                       <div className="flex flex-wrap gap-2 md:justify-end">
                         {program.strands.map(strand => (
@@ -227,10 +231,10 @@ export default function ProgramsPageClient({ content }: { content: ProgramsPageC
             <div className="page-wrapper py-16 md:py-20">
               <div className="mx-auto max-w-4xl text-center">
                 <span className="eyebrow mb-4 text-gold-300">Take the Next Step</span>
-                <h2 className="font-diocesan text-4xl font-semibold leading-tight md:text-5xl">Find the right program for your child</h2>
+                <h2 className="font-diocesan text-4xl font-semibold leading-tight md:text-5xl">{content.ctaHeading || 'Find the right program for your child'}</h2>
                 <span className="mx-auto my-6 block h-0.5 w-12 rounded-full bg-gold-500" />
                 <p className="mx-auto max-w-2xl leading-7 text-primary-100">
-                  Browse the schools or contact the Diocese of Baguio Schools office for enrollment guidance.
+                  {content.ctaText || 'Browse the schools or contact the Diocese of Baguio Schools office for enrollment guidance.'}
                 </p>
                 <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
                   <Link href="/schools" className="group/button inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-white px-6 py-3 font-semibold text-primary-800 shadow-sm transition-all hover:bg-primary-50 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800">
@@ -238,7 +242,7 @@ export default function ProgramsPageClient({ content }: { content: ProgramsPageC
                     <ArrowRight className="transition-transform group-hover/button:translate-x-1" size={18} aria-hidden="true" />
                   </Link>
                   <Link href="/enrollment" className="group/button inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border-2 border-white px-6 py-3 font-semibold text-white transition-all hover:border-gold-400 hover:bg-gold-400 hover:text-primary-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800">
-                    Send an Enrollment Inquiry
+                    {content.inquiryButtonLabel || 'Send an Enrollment Inquiry'}
                     <ArrowRight className="transition-transform group-hover/button:translate-x-1" size={18} aria-hidden="true" />
                   </Link>
                 </div>
