@@ -9,6 +9,7 @@ export default defineType({
     defineField({ name: 'heroSubtitle', title: 'Hero Subtitle', type: 'string' }),
     defineField({ name: 'heroDescription', title: 'Hero Description', type: 'text', rows: 3 }),
     defineField({ name: 'heroImage', title: 'Hero Image', type: 'image', options: { hotspot: true } }),
+    defineField({ name: 'heroImageAlt', title: 'Hero Image Alternative Text', type: 'string' }),
     defineField({ name: 'vision', title: 'Vision', type: 'text', rows: 4, validation: Rule => Rule.required() }),
     defineField({
       name: 'mission',

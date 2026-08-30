@@ -24,6 +24,7 @@ export type ProgramsPageContent = {
   heroSubtitle?: string
   heroDescription?: string
   heroImageUrl?: string
+  heroImageAlt?: string
   programs: Program[]
   primaryButton?: { label?: string; href?: string }
   secondaryButton?: { label?: string; href?: string }
@@ -76,6 +77,7 @@ export default function ProgramsPageClient({ content }: { content: ProgramsPageC
             subtitle={content.heroSubtitle}
             description={content.heroDescription}
             image={content.heroImageUrl}
+            imageAlt={content.heroImageAlt}
             imagePlaceholder="Students in Classroom Photo"
             viewport
           />

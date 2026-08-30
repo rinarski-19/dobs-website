@@ -9,6 +9,7 @@ export default defineType({
     defineField({ name: 'heroSubtitle', title: 'Hero Subtitle', type: 'string', initialValue: 'Curriculum' }),
     defineField({ name: 'heroDescription', title: 'Hero Description', type: 'text', rows: 3 }),
     defineField({ name: 'heroImage', title: 'Hero Image', type: 'image', options: { hotspot: true } }),
+    defineField({ name: 'heroImageAlt', title: 'Hero Image Alternative Text', type: 'string' }),
     defineField({
       name: 'programs', title: 'Programs', type: 'array',
       description: 'Drag programs to change the order in which they appear on the page.',
