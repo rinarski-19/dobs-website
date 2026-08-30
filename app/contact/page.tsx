@@ -14,7 +14,13 @@ type ContactPageContent = {
   phone?: string
   email?: string
   officeHours?: string
+  contactEyebrow?: string
+  contactHeading?: string
+  contactIntro?: string
+  messageEyebrow?: string
   messageHeading?: string
+  messageIntro?: string
+  submitLabel?: string
 }
 
 const fallbackPageContent = {
@@ -25,7 +31,13 @@ const fallbackPageContent = {
   phone: '+63 (74) 000-0000',
   email: 'info@dobsschools.edu.ph',
   officeHours: 'Mon–Fri, 8:00 AM – 5:00 PM',
+  contactEyebrow: 'Contact our office',
+  contactHeading: "We're here to help",
+  contactIntro: 'Reach the Diocese of Baguio Schools office using the details below, or leave us a message through the inquiry form.',
+  messageEyebrow: 'Send an inquiry',
   messageHeading: 'Send a Message',
+  messageIntro: 'Complete the form and our office will respond as soon as possible during regular office hours.',
+  submitLabel: 'Send Message',
 }
 
 export default async function ContactPage() {
@@ -48,13 +60,13 @@ export default async function ContactPage() {
       <section className="bg-parchment-50">
         <div className="page-wrapper py-16 md:py-20">
           <div className="mb-10 max-w-2xl">
-            <span className="eyebrow">Contact our office</span>
+            <span className="eyebrow">{content?.contactEyebrow || fallbackPageContent.contactEyebrow}</span>
             <h2 className="mt-3 font-diocesan text-4xl font-bold text-primary-700 md:text-5xl">
-              We&apos;re here to help
+              {content?.contactHeading || fallbackPageContent.contactHeading}
             </h2>
             <span className="gold-rule" />
             <p className="mt-5 leading-7 text-gray-600">
-              Reach the Diocese of Baguio Schools office using the details below, or leave us a message through the inquiry form.
+              {content?.contactIntro || fallbackPageContent.contactIntro}
             </p>
           </div>
 
@@ -128,12 +140,12 @@ export default async function ContactPage() {
           </div>
 
             <div className="rounded-2xl border border-primary-100 bg-white p-6 shadow-card md:p-8 lg:p-10">
-              <span className="eyebrow">Send an inquiry</span>
+              <span className="eyebrow">{content?.messageEyebrow || fallbackPageContent.messageEyebrow}</span>
               <h2 className="mt-2 font-diocesan text-4xl font-bold text-primary-700">
                 {content?.messageHeading || fallbackPageContent.messageHeading}
               </h2>
               <p className="mb-8 mt-3 text-sm leading-6 text-gray-600">
-                Complete the form and our office will respond as soon as possible during regular office hours.
+                {content?.messageIntro || fallbackPageContent.messageIntro}
               </p>
 
               <form className="space-y-5">
@@ -154,7 +166,7 @@ export default async function ContactPage() {
                   <textarea id="contact-message" name="message" className="form-textarea bg-parchment-50" rows={7} placeholder="How can we help you?" />
                 </div>
                 <button type="submit" className="btn-primary w-full sm:w-auto">
-                  Send Message <Send size={17} aria-hidden="true" />
+                  {content?.submitLabel || fallbackPageContent.submitLabel} <Send size={17} aria-hidden="true" />
                 </button>
               </form>
             </div>
