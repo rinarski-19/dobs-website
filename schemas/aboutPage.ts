@@ -56,6 +56,12 @@ export default defineType({
     defineField({ name: 'structureIntro', title: 'Structure Section Intro', type: 'text', rows: 3, initialValue: 'The Diocese provides pastoral direction, while the schools office supports coordination and each school serves its own educational community.' }),
     defineField({ name: 'ctaHeading', title: 'Closing Section Heading', type: 'string', initialValue: 'Discover our Catholic school community' }),
     defineField({ name: 'ctaText', title: 'Closing Section Text', type: 'text', rows: 3, initialValue: 'Find a school for your family or contact the Diocese of Baguio Schools office for assistance.' }),
+    defineField({ name: 'purposeHeading', title: 'Purpose Section Heading', type: 'string', initialValue: 'Our Guiding Purpose' }),
+    defineField({ name: 'overviewText', title: 'Overview Text', type: 'text', rows: 3, initialValue: 'The Diocese of Baguio Schools is the system of Catholic schools under the administration of the Diocese, serving families across Baguio City and the Province of Benguet. Its schools provide formation and learning from early childhood through secondary education.' }),
+    defineField({ name: 'structureEyebrow', title: 'Structure Section Label', type: 'string', initialValue: 'How We Are Organized' }),
+    defineField({ name: 'schoolsRoleText', title: 'Schools Role Text', type: 'text', rows: 3, initialValue: 'Each school responds to the needs of its local community while sharing a commitment to Gospel values, academic excellence, service, cultural respect, and responsible stewardship.' }),
+    defineField({ name: 'leadershipHeading', title: 'Leadership Section Heading', type: 'string', initialValue: 'Leadership &amp; Administration' }),
+    defineField({ name: 'browseButtonLabel', title: 'Browse Schools Button', type: 'string', initialValue: 'Browse Our Schools' }),
   ],
   preview: { prepare: () => ({ title: 'About Page' }) },
 })

@@ -1,6 +1,6 @@
 import Hero from '@/components/Hero'
 import Image from 'next/image'
-import { client, urlFor } from '@/lib/sanity'
+import { client, urlFor, getPageContent } from '@/lib/sanity'
 import { MapPin, Phone, Mail, BookOpen } from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -41,6 +41,7 @@ async function getSchool(slug: string): Promise<School | null> {
 export default async function SchoolDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const school = await getSchool(slug)
+  const schoolsPage = await getPageContent<{ principalHeading?: string }>('schoolsPage')
   if (!school) notFound()
 
   const coverUrl = school.coverPhoto
@@ -85,7 +86,7 @@ export default async function SchoolDetailPage({ params }: { params: Promise<{ s
             {school.principalName && (
               <section className="section">
                 <span className="eyebrow mb-2">Leadership</span>
-                <h2 className="section-heading mb-0">Message from the Principal</h2>
+                <h2 className="section-heading mb-0">{schoolsPage?.principalHeading || 'Message from the Principal'}</h2>
                 <span className="gold-rule mb-6" />
                 <div className="flex flex-col gap-6 rounded-2xl border border-parchment-200 bg-white p-6 shadow-card sm:flex-row sm:items-start">
                   {school.principalPhoto ? (

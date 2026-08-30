@@ -126,6 +126,12 @@ const TARGETS = [
     type: 'aboutPage',
     label: 'About Page',
     values: {
+      purposeHeading: 'Our Guiding Purpose',
+      overviewText: 'The Diocese of Baguio Schools is the system of Catholic schools under the administration of the Diocese, serving families across Baguio City and the Province of Benguet. Its schools provide formation and learning from early childhood through secondary education.',
+      structureEyebrow: 'How We Are Organized',
+      schoolsRoleText: 'Each school responds to the needs of its local community while sharing a commitment to Gospel values, academic excellence, service, cultural respect, and responsible stewardship.',
+      leadershipHeading: 'Leadership & Administration',
+      browseButtonLabel: 'Browse Our Schools',
       overviewHeading: 'One Catholic school community',
       overviewNote: 'Counts are generated from currently published school records.',
       valuesIntro: 'The values that guide learning, leadership, service, and community life throughout the Diocese of Baguio Schools.',
@@ -167,6 +173,10 @@ const TARGETS = [
     type: 'schoolsPage',
     label: 'Schools Page',
     values: {
+      directoryHeading: 'Find a Diocesan School',
+      noResultsText: 'No schools match your search or selected filters. Try another school name, location, education level, or enrollment status.',
+      enrollmentGuideLabel: 'View Enrollment Guide',
+      principalHeading: 'Message from the Principal',
       directoryIntro: 'Explore Catholic schools serving families across Baguio City and Benguet, and find the community, location, and educational level that best support your child.',
       ctaHeading: 'Find the right school for your child',
       ctaText: 'Review the enrollment process or speak with the Diocese of Baguio Schools office for guidance in choosing a school.',
@@ -177,6 +187,8 @@ const TARGETS = [
     type: 'programsPage',
     label: 'Programs Page',
     values: {
+      programsEyebrow: 'Explore Our Programs',
+      strandsHeading: 'Senior High Pathways',
       ctaHeading: 'Find the right program for your child',
       ctaText: 'Browse the schools or contact the Diocese of Baguio Schools office for enrollment guidance.',
       inquiryButtonLabel: 'Send an Enrollment Inquiry',

@@ -29,6 +29,8 @@ export type ProgramsPageContent = {
   ctaText?: string
   inquiryButtonLabel?: string
   strandsNote?: string
+  programsEyebrow?: string
+  strandsHeading?: string
   programs: Program[]
   primaryButton?: { label?: string; href?: string }
   secondaryButton?: { label?: string; href?: string }
@@ -88,7 +90,7 @@ export default function ProgramsPageClient({ content }: { content: ProgramsPageC
 
           <nav aria-label="Explore academic programs" className="absolute inset-x-0 bottom-5 z-20 px-4 md:bottom-8 md:px-8">
             <div className="mx-auto max-w-6xl">
-              <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-gold-300 drop-shadow-md">Explore Our Programs</p>
+              <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-gold-300 drop-shadow-md">{content.programsEyebrow || 'Explore Our Programs'}</p>
               <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-4 md:overflow-visible md:pb-0">
                 {content.programs.slice(0, 4).map((program, index) => {
                   const label = ['Pre-School', 'Grade School', 'Junior High', 'Senior High'][index] || program.title
@@ -192,7 +194,7 @@ export default function ProgramsPageClient({ content }: { content: ProgramsPageC
                   <div className="mb-8 rounded-xl border border-gold-400/40 bg-primary-950/85 p-4">
                     <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                       <div>
-                        <p className="text-xs font-bold uppercase tracking-[0.16em] text-gold-300">Senior High Pathways</p>
+                        <p className="text-xs font-bold uppercase tracking-[0.16em] text-gold-300">{content.strandsHeading || 'Senior High Pathways'}</p>
                         <p className="mt-1 text-xs leading-5 text-white/80">{content.strandsNote || 'Strand offerings vary by school. Contact your preferred school to confirm availability.'}</p>
                       </div>
                       <div className="flex flex-wrap gap-2 md:justify-end">

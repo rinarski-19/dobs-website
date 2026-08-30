@@ -59,6 +59,8 @@ export default defineType({
     defineField({ name: 'ctaText', title: 'Closing Section Text', type: 'text', rows: 3, initialValue: 'Browse the schools or contact the Diocese of Baguio Schools office for enrollment guidance.' }),
     defineField({ name: 'inquiryButtonLabel', title: 'Enrollment Inquiry Button', type: 'string', initialValue: 'Send an Enrollment Inquiry' }),
     defineField({ name: 'strandsNote', title: 'Strands Note', type: 'text', rows: 3, initialValue: 'Strand offerings vary by school. Contact your preferred school to confirm availability.' }),
+    defineField({ name: 'programsEyebrow', title: 'Programs Section Label', type: 'string', initialValue: 'Explore Our Programs' }),
+    defineField({ name: 'strandsHeading', title: 'Senior High Strands Heading', type: 'string', initialValue: 'Senior High Pathways' }),
   ],
   preview: { prepare: () => ({ title: 'Programs Page' }) },
 })

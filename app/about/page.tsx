@@ -8,6 +8,12 @@ import { ArrowRight, Award, Building2, Church, HeartHandshake, Network, Quote, S
 export const dynamic = 'force-dynamic'
 
 type AboutPageContent = {
+  purposeHeading?: string
+  overviewText?: string
+  structureEyebrow?: string
+  schoolsRoleText?: string
+  leadershipHeading?: string
+  browseButtonLabel?: string
   overviewHeading?: string
   overviewNote?: string
   valuesIntro?: string
@@ -35,6 +41,12 @@ type AboutPageContent = {
 }
 
 const fallback: Required<Omit<AboutPageContent, 'heroImage' | 'heroImageAlt'>> = {
+  purposeHeading: 'Our Guiding Purpose',
+  overviewText: 'The Diocese of Baguio Schools is the system of Catholic schools under the administration of the Diocese, serving families across Baguio City and the Province of Benguet. Its schools provide formation and learning from early childhood through secondary education.',
+  structureEyebrow: 'How We Are Organized',
+  schoolsRoleText: 'Each school responds to the needs of its local community while sharing a commitment to Gospel values, academic excellence, service, cultural respect, and responsible stewardship.',
+  leadershipHeading: 'Leadership &amp; Administration',
+  browseButtonLabel: 'Browse Our Schools',
   overviewHeading: 'One Catholic school community',
   overviewNote: 'Counts are generated from currently published school records.',
   valuesIntro: 'The values that guide learning, leadership, service, and community life throughout the Diocese of Baguio Schools.',
@@ -144,10 +156,10 @@ export default async function AboutPage() {
               <h2 className="mt-3 font-diocesan text-4xl font-bold leading-tight text-[#16324F] md:text-5xl">{content.overviewHeading || fallback.overviewHeading}</h2>
               <div className="mt-5 h-px w-20 bg-[#C7A24B]" />
               <p className="mt-6 text-base leading-7 text-slate-600 md:text-lg md:leading-8">
-                The Diocese of Baguio Schools is the system of Catholic schools under the administration of the Diocese, serving families across Baguio City and the Province of Benguet. Its schools provide formation and learning from early childhood through secondary education.
+                {content.overviewText || fallback.overviewText}
               </p>
               <p className="mt-4 text-base leading-7 text-slate-600">
-                Each school responds to the needs of its local community while sharing a commitment to Gospel values, academic excellence, service, cultural respect, and responsible stewardship.
+                {content.schoolsRoleText || fallback.schoolsRoleText}
               </p>
             </div>
             <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-[#D8CEB8] bg-white shadow-sm">
@@ -170,7 +182,7 @@ export default async function AboutPage() {
         <section className="pb-16 pt-6 md:pt-8">
           <div className="text-center max-w-2xl mx-auto mb-10">
             <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#8F3A3A]">Faith in action</span>
-            <h2 className="font-diocesan text-4xl md:text-5xl font-bold text-[#16324F] mt-3">Our Guiding Purpose</h2>
+            <h2 className="font-diocesan text-4xl md:text-5xl font-bold text-[#16324F] mt-3">{content.purposeHeading || fallback.purposeHeading}</h2>
             <div className="mx-auto mt-4 h-px w-20 bg-[#C7A24B]" />
           </div>
 
@@ -255,7 +267,7 @@ export default async function AboutPage() {
 
         <section className="border-t border-[#DED5C4] py-16">
           <div className="mx-auto mb-10 max-w-2xl text-center">
-            <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#8F3A3A]">How We Are Organized</span>
+            <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#8F3A3A]">{content.structureEyebrow || fallback.structureEyebrow}</span>
             <h2 className="mt-2 font-diocesan text-4xl font-bold text-[#16324F] md:text-5xl">{content.structureHeading || fallback.structureHeading}</h2>
             <div className="mx-auto mt-4 h-px w-20 bg-[#C7A24B]" />
             <p className="mt-5 text-base leading-7 text-slate-600">{content.structureIntro || fallback.structureIntro}</p>
@@ -281,7 +293,7 @@ export default async function AboutPage() {
         <section className="py-16 border-t border-[#DED5C4]">
           <div className="text-center max-w-2xl mx-auto mb-10">
             <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#8F3A3A]">Called to serve</span>
-            <h2 className="font-diocesan text-4xl md:text-5xl font-bold text-[#16324F] mt-2">Leadership &amp; Administration</h2>
+            <h2 className="font-diocesan text-4xl md:text-5xl font-bold text-[#16324F] mt-2">{content.leadershipHeading || fallback.leadershipHeading}</h2>
             <div className="mx-auto mt-4 h-px w-20 bg-[#C7A24B]" />
           </div>
           <div className="mx-auto grid max-w-5xl grid-cols-1 gap-7 md:grid-cols-2">
@@ -314,7 +326,7 @@ export default async function AboutPage() {
           <p className="mx-auto max-w-2xl text-base leading-7 text-primary-100">{content.ctaText || fallback.ctaText}</p>
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link href="/schools" className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-white px-6 py-3 font-semibold text-primary-800 shadow-sm transition-all hover:bg-primary-50 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800 sm:w-auto">
-              Browse Our Schools <ArrowRight className="transition-transform group-hover:translate-x-1" size={18} aria-hidden="true" />
+              {content.browseButtonLabel || fallback.browseButtonLabel} <ArrowRight className="transition-transform group-hover:translate-x-1" size={18} aria-hidden="true" />
             </Link>
             <Link href="/contact" className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg border-2 border-white px-6 py-3 font-semibold text-white transition-all hover:border-gold-400 hover:bg-gold-400 hover:text-primary-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800 sm:w-auto">
               {settings?.officeCtaLabel || 'Contact the DOBS Office'} <ArrowRight className="transition-transform group-hover:translate-x-1" size={18} aria-hidden="true" />
