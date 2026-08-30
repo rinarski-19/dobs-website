@@ -9,6 +9,7 @@ type ContactPageContent = {
   heroSubtitle?: string
   heroDescription?: string
   heroImage?: any
+  heroImageAlt?: string
   officeAddress?: string
   phone?: string
   email?: string
@@ -40,6 +41,7 @@ export default async function ContactPage() {
         subtitle={content?.heroSubtitle || fallbackPageContent.heroSubtitle}
         description={content?.heroDescription || fallbackPageContent.heroDescription}
         image={imageUrlFor(content?.heroImage)}
+        imageAlt={content?.heroImageAlt}
         imagePlaceholder="School Office Photo"
       />
 

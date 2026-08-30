@@ -41,6 +41,16 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      name: 'category',
+      title: 'Category',
+      type: 'string',
+      // These are the options the Events page filter already offers.
+      options: {
+        list: ['School Event', 'Academic', 'Faith Formation', 'Community', 'Sports'],
+      },
+      initialValue: 'School Event',
+    }),
+    defineField({
       name: 'school',
       title: 'School (leave blank for diocese-wide)',
       type: 'reference',

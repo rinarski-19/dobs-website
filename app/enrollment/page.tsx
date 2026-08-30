@@ -23,6 +23,7 @@ type EnrollmentPageContent = {
   heroSubtitle?: string
   heroDescription?: string
   heroImage?: any
+  heroImageAlt?: string
   processHeading?: string
   steps?: Array<{ title: string; description: string }>
   requirementsHeading?: string
@@ -67,6 +68,7 @@ export default async function EnrollmentPage() {
         subtitle={content?.heroSubtitle || fallbackPageContent.heroSubtitle}
         description={content?.heroDescription || fallbackPageContent.heroDescription}
         image={imageUrlFor(content?.heroImage)}
+        imageAlt={content?.heroImageAlt}
         imagePlaceholder="Students Photo"
         cta={{ label: 'Send an Inquiry', href: '#inquiry' }}
       />

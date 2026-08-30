@@ -12,6 +12,7 @@ type SchoolsPageContent = {
   heroSubtitle?: string
   heroDescription?: string
   heroImage?: any
+  heroImageAlt?: string
   emptyStateText?: string
 }
 
@@ -76,6 +77,7 @@ export default async function SchoolsPage({
         subtitle={content?.heroSubtitle || fallbackPageContent.heroSubtitle}
         description={content?.heroDescription || fallbackPageContent.heroDescription}
         image={imageUrlFor(content?.heroImage)}
+        imageAlt={content?.heroImageAlt}
         imagePlaceholder="Diocesan Schools Photo"
       />
 

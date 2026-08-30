@@ -4,7 +4,7 @@ import { useState, type ReactNode } from 'react'
 import { CalendarDays, ChevronLeft, ChevronRight, LayoutGrid } from 'lucide-react'
 
 type CalendarEvent = {
-  id: number
+  id: string
   title: string
   category: string
   date: {

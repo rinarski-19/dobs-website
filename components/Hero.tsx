@@ -7,6 +7,7 @@ type HeroProps = {
   subtitle?: string
   description?: string
   image?: string
+  imageAlt?: string
   imagePlaceholder?: string
   cta?: {
     label: string
@@ -27,6 +28,7 @@ export default function Hero({
   subtitle,
   description,
   image,
+  imageAlt,
   imagePlaceholder = 'Hero Image',
   cta,
   ctaSecondary,
@@ -54,7 +56,7 @@ export default function Hero({
       {image && !useCssBackground && (
         <Image
           src={image}
-          alt=""
+          alt={imageAlt ?? ''}
           fill
           priority
           sizes="100vw"

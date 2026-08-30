@@ -31,7 +31,7 @@ export default defineType({
       }],
       validation: Rule => Rule.min(1).required(),
     }),
-    defineField({ name: 'history', title: 'History', type: 'array', of: [{ type: 'block' }], validation: Rule => Rule.required() }),
+    defineField({ name: 'history', title: 'History', type: 'array', of: [{ type: 'block' }], description: 'Rendered as the history timeline. Begin a paragraph with a year (e.g. "2004 — The Diocese of Baguio was formally established.") and the year appears as the milestone marker. Paragraphs without a leading year still appear, without a marker.', validation: Rule => Rule.required() }),
     defineField({
       name: 'leadership',
       title: 'Leadership & Administration',

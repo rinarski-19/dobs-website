@@ -11,6 +11,7 @@ type NewsPageContent = {
   heroSubtitle?: string
   heroDescription?: string
   heroImage?: any
+  heroImageAlt?: string
   emptyStateText?: string
 }
 
@@ -173,6 +174,7 @@ export default async function NewsPage({
         subtitle={content?.heroSubtitle || fallbackPageContent.heroSubtitle}
         description={content?.heroDescription || fallbackPageContent.heroDescription}
         image={imageUrlFor(content?.heroImage)}
+        imageAlt={content?.heroImageAlt}
         imagePlaceholder="School Events Photo"
       />
 
@@ -412,7 +414,7 @@ export default async function NewsPage({
 
         {posts.length === 0 && (
           <div className="mt-8 rounded-xl border border-primary-100 bg-primary-50 px-5 py-4 text-center text-sm leading-6 text-primary-800">
-            <strong>No news articles are currently available.</strong>{' '}
+            <strong>{content?.emptyStateText || fallbackPageContent.emptyStateText}</strong>{' '}
             These sample cards show the information to add in Sanity. Published News Posts will replace them automatically.
           </div>
         )}

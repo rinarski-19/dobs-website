@@ -12,6 +12,7 @@ type AboutPageContent = {
   heroSubtitle?: string
   heroDescription?: string
   heroImage?: any
+  heroImageAlt?: string
   vision?: string
   mission?: string[]
   coreValues?: Array<{ _key?: string; name: string; description?: string }>
@@ -24,7 +25,7 @@ type AboutPageContent = {
   leadership?: Array<{ _key?: string; name: string; role: string; photo?: any; biography?: string }>
 }
 
-const fallback: Required<Omit<AboutPageContent, 'heroImage'>> = {
+const fallback: Required<Omit<AboutPageContent, 'heroImage' | 'heroImageAlt'>> = {
   heroTitle: 'About DOBS',
   heroSubtitle: 'Our Story',
   heroDescription: 'Learn about the mission, vision, core values, and history of the schools of the Diocese of Baguio.',
@@ -78,13 +79,30 @@ export default async function AboutPage() {
     { value: communities.length.toString(), label: 'Communities served' },
     { value: educationLevels.length.toString(), label: 'Educational levels' },
   ]
-  const historyMilestones = [
+  const fallbackMilestones = [
     { year: '1907', text: 'CICM missionaries arrived and began establishing mission centers, schools, hospitals, and parishes throughout the Cordillera.' },
     { year: '1932', text: 'The Apostolic Prefecture of the Mountain Provinces was established.' },
     { year: '1948', text: 'The ecclesiastical territory was elevated to the Apostolic Vicariate of the Mountain Provinces.' },
     { year: '1992', text: 'It was renamed the Apostolic Vicariate of Baguio.' },
     { year: '2004', text: 'The Diocese of Baguio was formally established, serving Baguio City and the Province of Benguet.' },
   ]
+
+  // The History field is rich text, but this timeline wants a year against each
+  // entry. Convention: start a paragraph with the year and the rest becomes the
+  // milestone text. A paragraph without a leading year still renders, just
+  // without a year marker — so nothing an editor writes is ever dropped.
+  const sanityMilestones = (content.history ?? [])
+    .filter(block => block?._type === 'block' && Array.isArray(block.children))
+    .map(block => (block.children ?? []).map(child => child.text ?? '').join('').trim())
+    .filter(Boolean)
+    .map((text, index) => {
+      const match = text.match(/^(\d{4})\s*[—–-]?\s*(.*)$/)
+      return match
+        ? { year: match[1], text: match[2], key: `${match[1]}-${index}` }
+        : { year: '', text, key: `entry-${index}` }
+    })
+
+  const historyMilestones = sanityMilestones.length ? sanityMilestones : fallbackMilestones.map(m => ({ ...m, key: m.year }))
 
   return (
     <>
@@ -93,6 +111,7 @@ export default async function AboutPage() {
         subtitle={content.heroSubtitle || fallback.heroSubtitle}
         description={content.heroDescription || fallback.heroDescription}
         image={imageUrlFor(content.heroImage) || '/images/about.jpeg'}
+        imageAlt={content.heroImageAlt}
         imagePlaceholder="Administration Building Photo"
         compactText
       />
@@ -204,9 +223,9 @@ export default async function AboutPage() {
             <div className="p-8 md:p-10">
               <div className="space-y-7 border-l-2 border-[#C7A24B] pl-8 text-base leading-7 text-slate-600">
                 {historyMilestones.map(milestone => (
-                  <div key={milestone.year} className="relative before:absolute before:-left-[2.72rem] before:top-1 before:h-5 before:w-5 before:rounded-full before:border-[3px] before:border-[#C7A24B] before:bg-white">
-                    <strong className="font-diocesan text-2xl font-bold text-[#155896]">{milestone.year}</strong>
-                    <p className="mt-1">{milestone.text}</p>
+                  <div key={milestone.key} className="relative before:absolute before:-left-[2.72rem] before:top-1 before:h-5 before:w-5 before:rounded-full before:border-[3px] before:border-[#C7A24B] before:bg-white">
+                    {milestone.year && <strong className="font-diocesan text-2xl font-bold text-[#155896]">{milestone.year}</strong>}
+                    <p className={milestone.year ? 'mt-1' : ''}>{milestone.text}</p>
                   </div>
                 ))}
               </div>

@@ -1,7 +1,7 @@
 import Hero from '@/components/Hero'
 import FeaturedEvent from '@/components/FeaturedEvent'
 import EventViewSwitcher from '@/components/EventViewSwitcher'
-import { getPageContent, imageUrlFor } from '@/lib/sanity'
+import { fetchSanity, getPageContent, imageUrlFor } from '@/lib/sanity'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, Building2, CalendarDays, ChevronLeft, ChevronRight, MapPin, RotateCcw, Search, School, Tag } from 'lucide-react'
@@ -13,8 +13,10 @@ type EventsPageContent = {
   heroSubtitle?: string
   heroDescription?: string
   heroImage?: any
+  heroImageAlt?: string
   latestEventHeading?: string
   allEventsHeading?: string
+  emptyStateText?: string
 }
 
 const fallbackPageContent = {
@@ -23,9 +25,10 @@ const fallbackPageContent = {
   heroDescription: 'Upcoming events, activities, and important dates across the schools of the Diocese of Baguio.',
   latestEventHeading: 'Latest Event',
   allEventsHeading: 'All Events',
+  emptyStateText: 'No upcoming events at this time.',
 }
 
-const upcomingEvent = {
+const sampleFeaturedEvent = {
   title: 'Sample: DOBS Community Mass and Fellowship',
   category: 'Sample Event',
   description: 'Sample event for layout preview only. Replace this with a confirmed Diocese of Baguio Schools activity published through Sanity.',
@@ -34,14 +37,114 @@ const upcomingEvent = {
   registerHref: '#',
 }
 
-const events = [
-  { id: 1, title: 'DOBS Community Mass and Fellowship', category: 'Sample Event', description: 'Sample event for layout preview only. Replace this with a confirmed activity published through Sanity.', date: { day: '15', month: 'Sep', year: '2026' }, school: 'Diocese of Baguio Schools', location: 'DOBS Office, Baguio City', image: '/images/events.png' },
-  { id: 2, title: 'Parent and Learner Orientation', category: 'Sample Event', description: 'A sample orientation entry showing how schedules, venues, and participating schools appear on the Events page.', date: { day: '22', month: 'Sep', year: '2026' }, school: 'Sample School', location: 'School Auditorium', image: '/images/classroom-discussion-1280x720.png' },
-  { id: 3, title: 'Catholic Schools Faith Formation Day', category: 'Sample Event', description: 'A sample activity demonstrating the card layout for an upcoming faith-formation gathering.', date: { day: '03', month: 'Oct', year: '2026' }, school: 'Diocese of Baguio Schools', location: 'Baguio City, Benguet', image: '/images/enrollment.png' },
+const sampleEvents: DisplayEvent[] = [
+  { id: 'sample-1', title: 'DOBS Community Mass and Fellowship', category: 'Sample Event', description: 'Sample event for layout preview only. Replace this with a confirmed activity published through Sanity.', date: { day: '15', month: 'Sep', year: '2026' }, school: 'Diocese of Baguio Schools', location: 'DOBS Office, Baguio City', image: '/images/events.png', href: '#' },
+  { id: 'sample-2', title: 'Parent and Learner Orientation', category: 'Sample Event', description: 'A sample orientation entry showing how schedules, venues, and participating schools appear on the Events page.', date: { day: '22', month: 'Sep', year: '2026' }, school: 'Sample School', location: 'School Auditorium', image: '/images/classroom-discussion-1280x720.png', href: '#' },
+  { id: 'sample-3', title: 'Catholic Schools Faith Formation Day', category: 'Sample Event', description: 'A sample activity demonstrating the card layout for an upcoming faith-formation gathering.', date: { day: '03', month: 'Oct', year: '2026' }, school: 'Diocese of Baguio Schools', location: 'Baguio City, Benguet', image: '/images/enrollment.png', href: '#' },
 ]
 
+type SanityEvent = {
+  _id: string
+  title: string
+  slug?: string
+  category?: string
+  startDate: string
+  endDate?: string
+  location?: string
+  schoolName?: string
+  description?: Array<{ _type?: string; children?: Array<{ text?: string }> }>
+  featuredImage?: unknown
+  registrationLink?: string
+}
+
+type DisplayEvent = {
+  id: string
+  title: string
+  category: string
+  description: string
+  date: { day: string; month: string; year: string }
+  school: string
+  location: string
+  image: string
+  href: string
+  startDate?: Date
+  registerHref?: string
+}
+
+// Every date on this page is a Philippine school event, so it is formatted in
+// Philippine time regardless of where the server happens to run.
+const EVENT_CATEGORIES = ['School Event', 'Academic', 'Faith Formation', 'Community', 'Sports']
+
+const MANILA = 'Asia/Manila'
+const datePart = (value: Date, options: Intl.DateTimeFormatOptions) =>
+  new Intl.DateTimeFormat('en-PH', { ...options, timeZone: MANILA }).format(value)
+
+function blocksToText(blocks?: SanityEvent['description']): string {
+  if (!Array.isArray(blocks)) return ''
+  return blocks
+    .filter(block => block?._type === 'block' && Array.isArray(block.children))
+    .map(block => (block.children ?? []).map(child => child?.text ?? '').join(''))
+    .join(' ')
+    .trim()
+}
+
+async function getEvents(): Promise<{ events: DisplayEvent[]; nextUp?: DisplayEvent }> {
+  const rows = await fetchSanity<SanityEvent[]>(`\
+      *[_type == "event" && defined(startDate)] | order(startDate asc) {
+        _id, title, "slug": slug.current, category, startDate, endDate, location,
+        "schoolName": school->name, description, featuredImage, registrationLink
+      }`)
+
+  const events = (rows ?? []).map(event => {
+    const start = new Date(event.startDate)
+    return {
+      id: event._id,
+      title: event.title,
+      category: event.category || 'School Event',
+      description: blocksToText(event.description),
+      date: {
+        day: datePart(start, { day: '2-digit' }),
+        month: datePart(start, { month: 'short' }),
+        year: datePart(start, { year: 'numeric' }),
+      },
+      school: event.schoolName || 'Diocese of Baguio Schools',
+      location: event.location || 'To be announced',
+      image: imageUrlFor(event.featuredImage, 800, 600) || '/images/events.png',
+      href: event.slug ? `/events/${event.slug}` : '#',
+      startDate: start,
+      registerHref: event.registrationLink,
+    }
+  })
+
+  const now = Date.now()
+  const nextUp = events.find(event => (event.startDate?.getTime() ?? 0) >= now) ?? events[0]
+
+  return { events, nextUp }
+}
+
 export default async function EventsPage() {
-  const content = await getPageContent<EventsPageContent>('eventsPage')
+  const [content, { events: sanityEvents, nextUp }] = await Promise.all([
+    getPageContent<EventsPageContent>('eventsPage'),
+    getEvents(),
+  ])
+
+  // Published events take over completely; the samples below are only a layout
+  // preview for an empty dataset.
+  const usingSamples = sanityEvents.length === 0
+  const displayedEvents: DisplayEvent[] = usingSamples ? sampleEvents : sanityEvents
+
+  const featured = nextUp
+    ? {
+        title: nextUp.title,
+        category: nextUp.category,
+        description: nextUp.description,
+        image: nextUp.image,
+        date: nextUp.startDate as Date,
+        registerHref: nextUp.registerHref || nextUp.href,
+      }
+    : sampleFeaturedEvent
+
+  const schoolOptions = Array.from(new Set(displayedEvents.map(event => event.school))).sort()
 
   return (
     <>
@@ -50,6 +153,7 @@ export default async function EventsPage() {
         subtitle={content?.heroSubtitle || fallbackPageContent.heroSubtitle}
         description={content?.heroDescription || fallbackPageContent.heroDescription}
         image={imageUrlFor(content?.heroImage)}
+        imageAlt={content?.heroImageAlt}
         imagePlaceholder="School Event Photo"
       />
 
@@ -65,7 +169,7 @@ export default async function EventsPage() {
             </h2>
             <span className="gold-rule" />
           </div>
-          <FeaturedEvent {...upcomingEvent} />
+          <FeaturedEvent {...featured} />
           </div>
         </section>
 
@@ -111,11 +215,9 @@ export default async function EventsPage() {
                 <Tag className="pointer-events-none absolute bottom-3 left-3.5 text-primary-500" size={18} aria-hidden="true" />
                 <select name="category" className="form-input bg-white pl-11">
                   <option value="">All categories</option>
-                  <option value="school-event">School Event</option>
-                  <option value="academic">Academic</option>
-                  <option value="faith-formation">Faith Formation</option>
-                  <option value="community">Community</option>
-                  <option value="sports">Sports</option>
+                  {EVENT_CATEGORIES.map(category => (
+                    <option key={category} value={category}>{category}</option>
+                  ))}
                 </select>
               </label>
 
@@ -124,7 +226,9 @@ export default async function EventsPage() {
                 <Building2 className="pointer-events-none absolute bottom-3 left-3.5 text-primary-500" size={18} aria-hidden="true" />
                 <select name="school" className="form-input bg-white pl-11">
                   <option value="">All schools</option>
-                  <option value="school-name">[ School Name ]</option>
+                  {schoolOptions.map(name => (
+                    <option key={name} value={name}>{name}</option>
+                  ))}
                 </select>
               </label>
 
@@ -136,9 +240,15 @@ export default async function EventsPage() {
             </div>
           </form>
 
-          <EventViewSwitcher events={events}>
+          {usingSamples && (
+            <p className="mb-6 rounded-2xl border border-dashed border-primary-200 bg-primary-50 px-5 py-4 text-sm font-medium text-primary-700">
+              {content?.emptyStateText || fallbackPageContent.emptyStateText} The entries below are layout samples.
+            </p>
+          )}
+
+          <EventViewSwitcher events={displayedEvents}>
           <div className="grid grid-cols-1 gap-7 lg:grid-cols-3">
-            {events.map(({ id, title, category, description, date, school, location, image }) => (
+            {displayedEvents.map(({ id, title, category, description, date, school, location, image, href }) => (
               <article
                 key={id}
                 className="group flex h-full flex-col overflow-hidden rounded-2xl border border-primary-100 bg-white shadow-card transition-all hover:-translate-y-1 hover:border-primary-200 hover:shadow-lg"
@@ -178,7 +288,7 @@ export default async function EventsPage() {
                   </div>
 
                   <a
-                    href="#"
+                    href={href}
                     className="mt-6 inline-flex items-center gap-2 self-start text-sm font-semibold text-primary-700 transition-colors hover:text-primary-500"
                   >
                     View Event <ArrowRight size={16} aria-hidden="true" />
@@ -190,7 +300,11 @@ export default async function EventsPage() {
 
           {/* Pagination */}
           <div className="mt-12 flex flex-col items-center justify-between gap-5 border-t border-gray-100 pt-8 sm:flex-row">
-            <p className="text-sm font-medium text-gray-600">Showing 1–3 of 3 sample events</p>
+            <p className="text-sm font-medium text-gray-600">
+              {usingSamples
+                ? `Showing ${displayedEvents.length} sample ${displayedEvents.length === 1 ? 'event' : 'events'}`
+                : `Showing ${displayedEvents.length} ${displayedEvents.length === 1 ? 'event' : 'events'}`}
+            </p>
 
             <nav className="flex items-center gap-3" aria-label="Events pagination">
               <button

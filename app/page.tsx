@@ -29,6 +29,7 @@ type HomePageContent = {
   heroSubtitle?: string
   heroDescription?: string
   heroImage?: any
+  heroImageAlt?: string
   features?: Feature[]
   stats?: Stat[]
   whyChooseHeading?: string
@@ -45,6 +46,16 @@ type HomePageContent = {
   enrollmentHeading?: string
   enrollmentDescription?: string
 }
+
+// Used only when the Home Page document has no Statistics entries. The school
+// count is the one figure derived from real data; the others are placeholders
+// and should be replaced or removed in Studio.
+const fallbackStats: Stat[] = [
+  { value: 20, label: 'Diocesan Schools', icon: 'schools' },
+  { value: 5000, suffix: '+', label: 'Students Enrolled', icon: 'students' },
+  { value: 400, suffix: '+', label: 'Faculty & Staff', icon: 'faculty' },
+  { value: 50, suffix: '+', label: 'Years of Service', icon: 'years' },
+]
 
 const fallbackContent = {
   heroTitle: 'Diocese of Baguio Schools',
@@ -209,6 +220,7 @@ export default async function HomePage() {
         subtitle={content?.heroSubtitle || fallbackContent.heroSubtitle}
         description={content?.heroDescription || fallbackContent.heroDescription}
         image={imageUrlFor(content?.heroImage) || '/images/home.png'}
+        imageAlt={content?.heroImageAlt}
         imagePlaceholder="School Campus Photo"
         cta={{ label: 'Enroll Now', href: '/enrollment' }}
         ctaSecondary={{ label: 'Our Schools', href: '/schools' }}
@@ -241,14 +253,7 @@ export default async function HomePage() {
       />
 
       {/* Community at a glance — navy band */}
-      <StatsCounter
-        stats={[
-          { value: 20, label: 'Diocesan Schools', icon: 'schools' },
-          { value: 5000, suffix: '+', label: 'Students Enrolled', icon: 'students' },
-          { value: 400, suffix: '+', label: 'Faculty & Staff', icon: 'faculty' },
-          { value: 50, suffix: '+', label: 'Years of Service', icon: 'years' },
-        ]}
-      />
+      <StatsCounter stats={content?.stats?.length ? content.stats : fallbackStats} />
 
       {/* Birthday celebrants — white */}
       <div className="bg-white">
