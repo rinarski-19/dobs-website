@@ -95,6 +95,14 @@ const TARGETS = [
     type: 'enrollmentPage',
     label: 'Enrollment Page',
     values: {
+      checklistIntro: 'Gather the following documents in advance. Your selected school may request additional requirements.',
+      formEyebrow: 'Start your application',
+      guidanceSchoolTitle: 'Choose a preferred school',
+      guidanceSchoolText: 'Review the school directory before completing the form.',
+      guidanceHoursTitle: 'Response during office hours',
+      guidanceHoursText: 'Monday–Friday, 8:00 AM–5:00 PM, excluding public holidays.',
+      guidanceContactTitle: 'Contact the DOBS office',
+      browseButtonLabel: 'Browse Our Schools',
       processEyebrow: 'Step-by-step guide',
       processIntro: 'Follow these steps to complete the enrollment process with your chosen school.',
       requirementsEyebrow: 'What to prepare',
@@ -134,6 +142,9 @@ const TARGETS = [
     type: 'newsPage',
     label: 'News Page',
     values: {
+      featuredButtonLabel: 'Read Featured Story',
+      facebookButtonLabel: 'Official Facebook Page',
+      postEmptyText: 'This announcement has no article body yet.',
       listIntro: 'Browse announcements, achievements, campus stories, pastoral activities, and enrollment updates from our school community.',
       followHeading: 'Stay connected with our school community',
       followText: 'Follow the Diocese of Baguio for community updates, pastoral announcements, and stories of faith and service.',
@@ -144,6 +155,8 @@ const TARGETS = [
     type: 'eventsPage',
     label: 'Events Page',
     values: {
+      registerButtonLabel: 'Register for this Event',
+      detailEmptyText: 'No further details have been published for this event yet.',
       listIntro: 'Explore upcoming activities, celebrations, academic programs, and important dates across the schools of the Diocese of Baguio.',
       ctaHeading: 'Have an event to share?',
       ctaText: 'Contact the Diocese of Baguio Schools office to share information about an upcoming school activity or community event.',

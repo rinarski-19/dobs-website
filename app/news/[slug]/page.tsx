@@ -28,7 +28,7 @@ type RelatedPost = {
   featuredImage?: any
 }
 
-type NewsPageContent = { heroImage?: any }
+type NewsPageContent = { heroImage?: any; postEmptyText?: string }
 
 // School events and announcements are Philippine-dated regardless of where the
 // server runs, so the timezone is pinned rather than inherited.
@@ -123,7 +123,7 @@ export default async function NewsPostPage({ params }: { params: Promise<{ slug:
                 <PortableText value={post.body} />
               ) : (
                 <p className="rounded-2xl border border-dashed border-primary-200 bg-primary-50 px-5 py-4 text-sm font-medium text-primary-700">
-                  This announcement has no article body yet.
+                  {newsPage?.postEmptyText || 'This announcement has no article body yet.'}
                 </p>
               )}
             </article>

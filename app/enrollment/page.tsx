@@ -19,6 +19,14 @@ import {
 export const dynamic = 'force-dynamic'
 
 type EnrollmentPageContent = {
+  checklistIntro?: string
+  formEyebrow?: string
+  guidanceSchoolTitle?: string
+  guidanceSchoolText?: string
+  guidanceHoursTitle?: string
+  guidanceHoursText?: string
+  guidanceContactTitle?: string
+  browseButtonLabel?: string
   processEyebrow?: string
   processIntro?: string
   requirementsEyebrow?: string
@@ -56,6 +64,14 @@ const steps = [
 ]
 
 const fallbackPageContent = {
+  checklistIntro: 'Gather the following documents in advance. Your selected school may request additional requirements.',
+  formEyebrow: 'Start your application',
+  guidanceSchoolTitle: 'Choose a preferred school',
+  guidanceSchoolText: 'Review the school directory before completing the form.',
+  guidanceHoursTitle: 'Response during office hours',
+  guidanceHoursText: 'Monday–Friday, 8:00 AM–5:00 PM, excluding public holidays.',
+  guidanceContactTitle: 'Contact the DOBS office',
+  browseButtonLabel: 'Browse Our Schools',
   processEyebrow: 'Step-by-step guide',
   processIntro: 'Follow these steps to complete the enrollment process with your chosen school.',
   requirementsEyebrow: 'What to prepare',
@@ -85,6 +101,9 @@ const stepIcons = [School, PhoneCall, FileText, ClipboardCheck, UserCheck, Badge
 export default async function EnrollmentPage() {
   const content = await getPageContent<EnrollmentPageContent>('enrollmentPage')
   const settings = await getSiteSettings()
+  // Office number lives on the Contact page document; read it rather than repeat it.
+  const officeContact = await getPageContent<{ phone?: string }>('contactPage')
+  const officePhone = officeContact?.phone || '(074) 442-3756'
   const enrollmentSteps = content?.steps?.length
     ? content.steps.map((item, index) => ({ step: index + 1, title: item.title, desc: item.description }))
     : steps
@@ -187,7 +206,7 @@ export default async function EnrollmentPage() {
                 <div>
                   <h3 className="font-diocesan text-2xl font-bold text-primary-700">{content?.checklistHeading || fallbackPageContent.checklistHeading}</h3>
                   <p className="mt-1 text-sm leading-6 text-gray-600">
-                    Gather the following documents in advance. Your selected school may request additional requirements.
+                    {content?.checklistIntro || fallbackPageContent.checklistIntro}
                   </p>
                 </div>
               </div>
@@ -221,7 +240,7 @@ export default async function EnrollmentPage() {
         <section id="inquiry" className="scroll-mt-20 bg-white">
           <div className="page-wrapper py-16 md:py-20">
           <div className="mb-10 max-w-2xl">
-            <span className="eyebrow">Start your application</span>
+            <span className="eyebrow">{content?.formEyebrow || fallbackPageContent.formEyebrow}</span>
             <h2 className="mt-3 font-diocesan text-4xl font-bold text-primary-700 md:text-5xl">
               {content?.inquiryHeading || fallbackPageContent.inquiryHeading}
             </h2>
@@ -246,8 +265,8 @@ export default async function EnrollmentPage() {
                     <School size={19} aria-hidden="true" />
                   </span>
                   <div>
-                    <p className="font-semibold">Choose a preferred school</p>
-                    <p className="mt-1 text-sm leading-6 text-primary-100">Review the school directory before completing the form.</p>
+                    <p className="font-semibold">{content?.guidanceSchoolTitle || fallbackPageContent.guidanceSchoolTitle}</p>
+                    <p className="mt-1 text-sm leading-6 text-primary-100">{content?.guidanceSchoolText || fallbackPageContent.guidanceSchoolText}</p>
                   </div>
                 </div>
                 <div className="flex gap-4 py-5">
@@ -255,8 +274,8 @@ export default async function EnrollmentPage() {
                     <Clock3 size={19} aria-hidden="true" />
                   </span>
                   <div>
-                    <p className="font-semibold">Response during office hours</p>
-                    <p className="mt-1 text-sm leading-6 text-primary-100">Monday–Friday, 8:00 AM–5:00 PM, excluding public holidays.</p>
+                    <p className="font-semibold">{content?.guidanceHoursTitle || fallbackPageContent.guidanceHoursTitle}</p>
+                    <p className="mt-1 text-sm leading-6 text-primary-100">{content?.guidanceHoursText || fallbackPageContent.guidanceHoursText}</p>
                   </div>
                 </div>
                 <div className="flex gap-4 py-5">
@@ -264,8 +283,8 @@ export default async function EnrollmentPage() {
                     <PhoneCall size={19} aria-hidden="true" />
                   </span>
                   <div>
-                    <p className="font-semibold">Contact the DOBS office</p>
-                    <a href="tel:+63744423756" className="mt-1 block text-sm text-primary-100 transition-colors hover:text-white hover:underline">(074) 442-3756</a>
+                    <p className="font-semibold">{content?.guidanceContactTitle || fallbackPageContent.guidanceContactTitle}</p>
+                    <a href={`tel:${officePhone.replace(/[^\d+]/g, '')}`} className="mt-1 block text-sm text-primary-100 transition-colors hover:text-white hover:underline">{officePhone}</a>
                     <a href="mailto:dioceseofbaguio2004@gmail.com" className="mt-1 flex items-center gap-2 break-all text-sm text-primary-100 transition-colors hover:text-white hover:underline">
                       <Mail size={15} className="shrink-0" aria-hidden="true" />
                       dioceseofbaguio2004@gmail.com
@@ -342,7 +361,7 @@ export default async function EnrollmentPage() {
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link href="/schools" className="btn-accent w-full sm:w-auto">
-                Browse Our Schools <ArrowRight size={18} aria-hidden="true" />
+                {content?.browseButtonLabel || fallbackPageContent.browseButtonLabel} <ArrowRight size={18} aria-hidden="true" />
               </Link>
               <Link
                 href="/contact"

@@ -7,6 +7,9 @@ import { ArrowRight, CalendarDays, ChevronLeft, ChevronRight, ExternalLink, Mail
 export const dynamic = 'force-dynamic'
 
 type NewsPageContent = {
+  featuredButtonLabel?: string
+  facebookButtonLabel?: string
+  postEmptyText?: string
   listIntro?: string
   followHeading?: string
   followText?: string
@@ -19,6 +22,9 @@ type NewsPageContent = {
 }
 
 const fallbackPageContent = {
+  featuredButtonLabel: 'Read Featured Story',
+  facebookButtonLabel: 'Official Facebook Page',
+  postEmptyText: 'This announcement has no article body yet.',
   listIntro: 'Browse announcements, achievements, campus stories, pastoral activities, and enrollment updates from our school community.',
   followHeading: 'Stay connected with our school community',
   followText: 'Follow the Diocese of Baguio for community updates, pastoral announcements, and stories of faith and service.',
@@ -227,7 +233,7 @@ export default async function NewsPage({
                   </span>
                 </div>
                 <span className="mt-7 inline-flex items-center gap-2 font-semibold text-primary-700 transition-colors group-hover:text-primary-500">
-                  Read Featured Story <ArrowRight size={18} aria-hidden="true" />
+                  {content?.featuredButtonLabel || fallbackPageContent.featuredButtonLabel} <ArrowRight size={18} aria-hidden="true" />
                 </span>
               </div>
             </Link>
@@ -445,7 +451,7 @@ export default async function NewsPage({
                 rel="noopener noreferrer"
                 className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-white px-6 py-3 font-semibold text-primary-800 transition-colors hover:bg-primary-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800"
               >
-                Official Facebook Page <ExternalLink size={18} aria-hidden="true" />
+                {content?.facebookButtonLabel || fallbackPageContent.facebookButtonLabel} <ExternalLink size={18} aria-hidden="true" />
               </a>
               <Link
                 href="/contact"

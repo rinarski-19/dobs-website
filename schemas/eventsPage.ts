@@ -17,6 +17,8 @@ export default defineType({
     defineField({ name: 'listIntro', title: 'Events List Intro', type: 'text', rows: 3, initialValue: 'Explore upcoming activities, celebrations, academic programs, and important dates across the schools of the Diocese of Baguio.' }),
     defineField({ name: 'ctaHeading', title: 'Closing Section Heading', type: 'string', initialValue: 'Have an event to share?' }),
     defineField({ name: 'ctaText', title: 'Closing Section Text', type: 'text', rows: 3, initialValue: 'Contact the Diocese of Baguio Schools office to share information about an upcoming school activity or community event.' }),
+    defineField({ name: 'registerButtonLabel', title: 'Register Button Label', type: 'string', initialValue: 'Register for this Event' }),
+    defineField({ name: 'detailEmptyText', title: 'Event With No Details — Message', type: 'text', rows: 3, initialValue: 'No further details have been published for this event yet.' }),
   ],
   preview: { prepare: () => ({ title: 'Events Page' }) },
 })

@@ -20,7 +20,7 @@ type EventDetail = {
   school?: { name?: string; city?: string; slug?: string }
 }
 
-type EventsPageContent = { heroImage?: any }
+type EventsPageContent = { heroImage?: any; registerButtonLabel?: string; detailEmptyText?: string }
 
 const MANILA = 'Asia/Manila'
 const fmt = (value: string, options: Intl.DateTimeFormatOptions) =>
@@ -109,7 +109,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
 
           {event.registrationLink && (
             <a href={event.registrationLink} className="btn-primary mt-7 w-fit" rel="noopener noreferrer" target="_blank">
-              Register for this Event <ArrowRight size={17} aria-hidden="true" />
+              {eventsPage?.registerButtonLabel || 'Register for this Event'} <ArrowRight size={17} aria-hidden="true" />
             </a>
           )}
 
@@ -119,7 +119,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
             <article className="min-w-0"><PortableText value={event.description} /></article>
           ) : (
             <p className="rounded-2xl border border-dashed border-primary-200 bg-primary-50 px-5 py-4 text-sm font-medium text-primary-700">
-              No further details have been published for this event yet.
+              {eventsPage?.detailEmptyText || 'No further details have been published for this event yet.'}
             </p>
           )}
 
