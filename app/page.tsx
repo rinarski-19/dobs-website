@@ -254,20 +254,23 @@ export default async function HomePage() {
     })) ?? [],
     today,
   )
-  // Layout preview only — five placeholder entries, dated today so they actually
-  // appear. They disappear the moment any real celebrant is added to the Home
-  // Page document in Studio.
+  // Layout preview only, and filtered by date exactly like real entries: each
+  // sample appears only on its own day (1 September, 2 September, and so on), so
+  // the date matching can be seen working. They disappear the moment any real
+  // celebrant is added to the Home Page document in Studio.
   const sampleCelebrants = [
-    { _key: 'sample-1', name: 'Sample Celebrant One',   role: 'Teacher',        school: 'Sample School',        birthday: today, greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/enrollment.png' },
-    { _key: 'sample-2', name: 'Sample Celebrant Two',   role: 'School Head',    school: 'Sample School',        birthday: today, greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/classroom-discussion-1280x720.png' },
-    { _key: 'sample-3', name: 'Sample Celebrant Three', role: 'Staff',          school: 'DOBS School Community', birthday: today, greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/news.png' },
-    { _key: 'sample-4', name: 'Sample Celebrant Four',  role: 'Teacher',        school: 'Sample School',        birthday: today, greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/events.png' },
-    { _key: 'sample-5', name: 'Sample Celebrant Five',  role: 'Administrator',  school: 'DOBS School Community', birthday: today, greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/home.png' },
+    { _key: 'sample-1', name: 'Sample Celebrant One',   role: 'Teacher',        school: 'Sample School',        birthday: '2026-09-01', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/enrollment.png' },
+    { _key: 'sample-2', name: 'Sample Celebrant Two',   role: 'School Head',    school: 'Sample School',        birthday: '2026-09-02', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/classroom-discussion-1280x720.png' },
+    { _key: 'sample-3', name: 'Sample Celebrant Three', role: 'Staff',          school: 'DOBS School Community', birthday: '2026-09-03', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/news.png' },
+    { _key: 'sample-4', name: 'Sample Celebrant Four',  role: 'Teacher',        school: 'Sample School',        birthday: '2026-09-04', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/events.png' },
+    { _key: 'sample-5', name: 'Sample Celebrant Five',  role: 'Administrator',  school: 'DOBS School Community', birthday: '2026-09-05', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/home.png' },
   ]
-  // Samples stand in only while no celebrant has been entered at all. Once the
-  // list is populated the section follows the real rule: today's birthdays only.
+  // Samples stand in only while no celebrant has been entered at all, and are
+  // filtered by today's date on the same rule as real entries.
   const hasRealCelebrants = (content?.birthdayCelebrants?.length ?? 0) > 0
-  const displayedCelebrants = hasRealCelebrants ? birthdayCelebrants : sampleCelebrants
+  const displayedCelebrants = hasRealCelebrants
+    ? birthdayCelebrants
+    : todaysCelebrants(sampleCelebrants, today)
   const featuredSchool = schools[0]
   const programPreviews = [
     { name: 'Pre-School', icon: Blocks, description: 'Early learning through play, discovery, faith, and care.' },
