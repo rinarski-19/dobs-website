@@ -222,14 +222,17 @@ export default async function HomePage() {
     ...celebrant,
     imageUrl: photo ? imageUrlFor(photo, 240, 240) : undefined,
   })) ?? []
-  const displayedCelebrants = birthdayCelebrants.length ? birthdayCelebrants : [{
-    _key: 'sample-jane-doe',
-    name: 'Jane Doe',
-    school: 'DOBS School Community',
-    birthday: '2026-08-26',
-    greeting: 'Sample celebrant — replace this entry with current birthday information in Sanity.',
-    imageUrl: '/images/enrollment.png',
-  }]
+  // Layout preview only — five placeholder entries so the section can be checked
+  // at a realistic count. These disappear the moment any real celebrant is added
+  // to the Home Page document in Studio.
+  const sampleCelebrants = [
+    { _key: 'sample-1', name: 'Sample Celebrant One',   role: 'Teacher',        school: 'Sample School',        birthday: '2026-09-02', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/enrollment.png' },
+    { _key: 'sample-2', name: 'Sample Celebrant Two',   role: 'School Head',    school: 'Sample School',        birthday: '2026-09-05', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/classroom-discussion-1280x720.png' },
+    { _key: 'sample-3', name: 'Sample Celebrant Three', role: 'Staff',          school: 'DOBS School Community', birthday: '2026-09-11', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/news.png' },
+    { _key: 'sample-4', name: 'Sample Celebrant Four',  role: 'Teacher',        school: 'Sample School',        birthday: '2026-09-18', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/events.png' },
+    { _key: 'sample-5', name: 'Sample Celebrant Five',  role: 'Administrator',  school: 'DOBS School Community', birthday: '2026-09-24', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/home.png' },
+  ]
+  const displayedCelebrants = birthdayCelebrants.length ? birthdayCelebrants : sampleCelebrants
   const featuredSchool = schools[0]
   const programPreviews = [
     { name: 'Pre-School', icon: Blocks, description: 'Early learning through play, discovery, faith, and care.' },

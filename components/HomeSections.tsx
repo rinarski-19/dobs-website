@@ -208,14 +208,21 @@ export function TestimonialsSection({ items, heading }: { items: Testimonial[]; 
 }
 
 export function BirthdaySection({ title, message, celebrants }: { title: string; message?: string; celebrants: BirthdayCelebrant[] }) {
-  const hasManyCelebrants = celebrants.length > 4
-  // A lone celebrant in a two-column grid leaves a conspicuous empty cell, so
-  // constrain it to the heading's width instead of stranding it mid-container.
-  const celebrantLayout = celebrants.length === 1
-    ? 'max-w-2xl'
-    : hasManyCelebrants
-      ? 'max-h-[34rem] overflow-y-auto pr-1 sm:grid-cols-2 xl:grid-cols-3'
-      : 'sm:grid-cols-2'
+  const isSingle = celebrants.length === 1
+  const useThirds = celebrants.length > 4
+  // Only cap the height once the list is long enough that the section would run
+  // away; five or six celebrants should simply be visible, not behind a scrollbar.
+  const useScroll = celebrants.length > 6
+
+  // Flex-wrap rather than a grid: it centres a lone celebrant and centres the
+  // trailing row, so five in a three-column layout ends with two centred cards
+  // instead of two cards and a hole.
+  const rowClass = `relative z-10 flex flex-wrap justify-center gap-4${useScroll ? ' max-h-[34rem] overflow-y-auto pr-1' : ''}`
+  const cardWidth = isSingle
+    ? 'w-full max-w-2xl'
+    : useThirds
+      ? 'w-full sm:w-[calc(50%-0.5rem)] xl:w-[calc(33.333%-0.667rem)]'
+      : 'w-full sm:w-[calc(50%-0.5rem)]'
 
   return (
     // Not `.section` (py-12): the Academic Programs section that follows is also
@@ -303,11 +310,11 @@ export function BirthdaySection({ title, message, celebrants }: { title: string;
             No birthday celebrants are listed this week. Please check again soon.
           </div>
         ) : (
-          <div className={`relative z-10 grid grid-cols-1 gap-4 ${celebrantLayout}`}>
+          <div className={rowClass}>
             {celebrants.map((celebrant, index) => (
               <div
                 key={celebrant._key ?? `${celebrant.name}-${index}`}
-                className="group flex h-full flex-col gap-4 rounded-2xl border border-morning-breeze/50 bg-white/85 p-4 shadow-sm backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-sunwashed hover:shadow-card motion-safe:animate-rise-in sm:flex-row sm:items-center sm:p-5"
+                className={`group flex flex-col gap-4 rounded-2xl border border-morning-breeze/50 bg-white/85 p-4 shadow-sm backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-sunwashed hover:shadow-card motion-safe:animate-rise-in sm:flex-row sm:items-center sm:p-5 ${cardWidth}`}
                 style={{ animationDelay: `${Math.min(index, 8) * 70}ms` }}
               >
                 <div className="relative shrink-0">
