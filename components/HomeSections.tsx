@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, ArrowUpRight, Balloon, Building2, Cake, CakeSlice, CalendarDays, Clock3, Gift, Heart, MapPin, Newspaper, PartyPopper, Quote, Sparkle, Sparkles, Star, Sun } from 'lucide-react'
@@ -216,15 +217,20 @@ export function BirthdaySection({ title, message, celebrants }: { title: string;
   // Flex-wrap rather than a grid, so a lone celebrant sits centred.
   const rowClass = `relative z-10 flex flex-wrap justify-center gap-4${useScroll ? ' max-h-[34rem] overflow-y-auto pr-1' : ''}`
 
-  const HALF = 'w-full sm:w-[calc(50%-0.5rem)]'
-  const THIRD = 'w-full sm:w-[calc(50%-0.5rem)] xl:w-[calc(33.333%-0.667rem)]'
+  // Every card is the same width; the shape of the rows comes from where the
+  // line breaks, not from resizing cards.
+  const cardWidth = count > 4
+    ? 'w-full sm:w-[calc(50%-0.5rem)] xl:w-[calc(33.333%-0.667rem)]'
+    : 'w-full sm:w-[calc(50%-0.5rem)]'
 
-  // Above four, the wide layout is three to a row — but a count that is not a
-  // multiple of three would leave the last row short. Lead with half-width rows
-  // to absorb the remainder, so every row is full: five reads as two then three,
-  // seven as two rows of two then three.
-  const leadingHalves = count > 4 ? { 0: 0, 1: 4, 2: 2 }[count % 3] ?? 0 : count
-  const widthFor = (index: number) => (index < leadingHalves ? HALF : THIRD)
+  // Three to a row on wide screens leaves the last row short unless the count
+  // divides by three, so the remainder is taken as a short row of two at the
+  // top: five reads as two then three, seven as two rows of two then three.
+  // The breaks are zero-height full-width spacers, with a negative margin that
+  // cancels the extra flex gap they would otherwise introduce.
+  const breakAfter = new Set<number>(
+    count > 4 ? ({ 0: [], 1: [1, 3], 2: [1] } as Record<number, number[]>)[count % 3] : [],
+  )
 
   return (
     // Not `.section` (py-12): the Academic Programs section that follows is also
@@ -314,9 +320,9 @@ export function BirthdaySection({ title, message, celebrants }: { title: string;
         ) : (
           <div className={rowClass}>
             {celebrants.map((celebrant, index) => (
+              <Fragment key={celebrant._key ?? `${celebrant.name}-${index}`}>
               <div
-                key={celebrant._key ?? `${celebrant.name}-${index}`}
-                className={`group flex flex-col gap-4 rounded-2xl border border-morning-breeze/50 bg-white/85 p-4 shadow-sm backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-sunwashed hover:shadow-card motion-safe:animate-rise-in sm:flex-row sm:items-center sm:p-5 ${count === 1 ? 'w-full max-w-2xl' : widthFor(index)}`}
+                className={`group flex flex-col gap-4 rounded-2xl border border-morning-breeze/50 bg-white/85 p-4 shadow-sm backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-sunwashed hover:shadow-card motion-safe:animate-rise-in sm:flex-row sm:items-center sm:p-5 ${count === 1 ? 'w-full max-w-2xl' : cardWidth}`}
                 style={{ animationDelay: `${Math.min(index, 8) * 70}ms` }}
               >
                 <div className="relative shrink-0">
@@ -346,6 +352,8 @@ export function BirthdaySection({ title, message, celebrants }: { title: string;
                   )}
                 </div>
               </div>
+              {breakAfter.has(index) && <div className="hidden h-0 w-full -mt-4 xl:block" aria-hidden="true" />}
+              </Fragment>
             ))}
           </div>
         )}
