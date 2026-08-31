@@ -35,6 +35,15 @@ export default defineConfig({
   name: 'diocese-baguio-studio',
   title: 'Diocese of Baguio Schools',
 
+  // Where the Studio is served from. Inside the Next.js app that is /studio;
+  // without this the router reads "studio" out of the URL as a tool name and
+  // reports "Tool not found: studio".
+  //
+  // The studio deployed with `sanity deploy` is served from the root instead,
+  // so build that one with the base path overridden:
+  //     SANITY_STUDIO_BASE_PATH=/ npx sanity deploy
+  basePath: process.env.SANITY_STUDIO_BASE_PATH || '/studio',
+
   projectId: '3tjt9t85',
   dataset: 'production',
 
