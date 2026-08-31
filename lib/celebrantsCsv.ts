@@ -18,8 +18,22 @@ export type CelebrantRow = {
 }
 
 export type ParseResult =
-  | { ok: true; celebrants: CelebrantRow[] }
+  | { ok: true; celebrants: CelebrantRow[]; warnings: string[] }
   | { ok: false; error: string }
+
+/**
+ * Spellings accepted for each column. Spreadsheets come back with whatever the
+ * person typed — "GREETINGS", "Position", "Date of Birth" — and silently
+ * dropping those columns loses real content, so the common variants are mapped.
+ */
+const COLUMN_ALIASES: Record<string, string[]> = {
+  name: ['name', 'full name', 'fullname', 'celebrant', 'celebrant name', 'employee', 'employee name'],
+  birthday: ['birthday', 'birthdays', 'birthdate', 'birth date', 'date of birth', 'dob', 'bday', 'date'],
+  role: ['role', 'roles', 'position', 'designation', 'title', 'job title'],
+  school: ['school', 'schools', 'campus', 'station', 'assignment'],
+  greeting: ['greeting', 'greetings', 'message', 'messages', 'note', 'remarks'],
+  photo: ['photo', 'photos', 'photo url', 'image', 'image url', 'picture'],
+}
 
 /** Handles quoted fields, commas and newlines inside quotes, and "" escapes. */
 export function parseCsv(text: string): string[][] {
@@ -79,12 +93,27 @@ export function celebrantsFromCsv(text: string): ParseResult {
   if (rows.length < 2) return { ok: false, error: 'The file needs a header row and at least one celebrant.' }
 
   const headers = rows[0].map(h => h.trim().toLowerCase())
-  const missing = ['name', 'birthday'].filter(h => !headers.includes(h))
+
+  // Map each field to the column that matches any of its accepted spellings.
+  const columnOf: Record<string, number> = {}
+  const claimed = new Set<number>()
+  for (const [field, aliases] of Object.entries(COLUMN_ALIASES)) {
+    const index = headers.findIndex((h, i) => !claimed.has(i) && aliases.includes(h))
+    if (index !== -1) { columnOf[field] = index; claimed.add(index) }
+  }
+
+  const missing = ['name', 'birthday'].filter(f => columnOf[f] === undefined)
   if (missing.length) {
     return { ok: false, error: `Missing column${missing.length > 1 ? 's' : ''}: ${missing.join(' and ')}. Found: ${headers.join(', ')}.` }
   }
 
-  const at = (name: string) => headers.indexOf(name)
+  // Anything left over is a column nobody will read — say so rather than lose it quietly.
+  const unknown = headers.filter((h, i) => !claimed.has(i) && h !== '')
+  const warnings = unknown.length
+    ? [`Ignored column${unknown.length > 1 ? 's' : ''}: ${unknown.join(', ')}. Recognised names are ${Object.keys(COLUMN_ALIASES).join(', ')}.`]
+    : []
+
+  const at = (name: string) => (columnOf[name] === undefined ? -1 : columnOf[name])
   const celebrants: CelebrantRow[] = []
 
   for (let i = 1; i < rows.length; i += 1) {
@@ -114,5 +143,5 @@ export function celebrantsFromCsv(text: string): ParseResult {
     celebrants.push(entry)
   }
 
-  return { ok: true, celebrants }
+  return { ok: true, celebrants, warnings }
 }

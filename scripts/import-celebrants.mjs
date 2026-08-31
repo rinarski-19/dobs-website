@@ -130,11 +130,32 @@ async function run() {
   if (rows.length < 2) fail('The CSV needs a header row and at least one celebrant.')
 
   const headers = rows[0].map(h => h.trim().toLowerCase())
-  const need = ['name', 'birthday']
-  const missing = need.filter(h => !headers.includes(h))
+
+  // Spreadsheets come back with whatever the person typed, so the common
+  // variants are accepted. Kept in step with lib/celebrantsCsv.ts.
+  const COLUMN_ALIASES = {
+    name: ['name', 'full name', 'fullname', 'celebrant', 'celebrant name', 'employee', 'employee name'],
+    birthday: ['birthday', 'birthdays', 'birthdate', 'birth date', 'date of birth', 'dob', 'bday', 'date'],
+    role: ['role', 'roles', 'position', 'designation', 'title', 'job title'],
+    school: ['school', 'schools', 'campus', 'station', 'assignment'],
+    greeting: ['greeting', 'greetings', 'message', 'messages', 'note', 'remarks'],
+    photo: ['photo', 'photos', 'photo url', 'image', 'image url', 'picture'],
+  }
+
+  const columnOf = {}
+  const claimed = new Set()
+  for (const [field, aliases] of Object.entries(COLUMN_ALIASES)) {
+    const index = headers.findIndex((h, i) => !claimed.has(i) && aliases.includes(h))
+    if (index !== -1) { columnOf[field] = index; claimed.add(index) }
+  }
+
+  const missing = ['name', 'birthday'].filter(f => columnOf[f] === undefined)
   if (missing.length) fail(`The CSV is missing these columns: ${missing.join(', ')}\nFound: ${headers.join(', ')}`)
 
-  const at = name => headers.indexOf(name)
+  const ignored = headers.filter((h, i) => !claimed.has(i) && h !== '')
+  if (ignored.length) console.log(`\nIgnoring unrecognised column${ignored.length > 1 ? 's' : ''}: ${ignored.join(', ')}`)
+
+  const at = name => (columnOf[name] === undefined ? -1 : columnOf[name])
   const entries = []
 
   for (let i = 1; i < rows.length; i += 1) {

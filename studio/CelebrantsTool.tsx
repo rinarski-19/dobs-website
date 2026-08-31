@@ -14,7 +14,7 @@ type StoredCelebrant = {
   role?: string
   school?: string
   greeting?: string
-  photo?: unknown
+  photoUrl?: string
 }
 
 type Status = { tone: 'positive' | 'critical' | 'caution' | 'primary'; message: string } | null
@@ -30,6 +30,8 @@ export default function CelebrantsTool() {
   const client = useClient({ apiVersion: API_VERSION })
   const user = useCurrentUser()
   const fileInput = useRef<HTMLInputElement>(null)
+  const photoInput = useRef<HTMLInputElement>(null)
+  const photoTarget = useRef<{ key: string; name: string } | null>(null)
 
   const [celebrants, setCelebrants] = useState<StoredCelebrant[] | null>(null)
   const [pending, setPending] = useState<CelebrantRow[] | null>(null)
@@ -39,7 +41,10 @@ export default function CelebrantsTool() {
 
   const load = useCallback(async () => {
     const result = await client.fetch<StoredCelebrant[] | null>(
-      '*[_id == $id][0].birthdayCelebrants',
+      `*[_id == $id][0].birthdayCelebrants[]{
+        _key, name, birthday, role, school, greeting,
+        "photoUrl": photo.asset->url
+      }`,
       { id: HOME_PAGE_ID },
     )
     setCelebrants(result ?? [])
@@ -76,7 +81,12 @@ export default function CelebrantsTool() {
       const result = celebrantsFromCsv(String(reader.result ?? ''))
       if (!result.ok) { setPending(null); setStatus({ tone: 'critical', message: result.error }); return }
       setPending(result.celebrants)
-      setStatus({ tone: 'primary', message: `Read ${result.celebrants.length} celebrant${result.celebrants.length === 1 ? '' : 's'}. Nothing saved yet — choose how to add them below.` })
+      const read = `Read ${result.celebrants.length} celebrant${result.celebrants.length === 1 ? '' : 's'}. Nothing saved yet — choose how to add them below.`
+      setStatus(
+        result.warnings.length
+          ? { tone: 'caution', message: `${read} ${result.warnings.join(' ')}` }
+          : { tone: 'primary', message: read },
+      )
     }
     reader.onerror = () => setStatus({ tone: 'critical', message: 'Could not read that file.' })
     reader.readAsText(file)
@@ -127,6 +137,48 @@ export default function CelebrantsTool() {
     }
   }
 
+  const choosePhoto = (key: string, name: string) => {
+    photoTarget.current = { key, name }
+    photoInput.current?.click()
+  }
+
+  const onPhoto = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    const target = photoTarget.current
+    if (photoInput.current) photoInput.current.value = ''
+    if (!file || !target) return
+
+    setBusy(true)
+    setStatus({ tone: 'primary', message: `Uploading photo for ${target.name}…` })
+    try {
+      const asset = await client.assets.upload('image', file, { filename: file.name })
+      await client
+        .patch(HOME_PAGE_ID)
+        .set({ [`birthdayCelebrants[_key=="${target.key}"].photo`]: { _type: 'image', asset: { _type: 'reference', _ref: asset._id } } })
+        .commit()
+      await load()
+      setStatus({ tone: 'positive', message: `Photo added for ${target.name}.` })
+    } catch (error) {
+      setStatus({ tone: 'critical', message: `Could not upload the photo: ${(error as Error).message}` })
+    } finally {
+      setBusy(false)
+      photoTarget.current = null
+    }
+  }
+
+  const removePhoto = async (key: string, name: string) => {
+    setBusy(true)
+    try {
+      await client.patch(HOME_PAGE_ID).unset([`birthdayCelebrants[_key=="${key}"].photo`]).commit()
+      await load()
+      setStatus({ tone: 'positive', message: `Photo removed for ${name}.` })
+    } catch (error) {
+      setStatus({ tone: 'critical', message: `Could not remove the photo: ${(error as Error).message}` })
+    } finally {
+      setBusy(false)
+    }
+  }
+
   const remove = async (key: string, name: string) => {
     setBusy(true)
     try {
@@ -155,6 +207,13 @@ export default function CelebrantsTool() {
 
   return (
     <Box padding={4} style={{ maxWidth: 900, margin: '0 auto' }}>
+      <input
+        ref={photoInput}
+        type="file"
+        accept="image/*"
+        onChange={onPhoto}
+        style={{ display: 'none' }}
+      />
       <Stack gap={5}>
         <Stack gap={3}>
           <Heading size={3}>Birthday Celebrants</Heading>
@@ -235,23 +294,61 @@ export default function CelebrantsTool() {
                 {sorted.map(celebrant => (
                   <Card key={celebrant._key} padding={3} radius={2} tone="transparent" border>
                     <Flex align="center" justify="space-between" gap={3}>
-                      <Stack gap={2}>
-                        <Flex align="center" gap={2}>
-                          <Text weight="semibold" size={1}>{celebrant.name}</Text>
-                          <Badge tone="primary" fontSize={0}>{formatBirthday(celebrant.birthday)}</Badge>
-                        </Flex>
-                        {(celebrant.role || celebrant.school) && (
-                          <Text size={1} muted>{[celebrant.role, celebrant.school].filter(Boolean).join(' · ')}</Text>
+                      <Flex align="center" gap={3}>
+                        {celebrant.photoUrl ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={`${celebrant.photoUrl}?w=96&h=96&fit=crop`}
+                            alt=""
+                            width={48}
+                            height={48}
+                            style={{ width: 48, height: 48, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
+                          />
+                        ) : (
+                          <Flex
+                            align="center"
+                            justify="center"
+                            style={{ width: 48, height: 48, borderRadius: '50%', flexShrink: 0, border: '1px dashed currentColor', opacity: 0.35 }}
+                          >
+                            <Text size={0} muted>No<br />photo</Text>
+                          </Flex>
                         )}
-                      </Stack>
-                      <Button
-                        text="Remove"
-                        tone="critical"
-                        mode="ghost"
-                        fontSize={1}
-                        disabled={busy}
-                        onClick={() => remove(celebrant._key, celebrant.name)}
-                      />
+                        <Stack gap={2}>
+                          <Flex align="center" gap={2}>
+                            <Text weight="semibold" size={1}>{celebrant.name}</Text>
+                            <Badge tone="primary" fontSize={0}>{formatBirthday(celebrant.birthday)}</Badge>
+                          </Flex>
+                          {(celebrant.role || celebrant.school) && (
+                            <Text size={1} muted>{[celebrant.role, celebrant.school].filter(Boolean).join(' · ')}</Text>
+                          )}
+                        </Stack>
+                      </Flex>
+                      <Inline gap={2}>
+                        <Button
+                          text={celebrant.photoUrl ? 'Change photo' : 'Add photo'}
+                          mode="ghost"
+                          fontSize={1}
+                          disabled={busy}
+                          onClick={() => choosePhoto(celebrant._key, celebrant.name)}
+                        />
+                        {celebrant.photoUrl && (
+                          <Button
+                            text="Clear photo"
+                            mode="bleed"
+                            fontSize={1}
+                            disabled={busy}
+                            onClick={() => removePhoto(celebrant._key, celebrant.name)}
+                          />
+                        )}
+                        <Button
+                          text="Remove"
+                          tone="critical"
+                          mode="ghost"
+                          fontSize={1}
+                          disabled={busy}
+                          onClick={() => remove(celebrant._key, celebrant.name)}
+                        />
+                      </Inline>
                     </Flex>
                   </Card>
                 ))}

@@ -62,6 +62,29 @@ type HomePageContent = {
 // Used only when the Home Page document has no Statistics entries. The school
 // count is the one figure derived from real data; the others are placeholders
 // and should be replaced or removed in Studio.
+type DatedCelebrant = { birthday?: string }
+
+/**
+ * Keeps only the celebrants whose birthday falls on today's date in Philippine
+ * time, comparing month and day so the stored year is irrelevant. Reading the
+ * clock lives here rather than in the component body, where React's rules
+ * forbid it.
+ */
+function todaysCelebrants<T extends DatedCelebrant>(celebrants: T[]): T[] {
+  const parts = new Intl.DateTimeFormat('en-PH', {
+    timeZone: 'Asia/Manila',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(new Date())
+
+  const month = parts.find(p => p.type === 'month')?.value
+  const day = parts.find(p => p.type === 'day')?.value
+  if (!month || !day) return celebrants
+
+  const today = `${month}-${day}`
+  return celebrants.filter(c => (c.birthday ?? '').slice(5) === today)
+}
+
 const fallbackStats: Stat[] = [
   { value: 20, label: 'Diocesan Schools', icon: 'schools' },
   { value: 5000, suffix: '+', label: 'Students Enrolled', icon: 'students' },
@@ -218,10 +241,12 @@ export default async function HomePage() {
     },
   ]
 
-  const birthdayCelebrants = content?.birthdayCelebrants?.map(({ photo, ...celebrant }) => ({
-    ...celebrant,
-    imageUrl: photo ? imageUrlFor(photo, 240, 240) : undefined,
-  })) ?? []
+  const birthdayCelebrants = todaysCelebrants(
+    content?.birthdayCelebrants?.map(({ photo, ...celebrant }) => ({
+      ...celebrant,
+      imageUrl: photo ? imageUrlFor(photo, 240, 240) : undefined,
+    })) ?? [],
+  )
   // Layout preview only — five placeholder entries so the section can be checked
   // at a realistic count. These disappear the moment any real celebrant is added
   // to the Home Page document in Studio.
@@ -232,7 +257,10 @@ export default async function HomePage() {
     { _key: 'sample-4', name: 'Sample Celebrant Four',  role: 'Teacher',        school: 'Sample School',        birthday: '2026-09-18', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/events.png' },
     { _key: 'sample-5', name: 'Sample Celebrant Five',  role: 'Administrator',  school: 'DOBS School Community', birthday: '2026-09-24', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/home.png' },
   ]
-  const displayedCelebrants = birthdayCelebrants.length ? birthdayCelebrants : sampleCelebrants
+  // Samples stand in only while no celebrant has been entered at all. Once the
+  // list is populated the section follows the real rule: today's birthdays only.
+  const hasRealCelebrants = (content?.birthdayCelebrants?.length ?? 0) > 0
+  const displayedCelebrants = hasRealCelebrants ? birthdayCelebrants : sampleCelebrants
   const featuredSchool = schools[0]
   const programPreviews = [
     { name: 'Pre-School', icon: Blocks, description: 'Early learning through play, discovery, faith, and care.' },
@@ -283,16 +311,19 @@ export default async function HomePage() {
       {/* Community at a glance — navy band */}
       <StatsCounter stats={content?.stats?.length ? content.stats : fallbackStats} />
 
-      {/* Birthday celebrants — white */}
-      <div className="bg-white">
-        <div className="mx-auto max-w-[1400px] px-6 md:px-10">
-          <BirthdaySection
-            title={content?.birthdayTitle || 'Celebrating Our Birthday Celebrants'}
-            message={content?.birthdayMessage}
-            celebrants={displayedCelebrants}
-          />
+      {/* Birthday celebrants — white. Only rendered when someone is celebrating
+          today, so the homepage does not carry an empty band the rest of the month. */}
+      {displayedCelebrants.length > 0 && (
+        <div className="bg-white">
+          <div className="mx-auto max-w-[1400px] px-6 md:px-10">
+            <BirthdaySection
+              title={content?.birthdayTitle || 'Celebrating Our Birthday Celebrants'}
+              message={content?.birthdayMessage}
+              celebrants={displayedCelebrants}
+            />
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Academic Programs preview */}
       <section className="bg-white">
