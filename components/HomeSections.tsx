@@ -208,7 +208,7 @@ export function TestimonialsSection({ items, heading }: { items: Testimonial[]; 
   )
 }
 
-export function BirthdaySection({ title, message, celebrants }: { title: string; message?: string; celebrants: BirthdayCelebrant[] }) {
+export function BirthdaySection({ title, message, emptyText, celebrants }: { title: string; message?: string; emptyText?: string; celebrants: BirthdayCelebrant[] }) {
   const count = celebrants.length
   // Only cap the height once the list is long enough that the section would run
   // away; five or six celebrants should simply be visible, not behind a scrollbar.
@@ -315,7 +315,7 @@ export function BirthdaySection({ title, message, celebrants }: { title: string;
         {celebrants.length === 0 ? (
           <div className="relative z-10 flex flex-col items-center gap-3 rounded-2xl border border-dashed border-sunwashed bg-cloud-puff/80 p-8 text-center text-primary-700 backdrop-blur-sm">
             <Cake className="text-primary-600" size={30} aria-hidden="true" />
-            No birthday celebrants are listed this week. Please check again soon.
+            {emptyText || 'No birthday celebrants today. Check back tomorrow!'}
           </div>
         ) : (
           <div className={rowClass}>

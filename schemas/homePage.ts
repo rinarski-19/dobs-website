@@ -58,6 +58,7 @@ export default defineType({
     }),
     defineField({ name: 'birthdayTitle', title: 'Birthday Section Heading', type: 'string', initialValue: 'Celebrating Our Birthday Celebrants' }),
     defineField({ name: 'birthdayMessage', title: 'Birthday Section Message', type: 'text', rows: 3, initialValue: 'May your special day be filled with joy, grace, and blessings.' }),
+    defineField({ name: 'birthdayEmptyText', title: 'Birthday Section — No Birthdays Today', type: 'string', description: 'Shown on days when nobody in the list has a birthday.', initialValue: 'No birthday celebrants today. Check back tomorrow!' }),
     defineField({
       name: 'birthdayCelebrants',
       title: 'Birthday Celebrants',

@@ -50,6 +50,7 @@ type HomePageContent = {
   birthdayTitle?: string
   birthdayMessage?: string
   birthdayCelebrants?: (Omit<BirthdayCelebrant, 'imageUrl'> & { photo?: any })[]
+  birthdayEmptyText?: string
   schoolsHeading?: string
   newsHeading?: string
   eventsHeading?: string
@@ -70,19 +71,23 @@ type DatedCelebrant = { birthday?: string }
  * clock lives here rather than in the component body, where React's rules
  * forbid it.
  */
-function todaysCelebrants<T extends DatedCelebrant>(celebrants: T[]): T[] {
+/** Today's date in Philippine time as YYYY-MM-DD, so the day rolls over at Manila midnight. */
+function manilaToday(): string {
   const parts = new Intl.DateTimeFormat('en-PH', {
     timeZone: 'Asia/Manila',
+    year: 'numeric',
     month: '2-digit',
     day: '2-digit',
   }).formatToParts(new Date())
 
-  const month = parts.find(p => p.type === 'month')?.value
-  const day = parts.find(p => p.type === 'day')?.value
-  if (!month || !day) return celebrants
+  const get = (type: string) => parts.find(p => p.type === type)?.value ?? ''
+  return `${get('year')}-${get('month')}-${get('day')}`
+}
 
-  const today = `${month}-${day}`
-  return celebrants.filter(c => (c.birthday ?? '').slice(5) === today)
+/** Keeps the celebrants whose birthday falls today, matching month and day so the stored year is irrelevant. */
+function todaysCelebrants<T extends DatedCelebrant>(celebrants: T[], today: string): T[] {
+  const monthDay = today.slice(5)
+  return celebrants.filter(c => (c.birthday ?? '').slice(5) === monthDay)
 }
 
 const fallbackStats: Stat[] = [
@@ -241,21 +246,23 @@ export default async function HomePage() {
     },
   ]
 
+  const today = manilaToday()
   const birthdayCelebrants = todaysCelebrants(
     content?.birthdayCelebrants?.map(({ photo, ...celebrant }) => ({
       ...celebrant,
       imageUrl: photo ? imageUrlFor(photo, 240, 240) : undefined,
     })) ?? [],
+    today,
   )
-  // Layout preview only — five placeholder entries so the section can be checked
-  // at a realistic count. These disappear the moment any real celebrant is added
-  // to the Home Page document in Studio.
+  // Layout preview only — five placeholder entries, dated today so they actually
+  // appear. They disappear the moment any real celebrant is added to the Home
+  // Page document in Studio.
   const sampleCelebrants = [
-    { _key: 'sample-1', name: 'Sample Celebrant One',   role: 'Teacher',        school: 'Sample School',        birthday: '2026-09-02', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/enrollment.png' },
-    { _key: 'sample-2', name: 'Sample Celebrant Two',   role: 'School Head',    school: 'Sample School',        birthday: '2026-09-05', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/classroom-discussion-1280x720.png' },
-    { _key: 'sample-3', name: 'Sample Celebrant Three', role: 'Staff',          school: 'DOBS School Community', birthday: '2026-09-11', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/news.png' },
-    { _key: 'sample-4', name: 'Sample Celebrant Four',  role: 'Teacher',        school: 'Sample School',        birthday: '2026-09-18', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/events.png' },
-    { _key: 'sample-5', name: 'Sample Celebrant Five',  role: 'Administrator',  school: 'DOBS School Community', birthday: '2026-09-24', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/home.png' },
+    { _key: 'sample-1', name: 'Sample Celebrant One',   role: 'Teacher',        school: 'Sample School',        birthday: today, greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/enrollment.png' },
+    { _key: 'sample-2', name: 'Sample Celebrant Two',   role: 'School Head',    school: 'Sample School',        birthday: today, greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/classroom-discussion-1280x720.png' },
+    { _key: 'sample-3', name: 'Sample Celebrant Three', role: 'Staff',          school: 'DOBS School Community', birthday: today, greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/news.png' },
+    { _key: 'sample-4', name: 'Sample Celebrant Four',  role: 'Teacher',        school: 'Sample School',        birthday: today, greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/events.png' },
+    { _key: 'sample-5', name: 'Sample Celebrant Five',  role: 'Administrator',  school: 'DOBS School Community', birthday: today, greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/home.png' },
   ]
   // Samples stand in only while no celebrant has been entered at all. Once the
   // list is populated the section follows the real rule: today's birthdays only.
@@ -311,19 +318,18 @@ export default async function HomePage() {
       {/* Community at a glance — navy band */}
       <StatsCounter stats={content?.stats?.length ? content.stats : fallbackStats} />
 
-      {/* Birthday celebrants — white. Only rendered when someone is celebrating
-          today, so the homepage does not carry an empty band the rest of the month. */}
-      {displayedCelebrants.length > 0 && (
-        <div className="bg-white">
-          <div className="mx-auto max-w-[1400px] px-6 md:px-10">
-            <BirthdaySection
-              title={content?.birthdayTitle || 'Celebrating Our Birthday Celebrants'}
-              message={content?.birthdayMessage}
-              celebrants={displayedCelebrants}
-            />
-          </div>
+      {/* Birthday celebrants — white. Always shown; on a day with no birthdays the
+          section carries a short message rather than disappearing. */}
+      <div className="bg-white">
+        <div className="mx-auto max-w-[1400px] px-6 md:px-10">
+          <BirthdaySection
+            title={content?.birthdayTitle || 'Celebrating Our Birthday Celebrants'}
+            message={content?.birthdayMessage}
+            emptyText={content?.birthdayEmptyText}
+            celebrants={displayedCelebrants}
+          />
         </div>
-      )}
+      </div>
 
       {/* Academic Programs preview */}
       <section className="bg-white">

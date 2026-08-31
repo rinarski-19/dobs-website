@@ -42,6 +42,7 @@ const TARGETS = [
     type: 'homePage',
     label: 'Home Page',
     values: {
+      birthdayEmptyText: 'No birthday celebrants today. Check back tomorrow!',
       // components/Features.tsx -> fallbackFeatures
       whyChooseHeading: 'Formed in Faith and Learning',
       features: [
