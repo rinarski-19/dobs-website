@@ -2,6 +2,7 @@ import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { visionTool } from '@sanity/vision'
 import { schemaTypes } from './schemas'
+import CelebrantsTool from './studio/CelebrantsTool'
 
 const singletonTypes = [
   'siteSettings',
@@ -56,4 +57,16 @@ export default defineConfig({
   schema: {
     types: schemaTypes,
   },
+
+  // A dedicated tab for the monthly birthday list: bulk upload from a CSV and
+  // remove entries, which the standard array editor cannot do in one step.
+  // It writes as the signed-in user, so no shared password or API token exists.
+  tools: prev => [
+    ...prev,
+    {
+      name: 'celebrants',
+      title: 'Birthday Celebrants',
+      component: CelebrantsTool,
+    },
+  ],
 })
