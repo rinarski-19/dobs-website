@@ -1,5 +1,6 @@
 import Hero from '@/components/Hero'
 import PortableText, { type Block } from '@/components/PortableText'
+import { formatPHDate } from '@/lib/dates'
 import { fetchSanity, getPageContent, imageUrlFor, urlFor } from '@/lib/sanity'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -22,9 +23,7 @@ type EventDetail = {
 
 type EventsPageContent = { heroImage?: any; registerButtonLabel?: string; detailEmptyText?: string }
 
-const MANILA = 'Asia/Manila'
-const fmt = (value: string, options: Intl.DateTimeFormatOptions) =>
-  new Intl.DateTimeFormat('en-PH', { ...options, timeZone: MANILA }).format(new Date(value))
+const fmt = (value: string, options: Intl.DateTimeFormatOptions) => formatPHDate(value, options)
 
 async function getEvent(slug: string) {
   return fetchSanity<EventDetail | null>(

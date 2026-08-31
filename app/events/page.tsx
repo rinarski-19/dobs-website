@@ -2,6 +2,7 @@ import Hero from '@/components/Hero'
 import FeaturedEvent from '@/components/FeaturedEvent'
 import EventViewSwitcher from '@/components/EventViewSwitcher'
 import { fetchSanity, getPageContent, imageUrlFor, getSiteSettings } from '@/lib/sanity'
+import { formatPHDate } from '@/lib/dates'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, Building2, CalendarDays, ChevronLeft, ChevronRight, MapPin, RotateCcw, Search, School, Tag } from 'lucide-react'
@@ -81,9 +82,7 @@ type DisplayEvent = {
 // Philippine time regardless of where the server happens to run.
 const EVENT_CATEGORIES = ['School Event', 'Academic', 'Faith Formation', 'Community', 'Sports']
 
-const MANILA = 'Asia/Manila'
-const datePart = (value: Date, options: Intl.DateTimeFormatOptions) =>
-  new Intl.DateTimeFormat('en-PH', { ...options, timeZone: MANILA }).format(value)
+const datePart = (value: Date, options: Intl.DateTimeFormatOptions) => formatPHDate(value, options)
 
 function blocksToText(blocks?: SanityEvent['description']): string {
   if (!Array.isArray(blocks)) return ''

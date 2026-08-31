@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { formatPHDate } from '@/lib/dates'
 
 type FeaturedEventProps = {
   title: string
@@ -53,8 +54,8 @@ export default function FeaturedEvent({
 }: FeaturedEventProps) {
   const { days, hours, minutes, seconds } = useCountdown(date)
 
-  const day   = date.toLocaleDateString('en-PH', { day: '2-digit' })
-  const month = date.toLocaleDateString('en-PH', { month: 'short' })
+  const day   = formatPHDate(date, { day: '2-digit' })
+  const month = formatPHDate(date, { month: 'short' })
 
   return (
     <div className="flex flex-col lg:flex-row gap-0 bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm">

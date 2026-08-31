@@ -1,5 +1,6 @@
 import Hero from '@/components/Hero'
 import PortableText, { toPlainText, type Block } from '@/components/PortableText'
+import { formatPHDate } from '@/lib/dates'
 import { fetchSanity, getPageContent, imageUrlFor, urlFor } from '@/lib/sanity'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -33,11 +34,7 @@ type NewsPageContent = { heroImage?: any; postEmptyText?: string }
 // School events and announcements are Philippine-dated regardless of where the
 // server runs, so the timezone is pinned rather than inherited.
 const formatDate = (value?: string) =>
-  value
-    ? new Intl.DateTimeFormat('en-PH', {
-        year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Manila',
-      }).format(new Date(value))
-    : null
+  value ? formatPHDate(value, { year: 'numeric', month: 'long', day: 'numeric' }) : null
 
 async function getPost(slug: string) {
   return fetchSanity<NewsPost | null>(

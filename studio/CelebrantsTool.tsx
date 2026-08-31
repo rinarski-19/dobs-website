@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useClient, useCurrentUser } from 'sanity'
 import { Badge, Box, Button, Card, Flex, Heading, Inline, Spinner, Stack, Text } from '@sanity/ui'
 import { celebrantsFromCsv, type CelebrantRow } from '../lib/celebrantsCsv'
+import { formatPHDate } from '../lib/dates'
 
 // The Home Page singleton this tool edits (see singletonPages in sanity.config.ts).
 const HOME_PAGE_ID = 'c5eaa530-f8a9-4378-b919-68fb1dfb773b'
@@ -23,7 +24,7 @@ function formatBirthday(value?: string) {
   if (!value) return '—'
   const date = new Date(`${value}T00:00:00`)
   if (Number.isNaN(date.getTime())) return value
-  return new Intl.DateTimeFormat('en-PH', { month: 'long', day: 'numeric', timeZone: 'Asia/Manila' }).format(date)
+  return formatPHDate(date, { month: 'long', day: 'numeric' })
 }
 
 export default function CelebrantsTool() {

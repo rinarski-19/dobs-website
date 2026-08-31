@@ -1,6 +1,7 @@
 import { Fragment } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { formatPHDate } from '@/lib/dates'
 import { ArrowRight, ArrowUpRight, Balloon, Building2, Cake, CakeSlice, CalendarDays, Clock3, Gift, Heart, MapPin, Newspaper, PartyPopper, Quote, Sparkle, Sparkles, Star, Sun } from 'lucide-react'
 
 export type HomeNewsItem = {
@@ -45,7 +46,7 @@ export type BirthdayCelebrant = {
 }
 
 function formatDate(value: string, options: Intl.DateTimeFormatOptions) {
-  return new Intl.DateTimeFormat('en-PH', options).format(new Date(value))
+  return formatPHDate(value, options)
 }
 
 export function LatestNewsSection({ items, heading }: { items: HomeNewsItem[]; heading: string }) {

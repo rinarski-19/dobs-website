@@ -20,6 +20,7 @@ import {
 } from '@/components/HomeSections'
 import { fetchSanity, getPageContent, imageUrlFor, getSiteSettings } from '@/lib/sanity'
 import { getSchools } from '@/lib/schools'
+import { phToday } from '@/lib/dates'
 
 // News and events are time-sensitive and intentionally fetched without cache.
 export const dynamic = 'force-dynamic'
@@ -71,19 +72,6 @@ type DatedCelebrant = { birthday?: string }
  * clock lives here rather than in the component body, where React's rules
  * forbid it.
  */
-/** Today's date in Philippine time as YYYY-MM-DD, so the day rolls over at Manila midnight. */
-function manilaToday(): string {
-  const parts = new Intl.DateTimeFormat('en-PH', {
-    timeZone: 'Asia/Manila',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  }).formatToParts(new Date())
-
-  const get = (type: string) => parts.find(p => p.type === type)?.value ?? ''
-  return `${get('year')}-${get('month')}-${get('day')}`
-}
-
 /** Keeps the celebrants whose birthday falls today, matching month and day so the stored year is irrelevant. */
 function todaysCelebrants<T extends DatedCelebrant>(celebrants: T[], today: string): T[] {
   const monthDay = today.slice(5)
@@ -246,7 +234,7 @@ export default async function HomePage() {
     },
   ]
 
-  const today = manilaToday()
+  const today = phToday()
   const birthdayCelebrants = todaysCelebrants(
     content?.birthdayCelebrants?.map(({ photo, ...celebrant }) => ({
       ...celebrant,

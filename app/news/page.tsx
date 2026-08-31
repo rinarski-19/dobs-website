@@ -1,5 +1,6 @@
 import Hero from '@/components/Hero'
 import { client, getPageContent, imageUrlFor, getSiteSettings } from '@/lib/sanity'
+import { formatMonthLabel, formatPHDate } from '@/lib/dates'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, CalendarDays, ChevronLeft, ChevronRight, ExternalLink, Mail, School, Search } from 'lucide-react'
@@ -228,7 +229,7 @@ export default async function NewsPage({
                   <span className="flex items-center gap-2"><School className="text-primary-600" size={16} aria-hidden="true" />{featuredPost.school}</span>
                   <span className="flex items-center gap-2"><CalendarDays className="text-primary-600" size={16} aria-hidden="true" />
                     {featuredPost.publishedAt
-                      ? new Date(featuredPost.publishedAt).toLocaleDateString('en-PH', { month: 'long', day: 'numeric', year: 'numeric' })
+                      ? formatPHDate(featuredPost.publishedAt, { month: 'long', day: 'numeric', year: 'numeric' })
                       : 'Publication date to be announced'}
                   </span>
                 </div>
@@ -308,7 +309,7 @@ export default async function NewsPage({
                 <option value="all">News Archive</option>
                 {archiveOptions.map(value => {
                   const [year, month] = value.split('-').map(Number)
-                  const label = new Intl.DateTimeFormat('en-PH', { month: 'long', year: 'numeric' }).format(new Date(year, month - 1, 1))
+                  const label = formatMonthLabel(year, month)
                   return <option key={value} value={value}>{label}</option>
                 })}
               </select>
@@ -357,7 +358,7 @@ export default async function NewsPage({
                       <CalendarDays className="shrink-0 text-primary-600" size={15} aria-hidden="true" />
                       <span>
                         {post.publishedAt
-                          ? new Date(post.publishedAt).toLocaleDateString('en-PH', { month: 'long', day: 'numeric', year: 'numeric' })
+                          ? formatPHDate(post.publishedAt, { month: 'long', day: 'numeric', year: 'numeric' })
                           : 'Publication date to be announced'}
                       </span>
                     </p>
