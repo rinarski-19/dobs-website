@@ -75,9 +75,10 @@ export default defineType({
             title: 'Birthdate',
             type: 'date',
             description: 'Pick the celebrant’s birthdate, or type it as mm/dd/yy. Only the month and day decide when they appear on the homepage, so the year can be any year.',
-            // Passed straight to date-fns, which is strict about tokens: the day
-            // must be lowercase `dd` and the year lowercase `yy`. MM/DD/YY throws.
-            options: { dateFormat: 'MM/dd/yy' },
+            // Moment-style tokens: Sanity converts these itself before handing
+            // them to date-fns, so DD is the day and YY the two-digit year.
+            // Lowercase `dd` is the weekday here and renders as "Tu".
+            options: { dateFormat: 'MM/DD/YY' },
             validation: Rule => Rule.required().error('A birthdate is required — without it the celebrant never appears on the homepage.'),
           }),
           defineField({ name: 'photo', title: 'Photo', type: 'image', options: { hotspot: true } }),
