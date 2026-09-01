@@ -63,17 +63,35 @@ export default defineType({
       name: 'birthdayCelebrants',
       title: 'Birthday Celebrants',
       type: 'array',
+      description: 'One entry per celebrant. Each entry needs a name and a birthdate; the homepage shows only the people whose birthdate falls on the current day in Philippine time.',
       of: [{
         type: 'object',
         fields: [
           defineField({ name: 'name', title: 'Celebrant Name', type: 'string', validation: Rule => Rule.required() }),
           defineField({ name: 'role', title: 'Role / Position', type: 'string' }),
           defineField({ name: 'school', title: 'School', type: 'string' }),
-          defineField({ name: 'birthday', title: 'Birthday', type: 'date' }),
+          defineField({
+            name: 'birthday',
+            title: 'Birthdate',
+            type: 'date',
+            description: 'Pick the celebrant’s birthdate. Only the month and day are used to decide when they appear on the homepage, so the year can be any year.',
+            options: { dateFormat: 'MMMM D, YYYY' },
+            validation: Rule => Rule.required().error('A birthdate is required — without it the celebrant never appears on the homepage.'),
+          }),
           defineField({ name: 'photo', title: 'Photo', type: 'image', options: { hotspot: true } }),
           defineField({ name: 'greeting', title: 'Personal Greeting', type: 'text', rows: 3 }),
         ],
-        preview: { select: { title: 'name', subtitle: 'school', media: 'photo' } },
+        // Show the birthdate in the collapsed list so a missing or wrong date is
+        // obvious without opening every row.
+        preview: {
+          select: { title: 'name', birthday: 'birthday', school: 'school', media: 'photo' },
+          prepare: ({ title, birthday, school, media }) => {
+            const when = birthday
+              ? new Date(`${birthday}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'UTC' })
+              : 'No birthdate set'
+            return { title, subtitle: school ? `${when} — ${school}` : when, media }
+          },
+        },
       }],
     }),
     defineField({ name: 'schoolsHeading', title: 'Schools Section Heading', type: 'string', initialValue: 'Our Schools' }),
