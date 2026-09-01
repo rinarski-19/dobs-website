@@ -74,8 +74,10 @@ export default defineType({
             name: 'birthday',
             title: 'Birthdate',
             type: 'date',
-            description: 'Pick the celebrant’s birthdate. Only the month and day are used to decide when they appear on the homepage, so the year can be any year.',
-            options: { dateFormat: 'MMMM D, YYYY' },
+            description: 'Pick the celebrant’s birthdate, or type it as mm/dd/yy. Only the month and day decide when they appear on the homepage, so the year can be any year.',
+            // Passed straight to date-fns, which is strict about tokens: the day
+            // must be lowercase `dd` and the year lowercase `yy`. MM/DD/YY throws.
+            options: { dateFormat: 'MM/dd/yy' },
             validation: Rule => Rule.required().error('A birthdate is required — without it the celebrant never appears on the homepage.'),
           }),
           defineField({ name: 'photo', title: 'Photo', type: 'image', options: { hotspot: true } }),
@@ -86,9 +88,10 @@ export default defineType({
         preview: {
           select: { title: 'name', birthday: 'birthday', school: 'school', media: 'photo' },
           prepare: ({ title, birthday, school, media }) => {
-            const when = birthday
-              ? new Date(`${birthday}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'UTC' })
-              : 'No birthdate set'
+            // Split the stored YYYY-MM-DD rather than parsing it into a Date —
+            // a date with no time of day can slide a day either way across zones.
+            const [year, month, day] = (birthday ?? '').split('-')
+            const when = birthday ? `${month}/${day}/${year.slice(2)}` : 'No birthdate set'
             return { title, subtitle: school ? `${when} — ${school}` : when, media }
           },
         },
