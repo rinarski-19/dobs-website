@@ -4,34 +4,17 @@ import { visionTool } from '@sanity/vision'
 import { schemaTypes } from './schemas'
 import CelebrantsTool from './studio/CelebrantsTool'
 
-const singletonTypes = [
-  'siteSettings',
-  'footer',
-  'homePage',
-  'aboutPage',
-  'programsPage',
-  'eventsPage',
-  'newsPage',
-  'enrollmentPage',
-  'contactPage',
-  'schoolsPage',
-  'event',
-]
+import { SINGLETON_IDS, SINGLETON_TITLES } from './lib/singletons'
 
-const singletonPages = [
-  { type: 'siteSettings', title: 'Site Settings', id: 'siteSettings' },
-  { type: 'footer', title: 'Footer', id: 'footer' },
-  // Point each singleton at its existing populated document so Studio and the
-  // website edit the same content, including the existing image references.
-  { type: 'homePage', title: 'Home Page', id: 'c5eaa530-f8a9-4378-b919-68fb1dfb773b' },
-  { type: 'aboutPage', title: 'About Page', id: '26fc3deb-cbdf-485f-9bbb-a8ea554685d1' },
-  { type: 'programsPage', title: 'Programs Page', id: '992c60bb-c640-4709-9412-2d70b8c21724' },
-  { type: 'eventsPage', title: 'Events Page', id: 'c6d3c27d-8cbf-4256-840d-c4cdcc4a68ef' },
-  { type: 'newsPage', title: 'News Page', id: '5aa39880-3cef-4c76-84f9-68e3b78756d9' },
-  { type: 'enrollmentPage', title: 'Enrollment Page', id: '2715a299-103d-4193-b7b5-aa012d8d9906' },
-  { type: 'contactPage', title: 'Contact Page', id: 'e78ed44c-61c6-49ec-8e0d-0ff0bec96347' },
-  { type: 'schoolsPage', title: 'Schools Page', id: '91aa98ac-5f6d-4e38-985d-b78816bd7e63' },
-]
+// Both lists come from lib/singletons.ts, so Studio and the website can never
+// disagree about which document backs a page.
+const singletonTypes = [...Object.keys(SINGLETON_IDS), 'event']
+
+const singletonPages = Object.keys(SINGLETON_IDS).map(type => ({
+  type,
+  title: SINGLETON_TITLES[type] ?? type,
+  id: SINGLETON_IDS[type],
+}))
 
 export default defineConfig({
   name: 'diocese-baguio-studio',

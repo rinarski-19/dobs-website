@@ -1,4 +1,5 @@
 import { client, imageUrlFor } from '@/lib/sanity'
+import { SINGLETON_IDS } from '@/lib/singletons'
 import ProgramsPageClient, { Program, ProgramsPageContent } from './ProgramsPageClient'
 
 export const dynamic = 'force-dynamic'
@@ -39,7 +40,7 @@ async function getProgramsPage(): Promise<ProgramsPageContent> {
 
   try {
     content = await client.fetch<ProgramsPageSanityContent | null>(`
-      *[_type == "programsPage"] | order(_updatedAt desc)[0] {
+      *[_id == $id][0] {
         heroTitle,
         heroSubtitle,
         heroDescription,
@@ -66,7 +67,7 @@ async function getProgramsPage(): Promise<ProgramsPageContent> {
         primaryButton,
         secondaryButton
       }
-    `, {}, { cache: 'no-store' })
+    `, { id: SINGLETON_IDS.programsPage }, { cache: 'no-store' })
   } catch (error) {
     console.error('Unable to load Programs Page content from Sanity:', error)
   }

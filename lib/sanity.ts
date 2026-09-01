@@ -1,5 +1,6 @@
 import { createClient } from 'next-sanity'
 import { createImageUrlBuilder } from '@sanity/image-url'
+import { SINGLETON_IDS } from './singletons'
 
 export const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? '3tjt9t85',
@@ -35,7 +36,21 @@ export async function fetchSanity<T>(
   return null
 }
 
+/**
+ * Reads a single-page document by its id — the same document Studio edits.
+ *
+ * The dataset holds a stale twin of every page type, so ordering by _updatedAt
+ * would sometimes return the wrong one and silently ignore an editor's change.
+ * The type query remains only as a fallback for a type with no id registered.
+ */
 export async function getPageContent<T>(pageType: string): Promise<T | null> {
+  const id = SINGLETON_IDS[pageType]
+
+  if (id) {
+    const byId = await fetchSanity<T>(`*[_id == $id][0]`, { id })
+    if (byId) return byId
+  }
+
   return fetchSanity<T>(
     `*[_type == $pageType] | order(_updatedAt desc)[0]`,
     { pageType },
@@ -102,8 +117,8 @@ export async function getFooter(): Promise<{ footer: FooterContent | null; conta
         { next: { revalidate: 60 } },
       ),
       client.fetch<FooterContact>(
-        `*[_type == "contactPage"][0]{ officeAddress, email, phone }`,
-        {},
+        `*[_id == $id][0]{ officeAddress, email, phone }`,
+        { id: SINGLETON_IDS.contactPage },
         { next: { revalidate: 60 } },
       ),
     ])
