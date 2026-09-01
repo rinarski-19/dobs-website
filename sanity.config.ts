@@ -67,8 +67,17 @@ export default defineConfig({
 
         const settingsTypes = ['siteSettings', 'footer']
         const pageTypes = Object.keys(SINGLETON_IDS).filter(t => !settingsTypes.includes(t))
-        // Everything reachable through a page above, so it is not listed twice.
-        const nested = Object.values(OWNED).map(o => o.type)
+
+        // Anything not already reachable above. Worked out from the schema list
+        // rather than by filtering the builder's own items, so a type cannot slip
+        // through and appear twice — which is what left "News Post" stranded at
+        // the bottom next to the page it belongs to.
+        const handled = new Set([
+          ...Object.keys(SINGLETON_IDS),
+          ...Object.values(OWNED).map(o => o.type),
+          'event',
+        ])
+        const leftovers = schemaTypes.map(t => t.name).filter(name => !handled.has(name))
 
         return S.list()
           .title('Content')
@@ -76,11 +85,7 @@ export default defineConfig({
             ...settingsTypes.map(pageItem),
             S.divider(),
             ...pageTypes.map(pageItem),
-            S.divider(),
-            ...S.documentTypeListItems().filter(item => {
-              const id = item.getId() ?? ''
-              return !singletonTypes.includes(id) && !nested.includes(id)
-            }),
+            ...(leftovers.length ? [S.divider(), ...leftovers.map(name => S.documentTypeListItem(name))] : []),
           ])
       },
     }),
