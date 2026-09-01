@@ -49,8 +49,21 @@ export function imageUrlFor(source: any, width = 1800, height = 900): string | u
 
 export type SiteSettings = {
   officeCtaLabel?: string
+}
+
+export type FooterContent = {
   organisationName?: string
-  footerTagline?: string
+  tagline?: string
+  quickLinksHeading?: string
+  quickLinks?: { _key?: string; label: string; href: string }[]
+  contactHeading?: string
+  copyrightText?: string
+}
+
+export type FooterContact = {
+  officeAddress?: string
+  email?: string
+  phone?: string
 }
 
 /**
@@ -62,12 +75,41 @@ export type SiteSettings = {
 export async function getSiteSettings(): Promise<SiteSettings | null> {
   try {
     return await client.fetch<SiteSettings>(
-      `*[_id == "siteSettings"][0]{ officeCtaLabel, organisationName, footerTagline }`,
+      `*[_id == "siteSettings"][0]{ officeCtaLabel }`,
       {},
       { next: { revalidate: 60 } },
     )
   } catch (error) {
     console.warn('Unable to load site settings from Sanity:', error)
     return null
+  }
+}
+
+/**
+ * Footer content, plus the office details it shows. Those come from the Contact
+ * Page document rather than being stored twice, so the address, email and phone
+ * cannot drift apart between the footer and the contact page.
+ *
+ * Cached for a minute rather than fetched no-store: the footer renders on every
+ * route including the static 404, which a no-store fetch would force to be dynamic.
+ */
+export async function getFooter(): Promise<{ footer: FooterContent | null; contact: FooterContact | null }> {
+  try {
+    const [footer, contact] = await Promise.all([
+      client.fetch<FooterContent>(
+        `*[_id == "footer"][0]{ organisationName, tagline, quickLinksHeading, quickLinks, contactHeading, copyrightText }`,
+        {},
+        { next: { revalidate: 60 } },
+      ),
+      client.fetch<FooterContact>(
+        `*[_type == "contactPage"][0]{ officeAddress, email, phone }`,
+        {},
+        { next: { revalidate: 60 } },
+      ),
+    ])
+    return { footer, contact }
+  } catch (error) {
+    console.warn('Unable to load footer content from Sanity:', error)
+    return { footer: null, contact: null }
   }
 }

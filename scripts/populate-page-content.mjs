@@ -204,8 +204,28 @@ const TARGETS = [
     create: true,
     values: {
       officeCtaLabel: 'Contact the DOBS Office',
+    },
+  },
+  {
+    // The footer band. Created if it does not exist.
+    id: 'footer',
+    type: 'footer',
+    label: 'Footer',
+    create: true,
+    values: {
       organisationName: 'Diocese of Baguio Schools',
-      footerTagline: 'The Catholic schools of the Diocese of Baguio, serving Baguio City and the province of Benguet.',
+      tagline: 'The Catholic schools of the Diocese of Baguio, serving Baguio City and the province of Benguet.',
+      quickLinksHeading: 'Quick Links',
+      quickLinks: [
+        { _key: 'link-about',      _type: 'object', label: 'About',       href: '/about' },
+        { _key: 'link-schools',    _type: 'object', label: 'Our Schools', href: '/schools' },
+        { _key: 'link-programs',   _type: 'object', label: 'Programs',    href: '/programs' },
+        { _key: 'link-news',       _type: 'object', label: 'News',        href: '/news' },
+        { _key: 'link-enrollment', _type: 'object', label: 'Enrollment',  href: '/enrollment' },
+        { _key: 'link-contact',    _type: 'object', label: 'Contact',     href: '/contact' },
+      ],
+      contactHeading: 'Contact',
+      copyrightText: 'Diocese of Baguio Schools. All rights reserved.',
     },
   },
 ]

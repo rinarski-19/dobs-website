@@ -6,6 +6,7 @@ import CelebrantsTool from './studio/CelebrantsTool'
 
 const singletonTypes = [
   'siteSettings',
+  'footer',
   'homePage',
   'aboutPage',
   'programsPage',
@@ -19,6 +20,7 @@ const singletonTypes = [
 
 const singletonPages = [
   { type: 'siteSettings', title: 'Site Settings', id: 'siteSettings' },
+  { type: 'footer', title: 'Footer', id: 'footer' },
   // Point each singleton at its existing populated document so Studio and the
   // website edit the same content, including the existing image references.
   { type: 'homePage', title: 'Home Page', id: 'c5eaa530-f8a9-4378-b919-68fb1dfb773b' },
