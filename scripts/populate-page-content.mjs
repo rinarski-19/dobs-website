@@ -203,6 +203,8 @@ const TARGETS = [
     label: 'Site Settings',
     create: true,
     values: {
+      siteTitle: 'Diocese of Baguio Schools',
+      siteDescription: 'The Catholic schools of the Diocese of Baguio, serving Baguio City and the province of Benguet — forming young minds in faith, excellence, and service.',
       officeCtaLabel: 'Contact the DOBS Office',
     },
   },

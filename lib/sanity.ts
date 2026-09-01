@@ -63,6 +63,8 @@ export function imageUrlFor(source: any, width = 1800, height = 900): string | u
 }
 
 export type SiteSettings = {
+  siteTitle?: string
+  siteDescription?: string
   officeCtaLabel?: string
 }
 
@@ -90,7 +92,7 @@ export type FooterContact = {
 export async function getSiteSettings(): Promise<SiteSettings | null> {
   try {
     return await client.fetch<SiteSettings>(
-      `*[_id == "siteSettings"][0]{ officeCtaLabel }`,
+      `*[_id == "siteSettings"][0]{ siteTitle, siteDescription, officeCtaLabel }`,
       {},
       { next: { revalidate: 60 } },
     )
