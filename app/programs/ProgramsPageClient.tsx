@@ -1,6 +1,7 @@
 'use client'
 
 import Hero from '@/components/Hero'
+import { safeHref } from '@/lib/safeHref'
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { ArrowRight, BookOpen, GraduationCap, Heart, School, Target, Users } from 'lucide-react'
@@ -210,7 +211,7 @@ export default function ProgramsPageClient({ content }: { content: ProgramsPageC
 
                 <div className="flex flex-wrap gap-4">
                   {content.primaryButton?.label && content.primaryButton.href && (
-                    <Link href={content.primaryButton.href} className="btn-primary group/button">
+                    <Link href={safeHref(content.primaryButton.href) ?? '/schools'} className="btn-primary group/button">
                       {content.primaryButton.label}
                       <ArrowRight className="transition-transform group-hover/button:translate-x-1" size={17} aria-hidden="true" />
                     </Link>

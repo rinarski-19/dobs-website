@@ -36,7 +36,21 @@ export default defineType({
         type: 'object',
         fields: [
           defineField({ name: 'label', title: 'Label', type: 'string', validation: Rule => Rule.required() }),
-          defineField({ name: 'href', title: 'Link', type: 'string', validation: Rule => Rule.required() }),
+          defineField({
+            name: 'href',
+            title: 'Link',
+            type: 'string',
+            description: 'A path on this site such as /schools, or a full https:// address.',
+            validation: Rule => Rule.required().custom(value => {
+              if (typeof value !== 'string') return true
+              const href = value.trim()
+              if (href.startsWith('//')) return 'Start with / for a page on this site, or https:// for another site.'
+              if (href.startsWith('/') || href.startsWith('#') || !href.includes(':')) return true
+              return /^(https?:|mailto:|tel:)/i.test(href)
+                ? true
+                : 'Only /paths, https://, mailto: and tel: links are allowed.'
+            }),
+          }),
         ],
         preview: { select: { title: 'label', subtitle: 'href' } },
       }],

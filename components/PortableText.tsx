@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { urlFor } from '@/lib/sanity'
+import { safeHref } from '@/lib/safeHref'
 
 type Span = { _key?: string; _type?: string; text?: string; marks?: string[] }
 type MarkDef = { _key: string; _type: string; href?: string }
@@ -43,13 +44,16 @@ function Spans({ spans, markDefs }: { spans?: Span[]; markDefs?: MarkDef[] }) {
           .map(mark => (markDefs ?? []).find(def => def._key === mark))
           .find(def => def?._type === 'link' && def.href)
 
-        if (linkDef?.href) {
+        // A link whose target is not a safe scheme still renders its words; it
+        // simply is not clickable, rather than vanishing from the article.
+        const href = safeHref(linkDef?.href)
+        if (href) {
           node = (
             <a
-              href={linkDef.href}
+              href={href}
               className="font-medium text-primary-700 underline underline-offset-2 transition-colors hover:text-gold-600"
               rel="noopener noreferrer"
-              target={linkDef.href.startsWith('http') ? '_blank' : undefined}
+              target={href.startsWith('http') ? '_blank' : undefined}
             >
               {node}
             </a>

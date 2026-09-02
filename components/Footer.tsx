@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { getFooter } from '@/lib/sanity'
+import { safeHref } from '@/lib/safeHref'
 
 const FALLBACK_LINKS = [
   { label: 'About', href: '/about' },
@@ -48,13 +49,18 @@ export default async function Footer() {
             {footer?.quickLinksHeading || FALLBACK.quickLinksHeading}
           </h3>
           <ul className="space-y-2 text-sm text-white/70">
-            {links.map(link => (
-              <li key={link.href}>
-                <Link href={link.href} className="hover:text-white transition-colors">
-                  {link.label}
-                </Link>
-              </li>
-            ))}
+            {links.map(link => {
+              const href = safeHref(link.href)
+              return (
+                <li key={link.href}>
+                  {href ? (
+                    <Link href={href} className="hover:text-white transition-colors">{link.label}</Link>
+                  ) : (
+                    <span>{link.label}</span>
+                  )}
+                </li>
+              )
+            })}
           </ul>
         </div>
 
