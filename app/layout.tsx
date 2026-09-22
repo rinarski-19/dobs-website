@@ -3,6 +3,7 @@ import './globals.css'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { getSiteSettings } from '@/lib/sanity'
+import { SITE_URL } from '@/lib/siteUrl'
 
 const FALLBACK_TITLE = 'Diocese of Baguio Schools'
 const FALLBACK_DESCRIPTION =
@@ -14,6 +15,9 @@ export async function generateMetadata(): Promise<Metadata> {
   const title = settings?.siteTitle || FALLBACK_TITLE
 
   return {
+    // Without this, a relative Open Graph image path has nothing to resolve
+    // against and Next drops it, so shared links lose their preview card.
+    metadataBase: new URL(SITE_URL),
     title: { default: title, template: `%s · ${title}` },
     description: settings?.siteDescription || FALLBACK_DESCRIPTION,
   }
