@@ -20,7 +20,7 @@ import {
 } from '@/components/HomeSections'
 import { fetchSanity, getPageContent, imageUrlFor, getSiteSettings } from '@/lib/sanity'
 import { getSchools } from '@/lib/schools'
-import { phToday } from '@/lib/dates'
+import { phToday, toMonthDay } from '@/lib/dates'
 
 // News and events are time-sensitive and intentionally fetched without cache.
 export const dynamic = 'force-dynamic'
@@ -68,14 +68,15 @@ type DatedCelebrant = { birthday?: string }
 
 /**
  * Keeps only the celebrants whose birthday falls on today's date in Philippine
- * time, comparing month and day so the stored year is irrelevant. Reading the
- * clock lives here rather than in the component body, where React's rules
- * forbid it.
+ * time. Reading the clock lives in the caller rather than in the component body,
+ * where React's rules forbid it.
+ *
+ * Birthdays are stored as MM-DD; toMonthDay also accepts the YYYY-MM-DD left by
+ * entries saved before the year was dropped, so both spellings match the same day.
  */
-/** Keeps the celebrants whose birthday falls today, matching month and day so the stored year is irrelevant. */
 function todaysCelebrants<T extends DatedCelebrant>(celebrants: T[], today: string): T[] {
   const monthDay = today.slice(5)
-  return celebrants.filter(c => (c.birthday ?? '').slice(5) === monthDay)
+  return celebrants.filter(c => toMonthDay(c.birthday) === monthDay)
 }
 
 const fallbackStats: Stat[] = [
@@ -162,13 +163,20 @@ async function getHomeEvents(): Promise<HomeEventItem[]> {
 }
 
 export default async function HomePage() {
-  // Keep Sanity reads sequential. Concurrent SDK requests can cross response
-  // streams in the Next.js development runtime and surface invalid JSON.
-  const content = await getPageContent<HomePageContent>('homePage')
-  const settings = await getSiteSettings()
-  const schools = await getHomeSchools()
-  const news = await getHomeNews()
-  const events = await getHomeEvents()
+  // These five reads do not depend on one another, so they go out together:
+  // awaited in turn they cost five round trips before the page can render.
+  //
+  // They were sequential because concurrent SDK requests were once seen to cross
+  // response streams in the dev runtime and surface invalid JSON. getFooter()
+  // has run two concurrent reads on every route since then without doing so, and
+  // this was re-checked under load in both dev and production builds.
+  const [content, settings, schools, news, events] = await Promise.all([
+    getPageContent<HomePageContent>('homePage'),
+    getSiteSettings(),
+    getHomeSchools(),
+    getHomeNews(),
+    getHomeEvents(),
+  ])
   const displayedNews: HomeNewsItem[] = news.length ? news : [
     {
       _id: 'sample-ceap-car-leadership-academy',
@@ -247,11 +255,11 @@ export default async function HomePage() {
   // the date matching can be seen working. They disappear the moment any real
   // celebrant is added to the Home Page document in Studio.
   const sampleCelebrants = [
-    { _key: 'sample-1', name: 'Sample Celebrant One',   role: 'Teacher',        school: 'Sample School',        birthday: '2026-09-01', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/enrollment.png' },
-    { _key: 'sample-2', name: 'Sample Celebrant Two',   role: 'School Head',    school: 'Sample School',        birthday: '2026-09-02', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/classroom-discussion-1280x720.png' },
-    { _key: 'sample-3', name: 'Sample Celebrant Three', role: 'Staff',          school: 'DOBS School Community', birthday: '2026-09-03', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/news.png' },
-    { _key: 'sample-4', name: 'Sample Celebrant Four',  role: 'Teacher',        school: 'Sample School',        birthday: '2026-09-04', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/events.png' },
-    { _key: 'sample-5', name: 'Sample Celebrant Five',  role: 'Administrator',  school: 'DOBS School Community', birthday: '2026-09-05', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/home.png' },
+    { _key: 'sample-1', name: 'Sample Celebrant One',   role: 'Teacher',        school: 'Sample School',        birthday: '09-01', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/enrollment.png' },
+    { _key: 'sample-2', name: 'Sample Celebrant Two',   role: 'School Head',    school: 'Sample School',        birthday: '09-02', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/classroom-discussion-1280x720.png' },
+    { _key: 'sample-3', name: 'Sample Celebrant Three', role: 'Staff',          school: 'DOBS School Community', birthday: '09-03', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/news.png' },
+    { _key: 'sample-4', name: 'Sample Celebrant Four',  role: 'Teacher',        school: 'Sample School',        birthday: '09-04', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/events.png' },
+    { _key: 'sample-5', name: 'Sample Celebrant Five',  role: 'Administrator',  school: 'DOBS School Community', birthday: '09-05', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/home.png' },
   ]
   // Samples stand in only while no celebrant has been entered at all, and are
   // filtered by today's date on the same rule as real entries.
