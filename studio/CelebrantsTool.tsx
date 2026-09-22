@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useClient, useCurrentUser } from 'sanity'
 import { Badge, Box, Button, Card, Flex, Heading, Inline, Spinner, Stack, Text } from '@sanity/ui'
 import { celebrantsFromCsv, type CelebrantRow } from '../lib/celebrantsCsv'
-import { formatPHDate } from '../lib/dates'
+import { formatMonthDay, toMonthDay } from '../lib/dates'
 
 // The Home Page singleton this tool edits (see singletonPages in sanity.config.ts).
 const HOME_PAGE_ID = 'c5eaa530-f8a9-4378-b919-68fb1dfb773b'
@@ -21,10 +21,24 @@ type StoredCelebrant = {
 type Status = { tone: 'positive' | 'critical' | 'caution' | 'primary'; message: string } | null
 
 function formatBirthday(value?: string) {
-  if (!value) return '—'
-  const date = new Date(`${value}T00:00:00`)
-  if (Number.isNaN(date.getTime())) return value
-  return formatPHDate(date, { month: 'long', day: 'numeric' })
+  return formatMonthDay(value) || '—'
+}
+
+/**
+ * A patch path such as birthdayCelebrants[_key=="…"] is a query, so a key
+ * carrying a quote or a bracket would change what the patch selects rather than
+ * being matched literally.
+ *
+ * Today every key is safe by construction — Sanity generates them, and the CSV
+ * importer slugs names down to [a-z0-9-]. That is a property of the current
+ * callers rather than of the path, and this is the one place where a key becomes
+ * executable syntax, so it is checked here instead of being assumed upstream.
+ */
+function keyPath(key: string, field?: string): string {
+  if (!/^[A-Za-z0-9_-]+$/.test(key)) {
+    throw new Error(`Unexpected characters in the entry key "${key}" — cannot edit this row safely.`)
+  }
+  return `birthdayCelebrants[_key=="${key}"]${field ? `.${field}` : ''}`
 }
 
 export default function CelebrantsTool() {
@@ -66,8 +80,13 @@ export default function CelebrantsTool() {
     return () => { cancelled = true }
   }, [load])
 
+  // Ordered by the day itself, so the list reads as a calendar. toMonthDay keeps
+  // entries saved before the year was dropped sorting alongside the new ones.
   const sorted = useMemo(
-    () => (celebrants ?? []).slice().sort((a, b) => (a.birthday ?? '').slice(5).localeCompare((b.birthday ?? '').slice(5))),
+    () =>
+      (celebrants ?? [])
+        .slice()
+        .sort((a, b) => (toMonthDay(a.birthday) ?? '').localeCompare(toMonthDay(b.birthday) ?? '')),
     [celebrants],
   )
 
@@ -155,7 +174,7 @@ export default function CelebrantsTool() {
       const asset = await client.assets.upload('image', file, { filename: file.name })
       await client
         .patch(HOME_PAGE_ID)
-        .set({ [`birthdayCelebrants[_key=="${target.key}"].photo`]: { _type: 'image', asset: { _type: 'reference', _ref: asset._id } } })
+        .set({ [keyPath(target.key, 'photo')]: { _type: 'image', asset: { _type: 'reference', _ref: asset._id } } })
         .commit()
       await load()
       setStatus({ tone: 'positive', message: `Photo added for ${target.name}.` })
@@ -170,7 +189,7 @@ export default function CelebrantsTool() {
   const removePhoto = async (key: string, name: string) => {
     setBusy(true)
     try {
-      await client.patch(HOME_PAGE_ID).unset([`birthdayCelebrants[_key=="${key}"].photo`]).commit()
+      await client.patch(HOME_PAGE_ID).unset([keyPath(key, 'photo')]).commit()
       await load()
       setStatus({ tone: 'positive', message: `Photo removed for ${name}.` })
     } catch (error) {
@@ -183,7 +202,7 @@ export default function CelebrantsTool() {
   const remove = async (key: string, name: string) => {
     setBusy(true)
     try {
-      await client.patch(HOME_PAGE_ID).unset([`birthdayCelebrants[_key=="${key}"]`]).commit()
+      await client.patch(HOME_PAGE_ID).unset([keyPath(key)]).commit()
       await load()
       setStatus({ tone: 'positive', message: `Removed ${name}.` })
     } catch (error) {
@@ -231,7 +250,8 @@ export default function CelebrantsTool() {
             <Text size={1} muted>
               Columns: <code>name</code> and <code>birthday</code> are required; <code>role</code>,{' '}
               <code>school</code>, <code>greeting</code> and <code>photo</code> are optional.
-              Dates can be 2026-09-14, 09/14/2026 or 09-14. A photo must be a web address.
+              Dates can be 09-14, 09/14/2026 or 2026-09-14 — only the month and day are
+              kept, so no birth year is ever stored. A photo must be a web address.
             </Text>
 
             <input

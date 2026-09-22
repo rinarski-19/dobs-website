@@ -6,15 +6,23 @@ import CelebrantsTool from './studio/CelebrantsTool'
 
 import { SINGLETON_IDS, SINGLETON_TITLES } from './lib/singletons'
 
-// Both lists come from lib/singletons.ts, so Studio and the website can never
-// disagree about which document backs a page.
-const singletonTypes = [...Object.keys(SINGLETON_IDS), 'event']
+// Comes from lib/singletons.ts, so Studio and the website can never disagree
+// about which document backs a page. `event` is deliberately not in here: there
+// are many events, and only the page types have exactly one document each.
+const singletonTypes = new Set(Object.keys(SINGLETON_IDS))
 
-const singletonPages = Object.keys(SINGLETON_IDS).map(type => ({
-  type,
-  title: SINGLETON_TITLES[type] ?? type,
-  id: SINGLETON_IDS[type],
-}))
+/**
+ * A page type has exactly one document, listed in the sidebar and read by id.
+ * Letting an editor create or duplicate another is what produced the stale twin
+ * of every page already sitting in the dataset: the copy saves happily, the site
+ * keeps reading the original, and the edit simply never appears.
+ *
+ * Duplicating and deleting break that one-document rule outright. Unpublishing
+ * leaves the page on the site with nothing to render, which looks identical to
+ * an outage. Everything else — editing, publishing, discarding a draft,
+ * restoring an earlier revision — is how a page is normally worked on and stays.
+ */
+const BLOCKED_SINGLETON_ACTIONS = new Set(['duplicate', 'delete', 'unpublish'])
 
 export default defineConfig({
   name: 'diocese-baguio-studio',
@@ -89,11 +97,31 @@ export default defineConfig({
           ])
       },
     }),
-    visionTool(),
+    // Vision is a GROQ console against the live dataset. Signed-in editors are
+    // the only ones who could reach it, so this is tidiness rather than a hole:
+    // a content editor has no use for a query console, and it need not be part
+    // of the production bundle at all.
+    ...(process.env.NODE_ENV === 'development' ? [visionTool()] : []),
   ],
 
   schema: {
     types: schemaTypes,
+  },
+
+  document: {
+    // Strip the destructive actions from the single-document page types.
+    actions: (prev, { schemaType }) =>
+      singletonTypes.has(schemaType)
+        ? prev.filter(({ action }) => !action || !BLOCKED_SINGLETON_ACTIONS.has(action))
+        : prev,
+
+    // Keep those types out of the global "Create new" menu as well, so the only
+    // way to reach a page is the sidebar entry that opens its one document.
+    // Scoped to the global menu: a reference field still needs to offer them.
+    newDocumentOptions: (prev, { creationContext }) =>
+      creationContext.type === 'global'
+        ? prev.filter(({ templateId }) => !singletonTypes.has(templateId))
+        : prev,
   },
 
   // A dedicated tab for the monthly birthday list: bulk upload from a CSV and
