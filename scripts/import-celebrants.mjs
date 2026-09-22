@@ -13,7 +13,8 @@
  *
  * CSV columns (header row required, order does not matter, case-insensitive):
  *   name      required — the celebrant's name
- *   birthday  required — 2026-09-14, or 09/14/2026, or 09-14 (day and month alone)
+ *   birthday  required — 09-14, or 09/14/2026, or 2026-09-14. Only the month and
+ *                        day are stored; a year in the file is read and discarded.
  *   role      optional — e.g. Teacher, School Head
  *   school    optional
  *   greeting  optional
@@ -82,21 +83,39 @@ const MONTH_DAY = /^(\d{1,2})[-/](\d{1,2})$/
 const ISO = /^(\d{4})-(\d{1,2})-(\d{1,2})$/
 const US = /^(\d{1,2})[/-](\d{1,2})[/-](\d{4})$/
 
-/** The site shows only the day and month, but the field is a date, so a missing year is filled in. */
+/**
+ * Reduces whatever the spreadsheet holds to MM-DD.
+ *
+ * A year in the file is read so the column still parses, and then thrown away:
+ * the site needs the month and day, and storing a full date of birth for every
+ * member of staff in a publicly readable dataset is not worth the convenience.
+ * Kept in step by hand with normaliseDate in lib/celebrantsCsv.ts.
+ */
 function normaliseDate(value, rowNumber) {
   const raw = value.trim()
   const pad = n => String(n).padStart(2, '0')
 
+  const monthDay = (month, day) => {
+    const m = Number(month)
+    const d = Number(day)
+    if (m < 1 || m > 12 || d < 1 || d > 31) return null
+    return `${pad(m)}-${pad(d)}`
+  }
+
   let m = raw.match(ISO)
-  if (m) return `${m[1]}-${pad(m[2])}-${pad(m[3])}`
+  if (m) return monthDay(m[2], m[3]) ?? badDate(raw, rowNumber)
 
   m = raw.match(US)
-  if (m) return `${m[3]}-${pad(m[1])}-${pad(m[2])}`
+  if (m) return monthDay(m[1], m[2]) ?? badDate(raw, rowNumber)
 
   m = raw.match(MONTH_DAY)
-  if (m) return `${new Date().getFullYear()}-${pad(m[1])}-${pad(m[2])}`
+  if (m) return monthDay(m[1], m[2]) ?? badDate(raw, rowNumber)
 
-  fail(`Row ${rowNumber}: "${raw}" is not a date I recognise.\nUse 2026-09-14, or 09/14/2026, or 09-14.`)
+  return badDate(raw, rowNumber)
+}
+
+function badDate(raw, rowNumber) {
+  fail(`Row ${rowNumber}: "${raw}" is not a date I recognise.\nUse 09-14, or 09/14/2026, or 2026-09-14 — only the month and day are kept.`)
 }
 
 const MIME = { '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp', '.gif': 'image/gif' }

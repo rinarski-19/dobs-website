@@ -69,20 +69,34 @@ const MONTH_DAY = /^(\d{1,2})[-/](\d{1,2})$/
 
 const pad = (n: string | number) => String(n).padStart(2, '0')
 
-/** The page shows only day and month, so a year left off is filled with this one. */
+/**
+ * Reduces whatever the spreadsheet holds to MM-DD.
+ *
+ * A year in the file is read so the column still parses, and then thrown away:
+ * the site needs the month and day, and storing a full date of birth for every
+ * member of staff in a publicly readable dataset is not worth the convenience.
+ * See toMonthDay in lib/dates.ts.
+ */
 export function normaliseDate(value: string): string | null {
   const raw = value.trim()
 
   let m = raw.match(ISO)
-  if (m) return `${m[1]}-${pad(m[2])}-${pad(m[3])}`
+  if (m) return monthDay(m[2], m[3])
 
   m = raw.match(US)
-  if (m) return `${m[3]}-${pad(m[1])}-${pad(m[2])}`
+  if (m) return monthDay(m[1], m[2])
 
   m = raw.match(MONTH_DAY)
-  if (m) return `${new Date().getFullYear()}-${pad(m[1])}-${pad(m[2])}`
+  if (m) return monthDay(m[1], m[2])
 
   return null
+}
+
+function monthDay(month: string, day: string): string | null {
+  const m = Number(month)
+  const d = Number(day)
+  if (m < 1 || m > 12 || d < 1 || d > 31) return null
+  return `${pad(m)}-${pad(d)}`
 }
 
 const slug = (value: string) =>
@@ -126,7 +140,7 @@ export function celebrantsFromCsv(text: string): ParseResult {
 
     const birthday = normaliseDate(get('birthday'))
     if (!birthday) {
-      return { ok: false, error: `Row ${rowNumber}: "${get('birthday')}" is not a date I recognise. Use 2026-09-14, or 09/14/2026, or 09-14.` }
+      return { ok: false, error: `Row ${rowNumber}: "${get('birthday')}" is not a date I recognise. Use 09-14, or 09/14/2026, or 2026-09-14 — only the month and day are kept.` }
     }
 
     const entry: CelebrantRow = {

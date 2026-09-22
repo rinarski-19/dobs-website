@@ -72,27 +72,34 @@ export default defineType({
           defineField({ name: 'school', title: 'School', type: 'string' }),
           defineField({
             name: 'birthday',
-            title: 'Birthdate',
-            type: 'date',
-            description: 'Pick the celebrant’s birthdate, or type it as mm/dd/yy. Only the month and day decide when they appear on the homepage, so the year can be any year.',
-            // Moment-style tokens: Sanity converts these itself before handing
-            // them to date-fns, so DD is the day and YY the two-digit year.
-            // Lowercase `dd` is the weekday here and renders as "Tu".
-            options: { dateFormat: 'MM/DD/YY' },
-            validation: Rule => Rule.required().error('A birthdate is required — without it the celebrant never appears on the homepage.'),
+            title: 'Birthday (month and day)',
+            type: 'string',
+            description: 'Type the month and day as mm-dd — 09-14 for 14 September. The year is deliberately not stored: the homepage only needs the day, and a full birthdate for every member of staff should not sit in content that anyone can read.',
+            placeholder: 'mm-dd',
+            validation: Rule =>
+              Rule.required()
+                .error('A birthday is required — without it the celebrant never appears on the homepage.')
+                .regex(/^(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/, {
+                  name: 'mm-dd',
+                  invert: false,
+                })
+                .error('Use mm-dd, for example 09-14 for 14 September. Do not include the year.'),
           }),
           defineField({ name: 'photo', title: 'Photo', type: 'image', options: { hotspot: true } }),
           defineField({ name: 'greeting', title: 'Personal Greeting', type: 'text', rows: 3 }),
         ],
-        // Show the birthdate in the collapsed list so a missing or wrong date is
+        // Show the birthday in the collapsed list so a missing or wrong one is
         // obvious without opening every row.
         preview: {
           select: { title: 'name', birthday: 'birthday', school: 'school', media: 'photo' },
           prepare: ({ title, birthday, school, media }) => {
-            // Split the stored YYYY-MM-DD rather than parsing it into a Date —
+            // Read the stored MM-DD as text rather than parsing it into a Date —
             // a date with no time of day can slide a day either way across zones.
-            const [year, month, day] = (birthday ?? '').split('-')
-            const when = birthday ? `${month}/${day}/${year.slice(2)}` : 'No birthdate set'
+            // Entries saved before the year was dropped are still YYYY-MM-DD, so
+            // the last two parts are taken rather than the first two.
+            const parts = (birthday ?? '').split('-')
+            const [month, day] = parts.length === 3 ? parts.slice(1) : parts
+            const when = month && day ? `${month}/${day}` : 'No birthday set'
             return { title, subtitle: school ? `${when} — ${school}` : when, media }
           },
         },

@@ -1,7 +1,7 @@
 import { Fragment } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { formatPHDate } from '@/lib/dates'
+import { formatMonthDay, formatPHDate } from '@/lib/dates'
 import { ArrowRight, ArrowUpRight, Balloon, Building2, Cake, CakeSlice, CalendarDays, Clock3, Gift, Heart, MapPin, Newspaper, PartyPopper, Quote, Sparkle, Sparkles, Star, Sun } from 'lucide-react'
 
 export type HomeNewsItem = {
@@ -342,7 +342,7 @@ export function BirthdaySection({ title, message, emptyText, celebrants }: { tit
                   {celebrant.birthday && (
                     <p className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-sunwashed bg-buttercup-sky/60 px-2.5 py-1 text-xs font-semibold text-primary-800">
                       <Cake size={13} aria-hidden="true" />
-                      {formatDate(celebrant.birthday, { month: 'long', day: 'numeric' })}
+                      {formatMonthDay(celebrant.birthday)}
                     </p>
                   )}
                   {celebrant.greeting && (

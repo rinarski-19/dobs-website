@@ -39,3 +39,49 @@ export function formatMonthLabel(year: number, month1to12: number): string {
   return new Intl.DateTimeFormat(PH_LOCALE, { month: 'long', year: 'numeric', timeZone: 'UTC' })
     .format(new Date(Date.UTC(year, month1to12 - 1, 1)))
 }
+
+/**
+ * Birthdays are stored and compared as MM-DD, never as a full date.
+ *
+ * A birthday only ever needs a month and a day: the homepage shows "14
+ * September" and matches on the current day. Keeping the year would mean
+ * holding a complete date of birth — an identity-verification factor for every
+ * member of staff — in a dataset that is readable without authentication.
+ *
+ * Entries written before this rule are stored as YYYY-MM-DD, so the year is
+ * tolerated on the way in and dropped. Nothing writes one back.
+ */
+const MONTH_DAY = /^(\d{2})-(\d{2})$/
+const LEGACY_FULL_DATE = /^\d{4}-(\d{2})-(\d{2})$/
+
+export function toMonthDay(value?: string | null): string | null {
+  const raw = value?.trim()
+  if (!raw) return null
+
+  const monthDay = raw.match(MONTH_DAY) ?? raw.match(LEGACY_FULL_DATE)
+  if (!monthDay) return null
+
+  const [, month, day] = monthDay
+  if (Number(month) < 1 || Number(month) > 12 || Number(day) < 1 || Number(day) > 31) return null
+
+  return `${month}-${day}`
+}
+
+/**
+ * "14 September" from an MM-DD. Formatted in UTC against a leap year, so that
+ * 02-29 is a real date and no time zone can nudge the day either way — the same
+ * reasoning as formatMonthLabel above.
+ */
+const LEAP_YEAR = 2000
+
+export function formatMonthDay(
+  value?: string | null,
+  options: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric' },
+): string {
+  const monthDay = toMonthDay(value)
+  if (!monthDay) return ''
+
+  const [month, day] = monthDay.split('-').map(Number)
+  return new Intl.DateTimeFormat(PH_LOCALE, { ...options, timeZone: 'UTC' })
+    .format(new Date(Date.UTC(LEAP_YEAR, month - 1, day)))
+}
