@@ -12,7 +12,11 @@
 const SAFE_SCHEME = /^(https?:|mailto:|tel:)/i
 
 export function safeHref(value?: string | null): string | undefined {
-  const href = value?.trim()
+  // Browsers treat a backslash as a forward slash in the authority position, so
+  // `/\example.com` and `\\example.com` both resolve to `//example.com` and leave
+  // the site. Folding them first means the protocol-relative check below sees
+  // every spelling of the same thing.
+  const href = value?.trim().replace(/\\/g, '/')
   if (!href) return undefined
 
   // Protocol-relative (//example.com) silently leaves the site.
