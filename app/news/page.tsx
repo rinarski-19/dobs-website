@@ -458,7 +458,7 @@ export default async function NewsPage({
                 href="/contact"
                 className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border-2 border-white px-6 py-3 font-semibold text-white transition-colors hover:border-gold-300 hover:bg-gold-300 hover:text-primary-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800"
               >
-                {settings?.officeCtaLabel || 'Contact the DOBS Office'} <Mail size={18} aria-hidden="true" />
+                {settings?.officeCtaLabel || 'Contact the DOB-S Office'} <Mail size={18} aria-hidden="true" />
               </Link>
             </div>
           </div>

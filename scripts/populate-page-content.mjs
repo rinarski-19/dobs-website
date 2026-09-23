@@ -64,7 +64,7 @@ const TARGETS = [
       eventsHeading: 'Upcoming Events',
       testimonialsHeading: 'Stories from Our Community',
       locationsHeading: 'Find a School Near You',
-      welcomeEyebrow: 'Welcome to DOBS',
+      welcomeEyebrow: 'Welcome to DOB-S',
       welcomeHeading: 'Forming minds, hearts, and communities',
       welcomeText: 'The Diocese of Baguio Schools brings together Catholic educational communities across Baguio City and Benguet. Our schools unite academic formation, Gospel values, cultural respect, and service to help every learner grow with purpose.',
       programsEyebrow: 'Learning Pathways',
@@ -102,7 +102,7 @@ const TARGETS = [
       guidanceSchoolText: 'Review the school directory before completing the form.',
       guidanceHoursTitle: 'Response during office hours',
       guidanceHoursText: 'Monday–Friday, 8:00 AM–5:00 PM, excluding public holidays.',
-      guidanceContactTitle: 'Contact the DOBS office',
+      guidanceContactTitle: 'Contact the DOB-S office',
       browseButtonLabel: 'Browse Our Schools',
       processEyebrow: 'Step-by-step guide',
       processIntro: 'Follow these steps to complete the enrollment process with your chosen school.',
@@ -205,7 +205,7 @@ const TARGETS = [
     values: {
       siteTitle: 'Diocese of Baguio Schools',
       siteDescription: 'The Catholic schools of the Diocese of Baguio, serving Baguio City and the province of Benguet — forming young minds in faith, excellence, and service.',
-      officeCtaLabel: 'Contact the DOBS Office',
+      officeCtaLabel: 'Contact the DOB-S Office',
     },
   },
   {

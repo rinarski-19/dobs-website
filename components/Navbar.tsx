@@ -26,7 +26,7 @@ export default function Navbar() {
 
         {/* Logo */}
         <Link href="/" className="group flex items-baseline gap-2 font-diocesan font-bold tracking-tight">
-          <span className="text-xl text-primary-700">DOBS</span>
+          <span className="text-xl text-primary-700">DOB-S</span>
           <span className="hidden sm:inline text-sm font-sans font-medium text-gray-500 group-hover:text-primary-700 transition-colors">
             Diocese of Baguio Schools
           </span>

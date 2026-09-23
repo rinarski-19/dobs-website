@@ -36,7 +36,7 @@ const fallbackPageContent = {
 }
 
 const sampleFeaturedEvent = {
-  title: 'Sample: DOBS Community Mass and Fellowship',
+  title: 'Sample: DOB-S Community Mass and Fellowship',
   category: 'Sample Event',
   description: 'Sample event for layout preview only. Replace this with a confirmed Diocese of Baguio Schools activity published through Sanity.',
   date: new Date('2026-09-15T09:00:00+08:00'),
@@ -45,7 +45,7 @@ const sampleFeaturedEvent = {
 }
 
 const sampleEvents: DisplayEvent[] = [
-  { id: 'sample-1', title: 'DOBS Community Mass and Fellowship', category: 'Sample Event', description: 'Sample event for layout preview only. Replace this with a confirmed activity published through Sanity.', date: { day: '15', month: 'Sep', year: '2026' }, school: 'Diocese of Baguio Schools', location: 'DOBS Office, Baguio City', image: '/images/events.png', href: '#' },
+  { id: 'sample-1', title: 'DOB-S Community Mass and Fellowship', category: 'Sample Event', description: 'Sample event for layout preview only. Replace this with a confirmed activity published through Sanity.', date: { day: '15', month: 'Sep', year: '2026' }, school: 'Diocese of Baguio Schools', location: 'DOB-S Office, Baguio City', image: '/images/events.png', href: '#' },
   { id: 'sample-2', title: 'Parent and Learner Orientation', category: 'Sample Event', description: 'A sample orientation entry showing how schedules, venues, and participating schools appear on the Events page.', date: { day: '22', month: 'Sep', year: '2026' }, school: 'Sample School', location: 'School Auditorium', image: '/images/classroom-discussion-1280x720.png', href: '#' },
   { id: 'sample-3', title: 'Catholic Schools Faith Formation Day', category: 'Sample Event', description: 'A sample activity demonstrating the card layout for an upcoming faith-formation gathering.', date: { day: '03', month: 'Oct', year: '2026' }, school: 'Diocese of Baguio Schools', location: 'Baguio City, Benguet', image: '/images/enrollment.png', href: '#' },
 ]
@@ -362,7 +362,7 @@ export default async function EventsPage() {
             </p>
             <div className="mt-8 flex items-center justify-center">
               <Link href="/contact" className="btn-accent w-full sm:w-auto">
-                {settings?.officeCtaLabel || 'Contact the DOBS Office'} <ArrowRight size={18} aria-hidden="true" />
+                {settings?.officeCtaLabel || 'Contact the DOB-S Office'} <ArrowRight size={18} aria-hidden="true" />
               </Link>
             </div>
           </div>

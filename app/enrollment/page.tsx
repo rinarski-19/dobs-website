@@ -70,7 +70,7 @@ const fallbackPageContent = {
   guidanceSchoolText: 'Review the school directory before completing the form.',
   guidanceHoursTitle: 'Response during office hours',
   guidanceHoursText: 'Monday–Friday, 8:00 AM–5:00 PM, excluding public holidays.',
-  guidanceContactTitle: 'Contact the DOBS office',
+  guidanceContactTitle: 'Contact the DOB-S office',
   browseButtonLabel: 'Browse Our Schools',
   processEyebrow: 'Step-by-step guide',
   processIntro: 'Follow these steps to complete the enrollment process with your chosen school.',
@@ -367,7 +367,7 @@ export default async function EnrollmentPage() {
                 href="/contact"
                 className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg border border-white/70 px-5 py-2.5 font-semibold text-white transition-all hover:border-white hover:bg-white hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-300 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-700 sm:w-auto"
               >
-                {settings?.officeCtaLabel || 'Contact the DOBS Office'} <ArrowRight size={18} aria-hidden="true" />
+                {settings?.officeCtaLabel || 'Contact the DOB-S Office'} <ArrowRight size={18} aria-hidden="true" />
               </Link>
             </div>
           </div>

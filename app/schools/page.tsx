@@ -362,7 +362,7 @@ export default async function SchoolsPage({
               <ArrowRight className="transition-transform group-hover:translate-x-1" size={18} aria-hidden="true" />
             </Link>
             <Link href="/contact" className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg border-2 border-white px-6 py-3 font-semibold text-white transition-all hover:border-gold-400 hover:bg-gold-400 hover:text-primary-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800 sm:w-auto">
-              {settings?.officeCtaLabel || 'Contact the DOBS Office'}
+              {settings?.officeCtaLabel || 'Contact the DOB-S Office'}
               <ArrowRight className="transition-transform group-hover:translate-x-1" size={18} aria-hidden="true" />
             </Link>
           </div>

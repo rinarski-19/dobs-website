@@ -56,7 +56,7 @@ const fallback: Required<Omit<AboutPageContent, 'heroImage' | 'heroImageAlt'>> =
   structureIntro: 'The Diocese provides pastoral direction, while the schools office supports coordination and each school serves its own educational community.',
   ctaHeading: 'Discover our Catholic school community',
   ctaText: 'Find a school for your family or contact the Diocese of Baguio Schools office for assistance.',
-  heroTitle: 'About DOBS',
+  heroTitle: 'About DOB-S',
   heroSubtitle: 'Our Story',
   heroDescription: 'Learn about the mission, vision, core values, and history of the schools of the Diocese of Baguio.',
   vision: 'We envision ourselves as caring Catholic school communities transforming lives and forming committed disciples of Jesus Christ.',
@@ -275,7 +275,7 @@ export default async function AboutPage() {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {[
               { icon: Church, title: 'Diocese of Baguio', text: 'Provides the Catholic identity, pastoral mission, and overall ecclesial direction of the diocesan schools.' },
-              { icon: Network, title: 'DOBS Office', text: 'Coordinates the schools and supports shared formation, standards, communication, and school development.' },
+              { icon: Network, title: 'DOB-S Office', text: 'Coordinates the schools and supports shared formation, standards, communication, and school development.' },
               { icon: Building2, title: 'Diocesan Schools', text: 'Deliver Catholic education in their communities while responding to local learners and families.' },
               { icon: Users, title: 'Leadership', text: 'The Bishop provides diocesan oversight, supported by the superintendent in the educational mission.' },
             ].map(({ icon: Icon, title, text }, index) => (
@@ -329,7 +329,7 @@ export default async function AboutPage() {
               {content.browseButtonLabel || fallback.browseButtonLabel} <ArrowRight className="transition-transform group-hover:translate-x-1" size={18} aria-hidden="true" />
             </Link>
             <Link href="/contact" className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg border-2 border-white px-6 py-3 font-semibold text-white transition-all hover:border-gold-400 hover:bg-gold-400 hover:text-primary-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800 sm:w-auto">
-              {settings?.officeCtaLabel || 'Contact the DOBS Office'} <ArrowRight className="transition-transform group-hover:translate-x-1" size={18} aria-hidden="true" />
+              {settings?.officeCtaLabel || 'Contact the DOB-S Office'} <ArrowRight className="transition-transform group-hover:translate-x-1" size={18} aria-hidden="true" />
             </Link>
           </div>
         </div>

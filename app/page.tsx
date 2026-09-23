@@ -87,7 +87,7 @@ const fallbackStats: Stat[] = [
 ]
 
 const fallbackContent = {
-  welcomeEyebrow: 'Welcome to DOBS',
+  welcomeEyebrow: 'Welcome to DOB-S',
   welcomeHeading: 'Forming minds, hearts, and communities',
   welcomeText: 'The Diocese of Baguio Schools brings together Catholic educational communities across Baguio City and Benguet. Our schools unite academic formation, Gospel values, cultural respect, and service to help every learner grow with purpose.',
   programsEyebrow: 'Learning Pathways',
@@ -215,7 +215,7 @@ export default async function HomePage() {
   const displayedEvents: HomeEventItem[] = events.length ? events : [
     {
       _id: 'sample-dobs-community-event',
-      title: 'Sample: DOBS Community Mass and Fellowship',
+      title: 'Sample: DOB-S Community Mass and Fellowship',
       startDate: '2026-09-15T09:00:00+08:00',
       location: 'Diocese of Baguio Schools Office, Baguio City',
       schoolName: 'Diocese of Baguio Schools',
@@ -257,9 +257,9 @@ export default async function HomePage() {
   const sampleCelebrants = [
     { _key: 'sample-1', name: 'Sample Celebrant One',   role: 'Teacher',        school: 'Sample School',        birthday: '09-01', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/enrollment.png' },
     { _key: 'sample-2', name: 'Sample Celebrant Two',   role: 'School Head',    school: 'Sample School',        birthday: '09-02', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/classroom-discussion-1280x720.png' },
-    { _key: 'sample-3', name: 'Sample Celebrant Three', role: 'Staff',          school: 'DOBS School Community', birthday: '09-03', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/news.png' },
+    { _key: 'sample-3', name: 'Sample Celebrant Three', role: 'Staff',          school: 'DOB-S School Community', birthday: '09-03', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/news.png' },
     { _key: 'sample-4', name: 'Sample Celebrant Four',  role: 'Teacher',        school: 'Sample School',        birthday: '09-04', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/events.png' },
-    { _key: 'sample-5', name: 'Sample Celebrant Five',  role: 'Administrator',  school: 'DOBS School Community', birthday: '09-05', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/home.png' },
+    { _key: 'sample-5', name: 'Sample Celebrant Five',  role: 'Administrator',  school: 'DOB-S School Community', birthday: '09-05', greeting: 'Sample entry — replace with current birthday information in Sanity.', imageUrl: '/images/home.png' },
   ]
   // Samples stand in only while no celebrant has been entered at all, and are
   // filtered by today's date on the same rule as real entries.
@@ -464,7 +464,7 @@ export default async function HomePage() {
           </p>
           <div className="flex flex-col justify-center gap-3 sm:flex-row">
             <Link href="/enrollment" className="btn-accent">Begin Enrollment <ArrowRight size={16} /></Link>
-            <Link href="/contact" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border-2 border-white px-5 py-2.5 font-semibold text-white transition-colors hover:border-gold-400 hover:bg-gold-400 hover:text-primary-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800">{settings?.officeCtaLabel || 'Contact the DOBS Office'} <ArrowRight size={16} /></Link>
+            <Link href="/contact" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border-2 border-white px-5 py-2.5 font-semibold text-white transition-colors hover:border-gold-400 hover:bg-gold-400 hover:text-primary-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800">{settings?.officeCtaLabel || 'Contact the DOB-S Office'} <ArrowRight size={16} /></Link>
           </div>
         </div>
       </section>

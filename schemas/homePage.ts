@@ -39,7 +39,7 @@ export default defineType({
         preview: { select: { title: 'label', subtitle: 'value' } },
       }],
     }),
-    defineField({ name: 'whyChooseHeading', title: 'Why Choose Section Heading', type: 'string', initialValue: 'Why Choose DOBS?' }),
+    defineField({ name: 'whyChooseHeading', title: 'Why Choose Section Heading', type: 'string', initialValue: 'Why Choose DOB-S?' }),
     defineField({ name: 'whyChooseDescription', title: 'Why Choose Section Description', type: 'text', rows: 3 }),
     defineField({
       name: 'testimonials',
@@ -126,7 +126,7 @@ export default defineType({
     }),
     defineField({ name: 'enrollmentHeading', title: 'Enrollment Section Heading', type: 'string', initialValue: 'Now Enrolling' }),
     defineField({ name: 'enrollmentDescription', title: 'Enrollment Section Description', type: 'text', rows: 3 }),
-    defineField({ name: 'welcomeEyebrow', title: 'Welcome Section Label', type: 'string', initialValue: 'Welcome to DOBS' }),
+    defineField({ name: 'welcomeEyebrow', title: 'Welcome Section Label', type: 'string', initialValue: 'Welcome to DOB-S' }),
     defineField({ name: 'welcomeHeading', title: 'Welcome Section Heading', type: 'string', initialValue: 'Forming minds, hearts, and communities' }),
     defineField({ name: 'welcomeText', title: 'Welcome Section Text', type: 'text', rows: 3, initialValue: 'The Diocese of Baguio Schools brings together Catholic educational communities across Baguio City and Benguet. Our schools unite academic formation, Gospel values, cultural respect, and service to help every learner grow with purpose.' }),
     defineField({ name: 'programsEyebrow', title: 'Programs Section Label', type: 'string', initialValue: 'Learning Pathways' }),

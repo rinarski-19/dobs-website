@@ -67,7 +67,7 @@ function Spans({ spans, markDefs }: { spans?: Span[]; markDefs?: MarkDef[] }) {
 }
 
 /**
- * Minimal Portable Text renderer covering what the DOBS schemas actually allow:
+ * Minimal Portable Text renderer covering what the DOB-S schemas actually allow:
  * paragraphs, headings, blockquotes, bullet/numbered lists and inline images.
  * Kept in-repo rather than pulling in @portabletext/react for this much.
  */

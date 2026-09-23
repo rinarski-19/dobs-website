@@ -50,7 +50,7 @@ export default defineType({
     defineField({ name: 'guidanceSchoolText', title: 'Guidance: School Text', type: 'text', rows: 3, initialValue: 'Review the school directory before completing the form.' }),
     defineField({ name: 'guidanceHoursTitle', title: 'Guidance: Hours Heading', type: 'string', initialValue: 'Response during office hours' }),
     defineField({ name: 'guidanceHoursText', title: 'Guidance: Hours Text', type: 'text', rows: 3, initialValue: 'Monday–Friday, 8:00 AM–5:00 PM, excluding public holidays.' }),
-    defineField({ name: 'guidanceContactTitle', title: 'Guidance: Contact Heading', type: 'string', initialValue: 'Contact the DOBS office' }),
+    defineField({ name: 'guidanceContactTitle', title: 'Guidance: Contact Heading', type: 'string', initialValue: 'Contact the DOB-S office' }),
     defineField({ name: 'browseButtonLabel', title: 'Browse Schools Button', type: 'string', initialValue: 'Browse Our Schools' }),
   ],
   preview: { prepare: () => ({ title: 'Enrollment Page' }) },

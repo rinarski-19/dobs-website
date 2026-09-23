@@ -26,7 +26,7 @@ export default defineType({
       title: 'Office Button Label',
       type: 'string',
       description: 'The button linking to the contact page. Appears on the Home, About, Enrollment, Events, News and Schools pages.',
-      initialValue: 'Contact the DOBS Office',
+      initialValue: 'Contact the DOB-S Office',
     }),
   ],
   preview: { prepare: () => ({ title: 'Site Settings' }) },

@@ -93,7 +93,7 @@ export function LatestNewsSection({ items, heading }: { items: HomeNewsItem[]; h
                 {item.imageUrl ? (
                   <Image src={item.imageUrl} alt={item.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary-800 to-primary-500 text-sm text-white/80">DOBS News</div>
+                  <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary-800 to-primary-500 text-sm text-white/80">DOB-S News</div>
                 )}
               </div>
               <div className="p-6">
